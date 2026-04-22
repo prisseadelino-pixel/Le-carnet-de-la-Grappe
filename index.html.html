@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LE CARNET DE LA GRAPPE</title>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Montserrat:wght@200;400;600&display=swap');
+        :root { --bg: #000; --gold: #c5a059; --txt: #fff; --brd: rgba(255,255,255,0.1); }
+        
+        /* Masquage forcé des barres publicitaires */
+        iframe, #tiiny-host-badge, .tiiny-badge, div[style*="bottom: 0"] { display: none !important; visibility: hidden !important; }
+
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; }
+        .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
+        .active { display: flex !important; }
+        
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 10px 0; text-align: center; font-size: 1.6rem; }
+        .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
+        
+        /* Aligner les bouteilles à gauche */
+        #LIST { width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: flex-start; }
+        .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; width: 100%; display: flex; align-items: center; text-align: left; box-sizing: border-box; }
+        .v-img { width: 60px; height: 85px; object-fit: cover; margin-right: 15px; border: 1px solid var(--brd); background: #111; }
+        
+        .stock-ctrl { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        .btn-s { background: none; border: 1px solid var(--gold); color: var(--gold); width: 28px; height: 28px; border-radius: 4px; cursor: pointer; }
+        .qte-val { color: var(--gold); font-weight: bold; min-width: 20px; text-align: center; }
+
+        .stars { color: var(--gold); font-size: 0.7rem; margin: 3px 0; }
+        .btn-main { background: none; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 90%; max-width: 320px; text-transform: uppercase; margin-top: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 30px; color: #000; z-index: 100; }
+        
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); }
+        #prev { width: 80px; height: 110px; object-fit: cover; margin: 10px auto; display: none; border: 1px solid var(--gold); }
+        .sel { color: var(--gold) !important; }
+        .star-in { font-size: 1.8rem; color: #222; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="H" class="p active">
+        <div style="margin-top: 15vh; text-align: center;">
+            <div class="subtitle">Collection Privée</div>
+            <h1>Le Carnet de la Grappe</h1>
+        </div>
+        <button class="btn-main" onclick="go('C')" style="margin-top: 40px;">Accéder à ma cave</button>
+    </div>
+
+    <div id="C" class="p">
+        <div class="subtitle">Sélectionner un Rayon</div>
+        <button class="btn-main" onclick="op('ROUGES')">Vins Rouges</button>
+        <button class="btn-main" onclick="op('BLANCS')">Vins Blancs</button>
+        <button class="btn-main" onclick="op('ROSES')">Vins Rosés</button>
+        <button class="btn-main" onclick="op('CHAMPAGNES')">Champagnes</button>
+        <button class="btn-main" onclick="op('SPIRITUEUX')">Spiritueux</button>
+        <button class="btn-main" onclick="op('BULLES')">Autres Bulles</button>
+        <button onclick="go('H')" style="background:none; border:none; color:var(--gold); margin-top:30px;">← RETOUR</button>
+    </div>
+
+    <div id="L" class="p">
+        <div id="T" class="subtitle"></div>
+        <div id="LIST"></div>
+        <button class="btn-add" onclick="resetForm(); go('A')">+</button>
+        <button onclick="go('C')" style="background:none; border:none; color:var(--gold); margin-top:30px;">← RETOUR</button>
+    </div>
+
+    <div id="A" class="p">
+        <div class="subtitle">Nouvelle Bouteille</div>
+        <input type="text" id="nom" placeholder="Nom du Domaine">
+        <input type="number" id="qteIn" placeholder="Quantité" value="1">
+        <button class="btn-main" style="font-size:0.7rem;" onclick="document.getElementById('f').click()">📸 Photo</button>
+        <input type="file" id="f" accept="image/*" capture="environment" style="display:none" onchange="preview(this)">
+        <img id="prev">
+        <div class="star-in" id="starIn">
+            <span onclick="setNote(1)">★</span><span onclick="setNote(2)">★</span><span onclick="setNote(3)">★</span><span onclick="setNote(4)">★</span><span onclick="setNote(5)">★</span>
+        </div>
+        <textarea id="txt" placeholder="Notes..." rows="3"></textarea>
+        <button class="btn-main" onclick="save()">Enregistrer</button>
+        <button onclick="go('L')" style="background:none; border:none; color:var(--gold); margin-top:15px;">ANNULER</button>
+    </div>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        let cave = []; let curCat = ""; let imgData = ""; let noteData = 3;
+
+        db.ref('cave').on('value', (snap) => {
+            const data = snap.val();
+            cave = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
+            if(curCat) draw();
+        });
+
+        function go(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
+        function setNote(n) { noteData = n; document.querySelectorAll('#starIn span').forEach((s, i) => s.classList.toggle('sel', i < n)); }
+        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; document.getElementById('prev').src = imgData; document.getElementById('prev').style.display = 'block'; }; r.readAsDataURL(input.files[0]); }
+        function resetForm() { document.getElementById('nom').value = ""; document.getElementById('txt').value = ""; document.getElementById('qteIn').value = "1"; imgData = ""; document.getElementById('prev').style.display = 'none'; setNote(3); }
+        
+        function save() {
+            const n = document.getElementById('nom').value; if(!n) return alert("Nom requis");
+            db.ref('cave').push({ n, q: parseInt(document.getElementById('qteIn').value), cat: curCat, note: noteData, txt: document.getElementById('txt').value, img: imgData });
+            go('L');
+        }
+
+        function updateQ(id, d) { 
+            const v = cave.find(i => i.id === id); 
+            db.ref('cave/' + id).update({ q: Math.max(0, v.q + d) }); 
+        }
+
+        function draw() {
+            const d = document.getElementById('LIST'); d.innerHTML = "";
+            cave.filter(v => v.cat === curCat).forEach(v => {
+                let s = "★".repeat(v.note) + "☆".repeat(5-v.note);
+                d.innerHTML += `
+                <div class="card">
+                    <img src="${v.img || 'https://via.placeholder.com/60x85/111/c5a059?text=Vin'}" class="v-img">
+                    <div style="flex:1">
+                        <b style="color:var(--gold); text-transform:uppercase; font-size:0.85rem;">${v.n}</b>
+                        <div class="stars">${s}</div>
+                        <div class="stock-ctrl">
+                            <button class="btn-s" onclick="updateQ('${v.id}', -1)">-</button>
+                            <span class="qte-val">${v.q}</span>
+                            <button class="btn-s" onclick="updateQ('${v.id}', 1)">+</button>
+                        </div>
+                    </div>
+                    <button style="background:none; border:none; color:#333; font-size:0.6rem;" onclick="if(confirm('Supprimer ?')) db.ref('cave/${v.id}').remove()">SUPPR</button>
+                </div>`;
+            });
+        }
+        setNote(3);
+    </script>
+</body>
+</html>
