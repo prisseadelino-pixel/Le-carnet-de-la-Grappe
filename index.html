@@ -9,8 +9,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Ma Cave">
     
-    <link rel="manifest" href="data:application/manifest+json,{'short_name':'MaCave','name':'Le Carnet de la Grappe','display':'standalone','start_url':'index.html','background_color':'#000000','theme_color':'#c5a059'}">
-
     <title>LE CARNET DE LA GRAPPE</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
@@ -20,37 +18,43 @@
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Montserrat:wght@200;400;600&display=swap');
         :root { --bg: #000; --gold: #c5a059; --txt: #fff; --brd: rgba(255,255,255,0.1); }
         
-        body, html { margin: 0; padding: 0; background: var(--bg); color: var(--txt); font-family: 'Montserrat', sans-serif; height: 100%; overflow-x: hidden; }
+        /* Masquage forcé des pubs résiduelles */
+        iframe, #tiiny-host-badge, .tiiny-badge, div[style*="bottom: 0"] { display: none !important; visibility: hidden !important; }
+
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; overflow-x: hidden; }
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
         
-        /* STYLE DU LOGO */
-        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; }
+        .header-img { width: 180px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; }
 
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
         
         #LIST { width: 100%; max-width: 500px; display: flex; flex-direction: column; }
-        .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; display: flex; align-items: flex-start; box-sizing: border-box; position: relative; }
-        .v-img { width: 70px; height: 100px; object-fit: cover; margin-right: 15px; border: 1px solid var(--brd); cursor: zoom-in; }
+        .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; width: 100%; display: flex; align-items: flex-start; box-sizing: border-box; position: relative; }
+        .v-img { width: 70px; height: 100px; object-fit: cover; margin-right: 15px; border: 1px solid var(--brd); background: #111; cursor: zoom-in; flex-shrink: 0; }
+        
         .v-info { flex: 1; }
-        .v-name { color: var(--gold); text-transform: uppercase; font-size: 0.9rem; font-weight: 600; display: block; }
-        .v-comment { color: #888; font-size: 0.75rem; font-style: italic; margin-top: 5px; display: block; }
+        .v-name { color: var(--gold); text-transform: uppercase; font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 2px; }
+        .v-comment { color: #888; font-size: 0.75rem; font-style: italic; margin-top: 5px; line-height: 1.2; display: block; }
         
         .stock-ctrl { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-        .btn-s { background: none; border: 1px solid var(--gold); color: var(--gold); width: 28px; height: 28px; border-radius: 4px; cursor: pointer;}
+        .btn-s { background: none; border: 1px solid var(--gold); color: var(--gold); width: 28px; height: 28px; border-radius: 4px; cursor: pointer; }
         .qte-val { color: var(--gold); font-weight: bold; min-width: 20px; text-align: center; }
+
         .stars { color: var(--gold); font-size: 0.7rem; margin: 3px 0; }
-        .btn-main { background: none; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 90%; max-width: 320px; text-transform: uppercase; margin-top: 10px; font-weight: 600; cursor: pointer;}
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 30px; z-index: 100; cursor: pointer;}
+        .btn-main { background: none; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 90%; max-width: 320px; text-transform: uppercase; margin-top: 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 30px; color: #000; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); font-family: 'Montserrat', sans-serif;}
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); font-family: 'Montserrat', sans-serif; box-sizing: border-box; }
         #prev { width: 80px; height: 110px; object-fit: cover; margin: 10px auto; display: none; border: 1px solid var(--gold); }
         .sel { color: var(--gold) !important; }
-        .star-in { font-size: 1.8rem; color: #222; margin: 10px 0; cursor: pointer;}
-        .btn-action { background: none; border: none; color: #444; font-size: 0.6rem; text-transform: uppercase; padding: 5px; cursor: pointer;}
+        .star-in { font-size: 1.8rem; color: #222; cursor: pointer; margin: 10px 0; }
+
+        .btn-action { background: none; border: none; color: #444; font-size: 0.6rem; cursor: pointer; text-transform: uppercase; padding: 5px; }
         .actions-top { position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; }
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; cursor: zoom-out;}
+
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
         #modal img { max-width: 90%; max-height: 80%; border: 1px solid var(--gold); object-fit: contain; }
     </style>
 </head>
@@ -58,8 +62,7 @@
 
     <div id="H" class="p active">
         <div style="margin-top: 10vh; text-align: center;">
-            <img src="https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg" class="header-img">
-            
+            <img src="https://votre-lien-image.com/logo.jpg" class="header-img" onerror="this.style.display='none'">
             <div class="subtitle">Collection Privée</div>
             <h1>Le Carnet de la Grappe</h1>
         </div>
@@ -103,4 +106,141 @@
     <div id="modal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
 
     <script>
-        window
+        const firebaseConfig = { databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        let cave = []; let curCat = ""; let imgData = ""; let noteData = 3;
+
+        db.ref('cave').on('value', (snap) => {
+            const data = snap.val();
+            cave = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
+            if(curCat) draw();
+        });
+
+        function go(id) { 
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0);
+        }
+
+        function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
+
+        function setNote(n) { 
+            noteData = n; 
+            document.querySelectorAll('#starIn span').forEach((s, i) => s.classList.toggle('sel', i < n)); 
+        }
+
+        function preview(input) { 
+            const r = new FileReader(); 
+            r.onload = e => { 
+                imgData = e.target.result; 
+                document.getElementById('prev').src = imgData; 
+                document.getElementById('prev').style.display = 'block'; 
+            }; 
+            r.readAsDataURL(input.files[0]); 
+        }
+
+        function zoom(src) {
+            if(!src || src.includes('placeholder')) return;
+            const m = document.getElementById('modal');
+            const mi = document.getElementById('modalImg');
+            mi.src = src; m.style.display = 'flex';
+        }
+
+        function prepAdd() {
+            document.getElementById('formTitle').innerText = "Nouvelle Bouteille";
+            document.getElementById('editId').value = "";
+            document.getElementById('nom').value = "";
+            document.getElementById('qteIn').value = "1";
+            document.getElementById('txt').value = "";
+            imgData = "";
+            document.getElementById('prev').style.display = 'none';
+            setNote(3);
+            go('A');
+        }
+
+        function prepEdit(id) {
+            const v = cave.find(item => item.id === id);
+            document.getElementById('formTitle').innerText = "Modifier la Bouteille";
+            document.getElementById('editId').value = id;
+            document.getElementById('nom').value = v.n;
+            document.getElementById('qteIn').value = v.q;
+            document.getElementById('txt').value = v.txt || "";
+            imgData = v.img || "";
+            if(imgData) {
+                document.getElementById('prev').src = imgData;
+                document.getElementById('prev').style.display = 'block';
+            } else {
+                document.getElementById('prev').style.display = 'none';
+            }
+            setNote(v.note || 3);
+            go('A');
+        }
+
+        function save() {
+            const n = document.getElementById('nom').value;
+            const id = document.getElementById('editId').value;
+            if(!n) return alert("Nom requis");
+            
+            const data = {
+                n, 
+                q: parseInt(document.getElementById('qteIn').value) || 0,
+                cat: curCat,
+                note: noteData,
+                txt: document.getElementById('txt').value,
+                img: imgData
+            };
+
+            if(id) {
+                db.ref('cave/' + id).update(data);
+            } else {
+                db.ref('cave').push(data);
+            }
+            go('L');
+        }
+
+        function updateQ(id, d) {
+            const v = cave.find(i => i.id === id);
+            db.ref('cave/' + id).update({ q: Math.max(0, (v.q || 0) + d) });
+        }
+
+        function draw() {
+            const d = document.getElementById('LIST'); 
+            d.innerHTML = "";
+            const filtered = cave.filter(v => v.cat === curCat);
+            
+            if(filtered.length === 0) {
+                d.innerHTML = "<div style='width:100%; text-align:center; margin-top:50px; opacity:0.5;'>Rayon vide.</div>";
+                return;
+            }
+
+            filtered.forEach(v => {
+                let s = "★".repeat(v.note) + "☆".repeat(5-v.note);
+                let img = v.img || 'https://via.placeholder.com/70x100/111/c5a059?text=Vin';
+                let comment = v.txt ? `<span class="v-comment">${v.txt}</span>` : "";
+                
+                d.innerHTML += `
+                <div class="card">
+                    <div class="actions-top">
+                        <button class="btn-action" onclick="prepEdit('${v.id}')">Modifier</button>
+                        <button class="btn-action" style="color:#600" onclick="if(confirm('Supprimer ?')) db.ref('cave/${v.id}').remove()">Suppr.</button>
+                    </div>
+                    <img src="${img}" class="v-img" onclick="zoom('${img}')">
+                    <div class="v-info">
+                        <span class="v-name">${v.n}</span>
+                        <div class="stars">${s}</div>
+                        ${comment}
+                        <div class="stock-ctrl">
+                            <button class="btn-s" onclick="updateQ('${v.id}', -1)">-</button>
+                            <span class="qte-val">${v.q}</span>
+                            <button class="btn-s" onclick="updateQ('${v.id}', 1)">+</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+        setNote(3);
+    </script>
+</body>
+</html>
