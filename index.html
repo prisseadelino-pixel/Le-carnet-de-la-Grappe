@@ -68,18 +68,25 @@
     <div id="modal" onclick="this.style.display='none'"><img id="modalImg"></div>
 
     <script>
-        // 1. SCRIPT HORS CONNEXION (Service Worker)
+        // SERVICE WORKER AMÉLIORÉ
         if ('serviceWorker' in navigator) {
             const swCode = `
-                const cacheName = 'cave-v1';
-                self.addEventListener('install', e => e.waitUntil(caches.open(cacheName).then(c => c.addAll(['/', '/index.html']))));
-                self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
+                const cacheName = 'cave-v2';
+                self.addEventListener('install', e => {
+                    e.waitUntil(caches.open(cacheName).then(c => c.addAll(['index.html', './'])));
+                });
+                self.addEventListener('fetch', e => {
+                    // Laisser passer les requêtes Firebase sans les cacher
+                    if (e.request.url.includes('firebase')) {
+                        return fetch(e.request);
+                    }
+                    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+                });
             `;
             const blob = new Blob([swCode], {type: 'text/javascript'});
             navigator.serviceWorker.register(URL.createObjectURL(blob));
         }
 
-        // 2. FIREBASE & LOGIQUE
         const firebaseConfig = { databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -91,12 +98,17 @@
             if(curCat) draw();
         });
 
-        function go(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function go(id) { 
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0);
+        }
         function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
         function setNote(n) { noteData = n; document.querySelectorAll('#starIn span').forEach((s, i) => s.classList.toggle('sel', i < n)); }
         function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; document.getElementById('prev').src = imgData; document.getElementById('prev').style.display = 'block'; }; r.readAsDataURL(input.files[0]); }
         function zoom(src) { if(!src) return; document.getElementById('modalImg').src = src; document.getElementById('modal').style.display = 'flex'; }
         function prepAdd() { document.getElementById('editId').value = ""; document.getElementById('nom').value = ""; document.getElementById('qteIn').value = "1"; document.getElementById('txt').value = ""; imgData = ""; document.getElementById('prev').style.display = 'none'; setNote(3); go('A'); }
+        
         function save() {
             const n = document.getElementById('nom').value;
             const id = document.getElementById('editId').value;
@@ -105,14 +117,18 @@
             id ? db.ref('cave/' + id).update(data) : db.ref('cave').push(data);
             go('L');
         }
+
         function updateQ(id, d) { const v = cave.find(i => i.id === id); db.ref('cave/' + id).update({ q: Math.max(0, (v.q || 0) + d) }); }
+
         function draw() {
             const d = document.getElementById('LIST'); d.innerHTML = "";
-            cave.filter(v => v.cat === curCat).forEach(v => {
+            const list = cave.filter(v => v.cat === curCat);
+            if(list.length === 0) d.innerHTML = "<div style='margin-top:20px;opacity:0.5'>Vide</div>";
+            list.forEach(v => {
                 let s = "★".repeat(v.note) + "☆".repeat(5-v.note);
                 d.innerHTML += `<div class="card">
                     <img src="${v.img || ''}" class="v-img" onclick="zoom('${v.img}')">
-                    <div class="v-info"><b>${v.n}</b><div class="stars">${s}</div><div class="stock-ctrl"><button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button><span>${v.q}</span><button class="btn-s" onclick="updateQ('${v.id}',1)">+</button></div></div>
+                    <div class="v-info"><b>${v.n}</b><div class="stars">${s}</div><div class="stock-ctrl"><button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button><span class="qte-val">${v.q}</span><button class="btn-s" onclick="updateQ('${v.id}',1)">+</button></div></div>
                 </div>`;
             });
         }
