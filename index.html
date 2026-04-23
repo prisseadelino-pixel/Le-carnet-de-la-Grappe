@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Ma Cave">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>LE CARNET DE LA GRAPPE</title>
     
@@ -18,14 +17,20 @@
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Montserrat:wght@200;400;600&display=swap');
         :root { --bg: #000; --gold: #c5a059; --txt: #fff; --brd: rgba(255,255,255,0.1); }
         
-        /* Masquage forcé des pubs résiduelles */
         iframe, #tiiny-host-badge, .tiiny-badge, div[style*="bottom: 0"] { display: none !important; visibility: hidden !important; }
 
         body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--txt); margin: 0; padding: 0; overflow-x: hidden; }
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
         
-        .header-img { width: 180px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; }
+        .header-img { 
+            width: 180px; 
+            height: auto; 
+            margin-bottom: 15px; 
+            border: 1px solid var(--gold); 
+            padding: 5px; 
+            border-radius: 8px; 
+        }
 
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
@@ -62,7 +67,9 @@
 
     <div id="H" class="p active">
         <div style="margin-top: 10vh; text-align: center;">
-            <img src="https://votre-lien-image.com/logo.jpg" class="header-img" onerror="this.style.display='none'">
+            
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="header-img" onerror="this.style.display='none'">
+            
             <div class="subtitle">Collection Privée</div>
             <h1>Le Carnet de la Grappe</h1>
         </div>
@@ -92,13 +99,13 @@
         <input type="hidden" id="editId">
         <input type="text" id="nom" placeholder="Nom du Domaine">
         <input type="number" id="qteIn" placeholder="Quantité">
-        <button class="btn-main" style="font-size:0.7rem;" onclick="document.getElementById('f').click()">📸 Photo</button>
+        <button class="btn-main" style="font-size:0.7rem;" onclick="document.getElementById('f').click()">📸 Prendre Photo</button>
         <input type="file" id="f" accept="image/*" capture="environment" style="display:none" onchange="preview(this)">
         <img id="prev">
         <div class="star-in" id="starIn">
             <span onclick="setNote(1)">★</span><span onclick="setNote(2)">★</span><span onclick="setNote(3)">★</span><span onclick="setNote(4)">★</span><span onclick="setNote(5)">★</span>
         </div>
-        <textarea id="txt" placeholder="Notes de dégustation..." rows="4"></textarea>
+        <textarea id="txt" placeholder="Vos commentaires..." rows="4"></textarea>
         <button class="btn-main" onclick="save()">Enregistrer</button>
         <button onclick="go('L')" style="background:none; border:none; color:var(--gold); margin-top:15px; cursor:pointer;">ANNULER</button>
     </div>
@@ -234,13 +241,4 @@
                         <div class="stock-ctrl">
                             <button class="btn-s" onclick="updateQ('${v.id}', -1)">-</button>
                             <span class="qte-val">${v.q}</span>
-                            <button class="btn-s" onclick="updateQ('${v.id}', 1)">+</button>
-                        </div>
-                    </div>
-                </div>`;
-            });
-        }
-        setNote(3);
-    </script>
-</body>
-</html>
+                            <button class="bt
