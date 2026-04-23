@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Ma Cave">
     
-    <link rel="manifest" href="data:application/manifest+json,{'short_name':'MaCave','name':'Le Carnet de la Grappe','display':'standalone','start_url':'index.html','background_color':'#000000','theme_color':'#c5a059','icons':[{'src':'https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg','sizes':'512x512','type':'image/jpeg'}]}">
+    <link rel="manifest" href="data:application/manifest+json,{'short_name':'MaCave','name':'Le Carnet de la Grappe','display':'standalone','start_url':'index.html','background_color':'#000000','theme_color':'#c5a059'}">
 
     <title>LE CARNET DE LA GRAPPE</title>
     
@@ -24,8 +24,8 @@
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
         
-        /* STYLE DU LOGO (Ton carnet doré) */
-        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; box-shadow: 0 0 15px rgba(197, 160, 89, 0.3); }
+        /* STYLE DU LOGO */
+        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; }
 
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
@@ -103,84 +103,4 @@
     <div id="modal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
 
     <script>
-        // Tenter de masquer la barre d'adresse au chargement
-        window.addEventListener("load", function() { setTimeout(function(){ window.scrollTo(0, 1); }, 0); });
-
-        // CONFIGURATION FIREBASE (La tienne)
-        const firebaseConfig = { databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app/" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        let cave = []; let curCat = ""; let imgData = ""; let noteData = 3;
-
-        // Synchro Temps Réel
-        db.ref('cave').on('value', (snap) => {
-            const data = snap.val();
-            cave = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
-            if(curCat) draw();
-        });
-
-        // Navigation
-        function go(id) { 
-            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
-            window.scrollTo(0,0);
-        }
-        function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
-        
-        // Notes et Étoiles
-        function setNote(n) { noteData = n; document.querySelectorAll('#starIn span').forEach((s, i) => s.classList.toggle('sel', i < n)); }
-        
-        // Photo
-        function preview(input) { 
-            const r = new FileReader(); 
-            r.onload = e => { imgData = e.target.result; document.getElementById('prev').src = imgData; document.getElementById('prev').style.display = 'block'; }; 
-            r.readAsDataURL(input.files[0]); 
-        }
-        function zoom(src) { if(!src || src.includes('placeholder')) return; document.getElementById('modalImg').src = src; document.getElementById('modal').style.display = 'flex'; }
-        
-        // Formulaires
-        function prepAdd() { document.getElementById('formTitle').innerText = "Nouvelle Bouteille"; document.getElementById('editId').value = ""; document.getElementById('nom').value = ""; document.getElementById('qteIn').value = "1"; document.getElementById('txt').value = ""; imgData = ""; document.getElementById('prev').style.display = 'none'; setNote(3); go('A'); }
-        function prepEdit(id) {
-            const v = cave.find(item => item.id === id);
-            document.getElementById('formTitle').innerText = "Modifier";
-            document.getElementById('editId').value = id;
-            document.getElementById('nom').value = v.n;
-            document.getElementById('qteIn').value = v.q;
-            document.getElementById('txt').value = v.txt || "";
-            imgData = v.img || "";
-            if(imgData) { document.getElementById('prev').src = imgData; document.getElementById('prev').style.display = 'block'; }
-            setNote(v.note || 3); go('A');
-        }
-        
-        // Sauvegarde (Ajout ou Modif)
-        function save() {
-            const n = document.getElementById('nom').value;
-            const id = document.getElementById('editId').value;
-            if(!n) return alert("Nom requis");
-            const data = { n, q: parseInt(document.getElementById('qteIn').value) || 0, cat: curCat, note: noteData, txt: document.getElementById('txt').value, img: imgData };
-            if(id) { db.ref('cave/' + id).update(data); } else { db.ref('cave').push(data); }
-            go('L');
-        }
-        
-        // Stocks
-        function updateQ(id, d) { const v = cave.find(i => i.id === id); db.ref('cave/' + id).update({ q: Math.max(0, (v.q || 0) + d) }); }
-        
-        // Affichage Liste
-        function draw() {
-            const d = document.getElementById('LIST'); d.innerHTML = "";
-            const filtered = cave.filter(v => v.cat === curCat);
-            if(filtered.length === 0) { d.innerHTML = "<div style='text-align:center;margin-top:50px;opacity:0.5;'>Rayon vide.</div>"; return; }
-            filtered.forEach(v => {
-                let s = "★".repeat(v.note) + "☆".repeat(5-v.note);
-                let img = v.img || 'https://via.placeholder.com/70x100/111/c5a059?text=Vin';
-                d.innerHTML += `<div class="card">
-                    <div class="actions-top"><button class="btn-action" onclick="prepEdit('${v.id}')">Modif</button><button class="btn-action" style="color:#600" onclick="if(confirm('Supprimer ?')) db.ref('cave/${v.id}').remove()">X</button></div>
-                    <img src="${img}" class="v-img" onclick="zoom('${img}')">
-                    <div class="v-info"><span class="v-name">${v.n}</span><div class="stars">${s}</div><span class="v-comment">${v.txt||""}</span><div class="stock-ctrl"><button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button><span class="qte-val">${v.q}</span><button class="btn-s" onclick="updateQ('${v.id}',1)">+</button></div></div>
-                </div>`;
-            });
-        }
-        setNote(3);
-    </script>
-</body>
-</html>
+        window
