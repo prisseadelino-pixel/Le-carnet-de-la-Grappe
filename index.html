@@ -16,7 +16,17 @@
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
         
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 10px 0; text-align: center; font-size: 1.6rem; }
+        /* --- MODIFICATION DE LA TAILLE ICI --- */
+        .header-img { 
+            width: 100px; /* Change ce chiffre pour agrandir ou rétrécir */
+            height: auto; 
+            margin-bottom: 15px; 
+            border: 1px solid var(--gold); 
+            padding: 5px;
+            border-radius: 8px; /* Léger arrondi des coins */
+        }
+
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
         
         #LIST { width: 100%; max-width: 500px; display: flex; flex-direction: column; }
@@ -50,8 +60,10 @@
 <body>
 
     <div id="H" class="p active">
-        <div style="margin-top: 15vh; text-align: center;">
-            <div class="subtitle">Collection Privée</div>
+        <div style="margin-top: 10vh; text-align: center;">
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="header-img"
+   <br>
+   <div class="subtitle">Collection Privée</div>
             <h1>Le Carnet de la Grappe</h1>
         </div>
         <button class="btn-main" onclick="go('C')" style="margin-top: 40px;">Accéder à ma cave</button>
@@ -86,7 +98,7 @@
         <div class="star-in" id="starIn">
             <span onclick="setNote(1)">★</span><span onclick="setNote(2)">★</span><span onclick="setNote(3)">★</span><span onclick="setNote(4)">★</span><span onclick="setNote(5)">★</span>
         </div>
-        <textarea id="txt" placeholder="Vos notes / commentaires..." rows="4"></textarea>
+        <textarea id="txt" placeholder="Notes de dégustation..." rows="4"></textarea>
         <button class="btn-main" onclick="save()">Enregistrer</button>
         <button onclick="go('L')" style="background:none; border:none; color:var(--gold); margin-top:15px; cursor:pointer;">ANNULER</button>
     </div>
