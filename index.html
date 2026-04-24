@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="manifest" href="data:application/manifest+json,{'short_name':'MaCave','name':'Le Carnet de la Grappe','display':'standalone','start_url':'index.html','background_color':'#000000','theme_color':'#c5a059'}">
     <title>LE CARNET DE LA GRAPPE</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
@@ -18,38 +15,36 @@
         body, html { margin: 0; padding: 0; background: var(--bg); color: var(--txt); font-family: 'Montserrat', sans-serif; height: 100%; overflow-x: hidden; }
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
-        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; }
+        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
         .btn-main { background: none; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 90%; max-width: 320px; text-transform: uppercase; margin-top: 10px; font-weight: 600; cursor: pointer; }
         .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; box-sizing: border-box; }
         .v-img { width: 70px; height: 100px; object-fit: cover; margin-right: 15px; border: 1px solid var(--brd); }
-        .stars { color: var(--gold); font-size: 0.7rem; margin: 3px 0; }
         .btn-s { background: none; border: 1px solid var(--gold); color: var(--gold); width: 28px; height: 28px; border-radius: 4px; }
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 30px; z-index: 100; color: #000; }
         input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); }
-        .sel { color: var(--gold) !important; }
     </style>
 </head>
 <body>
 
-    <div id="AUTH" class="p">
-        <div style="margin-top: 20vh; text-align: center;">
+    <div id="AUTH" class="p active">
+        <div style="margin-top: 15vh; text-align: center;">
             <img src="https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg" class="header-img">
             <h1>Le Carnet de la Grappe</h1>
-            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px;">Connectez-vous pour accéder à votre cave privée</p>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px;">Accédez à votre cave personnelle</p>
             <button class="btn-main" onclick="login()">Se connecter avec Google</button>
         </div>
     </div>
 
     <div id="H" class="p">
-        <div style="margin-top: 10vh; text-align: center;">
-            <img src="<img src="https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg" class="header-img">">
+        <div style="margin-top: 5vh; text-align: center;">
+            <img src="https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg" class="header-img">
             <div id="userWelcome" class="subtitle">Bienvenue</div>
             <h1>Ma Cave Privée</h1>
         </div>
-        <button class="btn-main" onclick="go('C')" style="margin-top: 40px;">Accéder aux Rayons</button>
-        <button onclick="logout()" style="background:none;border:none;color:gray;margin-top:40px;font-size:0.7rem;">Déconnexion</button>
+        <button class="btn-main" onclick="go('C')" style="margin-top: 40px;">Entrer dans les Rayons</button>
+        <button onclick="logout()" style="background:none;border:none;color:gray;margin-top:50px;font-size:0.7rem;">Déconnexion</button>
     </div>
 
     <div id="C" class="p">
@@ -58,27 +53,11 @@
         <button class="btn-main" onclick="op('BLANCS')">Vins Blancs</button>
         <button class="btn-main" onclick="op('ROSES')">Vins Rosés</button>
         <button class="btn-main" onclick="op('CHAMPAGNES')">Champagnes</button>
-        <button class="btn-main" onclick="op('SPIRITUEUX')">Spiritueux</button>
         <button onclick="go('H')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button>
     </div>
 
-    <div id="L" class="p">
-        <div id="T" class="subtitle"></div>
-        <div id="LIST" style="width:100%"></div>
-        <button class="btn-add" onclick="prepAdd()">+</button>
-        <button onclick="go('C')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button>
-    </div>
-
-    <div id="A" class="p">
-        <div id="formTitle" class="subtitle">Ajouter</div>
-        <input type="text" id="nom" placeholder="Nom du Domaine">
-        <input type="number" id="qteIn" placeholder="Quantité">
-        <button class="btn-main" onclick="document.getElementById('f').click()">📸 Photo</button>
-        <input type="file" id="f" accept="image/*" capture="environment" style="display:none" onchange="preview(this)">
-        <textarea id="txt" placeholder="Notes..."></textarea>
-        <button class="btn-main" onclick="save()">Enregistrer</button>
-        <button onclick="go('L')" style="background:none;border:none;color:var(--gold);margin-top:10px;">ANNULER</button>
-    </div>
+    <div id="L" class="p"><div id="T" class="subtitle"></div><div id="LIST" style="width:100%"></div><button class="btn-add" onclick="prepAdd()">+</button><button onclick="go('C')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button></div>
+    <div id="A" class="p"><div id="formTitle" class="subtitle">Ajouter</div><input type="text" id="nom" placeholder="Nom du Domaine"><input type="number" id="qteIn" placeholder="Quantité"><button class="btn-main" onclick="document.getElementById('f').click()">📸 Photo</button><input type="file" id="f" accept="image/*" capture="environment" style="display:none" onchange="preview(this)"><textarea id="txt" placeholder="Notes..."></textarea><button class="btn-main" onclick="save()">Enregistrer</button><button onclick="go('L')" style="background:none;border:none;color:var(--gold);margin-top:10px;">ANNULER</button></div>
 
     <script>
         const firebaseConfig = {
@@ -97,7 +76,7 @@
         let currentUser = null, cave = [], curCat = "", imgData = "";
 
         function login() { const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithRedirect(provider); }
-        function logout() { auth.signOut().then(() => location.reload()); }
+        function logout() { auth.signOut().then(() => { window.location.reload(); }); }
 
         auth.onAuthStateChanged(user => {
             if (user) {
@@ -112,16 +91,15 @@
             } else { go('AUTH'); }
         });
 
-        function go(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function go(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
-        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; }; r.readAsDataURL(input.files[0]); }
+        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; alert("Photo capturée !"); }; r.readAsDataURL(input.files[0]); }
         
         function save() {
             const n = document.getElementById('nom').value;
-            if(!n || !currentUser) return alert("Nom requis");
+            if(!n || !currentUser) return alert("Nom manquant");
             const data = { n, q: parseInt(document.getElementById('qteIn').value) || 0, cat: curCat, img: imgData, txt: document.getElementById('txt').value };
-            db.ref('users/' + currentUser.uid + '/cave').push(data);
-            go('L');
+            db.ref('users/' + currentUser.uid + '/cave').push(data).then(() => { go('L'); });
         }
 
         function updateQ(id, d) { 
@@ -132,16 +110,7 @@
         function draw() {
             const d = document.getElementById('LIST'); d.innerHTML = "";
             cave.filter(v => v.cat === curCat).forEach(v => {
-                d.innerHTML += `<div class="card">
-                    <img src="${v.img || ''}" class="v-img">
-                    <div style="flex:1"><b>${v.n}</b><br>
-                        <div style="margin-top:10px">
-                            <button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button>
-                            <span style="margin:0 10px">${v.q}</span>
-                            <button class="btn-s" onclick="updateQ('${v.id}',1)">+</button>
-                        </div>
-                    </div>
-                </div>`;
+                d.innerHTML += `<div class="card"><img src="${v.img || ''}" class="v-img"><div style="flex:1"><b>${v.n}</b><br><div style="margin-top:10px"><button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button><span style="margin:0 10px">${v.q}</span><button class="btn-s" onclick="updateQ('${v.id}',1)">+</button></div></div></div>`;
             });
         }
         function prepAdd() { document.getElementById('nom').value=""; document.getElementById('qteIn').value="1"; imgData=""; go('A'); }
