@@ -3,157 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#000000">
-
     <link rel="manifest" href="data:application/manifest+json,{'short_name':'MaCave','name':'Le Carnet de la Grappe','display':'standalone','start_url':'index.html','background_color':'#000000','theme_color':'#c5a059'}">
-
     <title>LE CARNET DE LA GRAPPE</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;700&family=Montserrat:wght@200;400;600&display=swap');
         :root { --bg: #000; --gold: #c5a059; --txt: #fff; --brd: rgba(255,255,255,0.1); }
-        
         body, html { margin: 0; padding: 0; background: var(--bg); color: var(--txt); font-family: 'Montserrat', sans-serif; height: 100%; overflow-x: hidden; }
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
-        
         .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
-        
-        #LIST { width: 100%; max-width: 500px; display: flex; flex-direction: column; }
-        .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; display: flex; align-items: flex-start; box-sizing: border-box; position: relative; }
-        .v-img { width: 70px; height: 100px; object-fit: cover; margin-right: 15px; border: 1px solid var(--brd); }
-        .v-info { flex: 1; }
-        .v-name { color: var(--gold); text-transform: uppercase; font-size: 0.9rem; font-weight: 600; display: block; }
-        .v-comment { color: #888; font-size: 0.75rem; font-style: italic; margin-top: 5px; display: block; }
-        
-        .stock-ctrl { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-        .btn-s { background: none; border: 1px solid var(--gold); color: var(--gold); width: 28px; height: 28px; border-radius: 4px; }
-        .qte-val { color: var(--gold); font-weight: bold; min-width: 20px; text-align: center; }
-        .stars { color: var(--gold); font-size: 0.7rem; margin: 3px 0; }
         .btn-main { background: none; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 90%; max-width: 320px; text-transform: uppercase; margin-top: 10px; font-weight: 600; cursor: pointer; }
+        .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; box-sizing: border-box; }
+        .v-img { width: 70px; height: 100px; object-fit: cover; margin-right: 15px; border: 1px solid var(--brd); }
+        .stars { color: var(--gold); font-size: 0.7rem; margin: 3px 0; }
+        .btn-s { background: none; border: 1px solid var(--gold); color: var(--gold); width: 28px; height: 28px; border-radius: 4px; }
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 55px; height: 55px; border-radius: 50%; border: none; font-size: 30px; z-index: 100; color: #000; }
-        
         input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); }
-        #prev { width: 80px; height: 110px; object-fit: cover; margin: 10px auto; display: none; border: 1px solid var(--gold); }
         .sel { color: var(--gold) !important; }
-        .star-in { font-size: 1.8rem; color: #222; margin: 10px 0; }
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
-        #modal img { max-width: 90%; max-height: 80%; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
 
-    <div id="H" class="p active">
-        <div style="margin-top: 10vh; text-align: center;">
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-            <div class="subtitle">Collection Privée</div>
+    <div id="AUTH" class="p">
+        <div style="margin-top: 20vh; text-align: center;">
+            <img src="https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg" class="header-img">
             <h1>Le Carnet de la Grappe</h1>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 20px;">Connectez-vous pour accéder à votre cave privée</p>
+            <button class="btn-main" onclick="login()">Se connecter avec Google</button>
         </div>
-        <button class="btn-main" onclick="go('C')" style="margin-top: 40px;">Accéder à ma cave</button>
     </div>
 
-    <div id="C" class="p"><div class="subtitle">Rayons</div><button class="btn-main" onclick="op('ROUGES')">Vins Rouges</button><button class="btn-main" onclick="op('BLANCS')">Vins Blancs</button><button class="btn-main" onclick="op('ROSES')">Vins Rosés</button><button class="btn-main" onclick="op('CHAMPAGNES')">Champagnes</button><button class="btn-main" onclick="op('SPIRITUEUX')">Spiritueux</button><button class="btn-main" onclick="op('BULLES')">Autres Bulles</button><button onclick="go('H')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button></div>
-    <div id="L" class="p"><div id="T" class="subtitle"></div><div id="LIST"></div><button class="btn-add" onclick="prepAdd()">+</button><button onclick="go('C')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button></div>
-    <div id="A" class="p"><div id="formTitle" class="subtitle">Nouvelle Bouteille</div><input type="hidden" id="editId"><input type="text" id="nom" placeholder="Nom du Domaine"><input type="number" id="qteIn" placeholder="Quantité"><button class="btn-main" onclick="document.getElementById('f').click()">📸 Photo</button><input type="file" id="f" accept="image/*" capture="environment" style="display:none" onchange="preview(this)"><img id="prev"><div class="star-in" id="starIn"><span onclick="setNote(1)">★</span><span onclick="setNote(2)">★</span><span onclick="setNote(3)">★</span><span onclick="setNote(4)">★</span><span onclick="setNote(5)">★</span></div><textarea id="txt" placeholder="Notes..." rows="4"></textarea><button class="btn-main" onclick="save()">Enregistrer</button><button onclick="go('L')" style="background:none;border:none;color:var(--gold);margin-top:15px;">ANNULER</button></div>
+    <div id="H" class="p">
+        <div style="margin-top: 10vh; text-align: center;">
+            <img src="https://files.plytix.com/api/v1.1/file/public_assets/5f8021d7b3e0e7000164c8d5/products/664379d30da57f6487920786/images/66437a346587c6742a03e1eb/main.jpg" class="header-img">
+            <div id="userWelcome" class="subtitle">Bienvenue</div>
+            <h1>Ma Cave Privée</h1>
+        </div>
+        <button class="btn-main" onclick="go('C')" style="margin-top: 40px;">Accéder aux Rayons</button>
+        <button onclick="logout()" style="background:none;border:none;color:gray;margin-top:40px;font-size:0.7rem;">Déconnexion</button>
+    </div>
 
-    <div id="modal" onclick="this.style.display='none'"><img id="modalImg"></div>
+    <div id="C" class="p">
+        <div class="subtitle">Rayons</div>
+        <button class="btn-main" onclick="op('ROUGES')">Vins Rouges</button>
+        <button class="btn-main" onclick="op('BLANCS')">Vins Blancs</button>
+        <button class="btn-main" onclick="op('ROSES')">Vins Rosés</button>
+        <button class="btn-main" onclick="op('CHAMPAGNES')">Champagnes</button>
+        <button class="btn-main" onclick="op('SPIRITUEUX')">Spiritueux</button>
+        <button onclick="go('H')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button>
+    </div>
+
+    <div id="L" class="p">
+        <div id="T" class="subtitle"></div>
+        <div id="LIST" style="width:100%"></div>
+        <button class="btn-add" onclick="prepAdd()">+</button>
+        <button onclick="go('C')" style="background:none;border:none;color:var(--gold);margin-top:30px;">← RETOUR</button>
+    </div>
+
+    <div id="A" class="p">
+        <div id="formTitle" class="subtitle">Ajouter</div>
+        <input type="text" id="nom" placeholder="Nom du Domaine">
+        <input type="number" id="qteIn" placeholder="Quantité">
+        <button class="btn-main" onclick="document.getElementById('f').click()">📸 Photo</button>
+        <input type="file" id="f" accept="image/*" capture="environment" style="display:none" onchange="preview(this)">
+        <textarea id="txt" placeholder="Notes..."></textarea>
+        <button class="btn-main" onclick="save()">Enregistrer</button>
+        <button onclick="go('L')" style="background:none;border:none;color:var(--gold);margin-top:10px;">ANNULER</button>
+    </div>
 
     <script>
-        // SERVICE WORKER AMÉLIORÉ
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                const cacheName = 'cave-v2';
-                self.addEventListener('install', e => {
-                    e.waitUntil(caches.open(cacheName).then(c => c.addAll(['index.html', './'])));
-                });
-                self.addEventListener('fetch', e => {
-                    // Laisser passer les requêtes Firebase sans les cacher
-                    if (e.request.url.includes('firebase')) {
-                        return fetch(e.request);
-                    }
-                    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-                });
-            `;
-            const blob = new Blob([swCode], {type: 'text/javascript'});
-            navigator.serviceWorker.register(URL.createObjectURL(blob));
-        }
-
         const firebaseConfig = {
-  apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
-  authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
-  databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "le-carnet-de-la-grappe",
-  storageBucket: "le-carnet-de-la-grappe.firebasestorage.app",
-  messagingSenderId: "90122533942",
-  appId: "1:90122533942:web:0448a69951e95108ce6c97",
-  measurementId: "G-43WW8LLQ2S"
-};
+            apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
+            authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
+            databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "le-carnet-de-la-grappe",
+            storageBucket: "le-carnet-de-la-grappe.firebasestorage.app",
+            messagingSenderId: "90122533942",
+            appId: "1:90122533942:web:0448a69951e95108ce6c97"
+        };
 
-// Initialisation
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const auth = firebase.auth();
-let currentUser = null, cave = [], curCat = "", imgData = "", noteData = 3;
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const auth = firebase.auth();
+        let currentUser = null, cave = [], curCat = "", imgData = "";
 
-// Détecte quand l'utilisateur se connecte
-auth.onAuthStateChanged(user => {
-    if (user) {
-        currentUser = user;
-        // On va chercher uniquement la cave de cet utilisateur spécifique
-        db.ref('users/' + user.uid + '/cave').on('value', snap => {
-            const data = snap.val();
-            cave = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
-            if(curCat) draw();
+        function login() { const provider = new firebase.auth.GoogleAuthProvider(); auth.signInWithRedirect(provider); }
+        function logout() { auth.signOut().then(() => location.reload()); }
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('userWelcome').innerText = "Cave de " + user.displayName;
+                db.ref('users/' + user.uid + '/cave').on('value', snap => {
+                    const data = snap.val();
+                    cave = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
+                    if(curCat) draw();
+                });
+                go('H');
+            } else { go('AUTH'); }
         });
-        go('H'); // Envoie vers l'accueil une fois connecté
-    } else {
-        go('AUTH'); // Sinon, reste sur l'écran de connexion
-    }
-});
 
-        function go(id) { 
-            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
-            window.scrollTo(0,0);
-        }
+        function go(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
         function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
-        function setNote(n) { noteData = n; document.querySelectorAll('#starIn span').forEach((s, i) => s.classList.toggle('sel', i < n)); }
-        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; document.getElementById('prev').src = imgData; document.getElementById('prev').style.display = 'block'; }; r.readAsDataURL(input.files[0]); }
-        function zoom(src) { if(!src) return; document.getElementById('modalImg').src = src; document.getElementById('modal').style.display = 'flex'; }
-        function prepAdd() { document.getElementById('editId').value = ""; document.getElementById('nom').value = ""; document.getElementById('qteIn').value = "1"; document.getElementById('txt').value = ""; imgData = ""; document.getElementById('prev').style.display = 'none'; setNote(3); go('A'); }
+        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; }; r.readAsDataURL(input.files[0]); }
         
         function save() {
             const n = document.getElementById('nom').value;
-            const id = document.getElementById('editId').value;
-            if(!n) return alert("Nom requis");
-            const data = { n, q: parseInt(document.getElementById('qteIn').value) || 0, cat: curCat, note: noteData, txt: document.getElementById('txt').value, img: imgData };
-            id ? db.ref('cave/' + id).update(data) : db.ref('cave').push(data);
+            if(!n || !currentUser) return alert("Nom requis");
+            const data = { n, q: parseInt(document.getElementById('qteIn').value) || 0, cat: curCat, img: imgData, txt: document.getElementById('txt').value };
+            db.ref('users/' + currentUser.uid + '/cave').push(data);
             go('L');
         }
 
-        function updateQ(id, d) { const v = cave.find(i => i.id === id); db.ref('cave/' + id).update({ q: Math.max(0, (v.q || 0) + d) }); }
+        function updateQ(id, d) { 
+            const v = cave.find(i => i.id === id); 
+            db.ref('users/' + currentUser.uid + '/cave/' + id).update({ q: Math.max(0, (v.q || 0) + d) }); 
+        }
 
         function draw() {
             const d = document.getElementById('LIST'); d.innerHTML = "";
-            const list = cave.filter(v => v.cat === curCat);
-            if(list.length === 0) d.innerHTML = "<div style='margin-top:20px;opacity:0.5'>Vide</div>";
-            list.forEach(v => {
-                let s = "★".repeat(v.note) + "☆".repeat(5-v.note);
+            cave.filter(v => v.cat === curCat).forEach(v => {
                 d.innerHTML += `<div class="card">
-                    <img src="${v.img || ''}" class="v-img" onclick="zoom('${v.img}')">
-                    <div class="v-info"><b>${v.n}</b><div class="stars">${s}</div><div class="stock-ctrl"><button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button><span class="qte-val">${v.q}</span><button class="btn-s" onclick="updateQ('${v.id}',1)">+</button></div></div>
+                    <img src="${v.img || ''}" class="v-img">
+                    <div style="flex:1"><b>${v.n}</b><br>
+                        <div style="margin-top:10px">
+                            <button class="btn-s" onclick="updateQ('${v.id}',-1)">-</button>
+                            <span style="margin:0 10px">${v.q}</span>
+                            <button class="btn-s" onclick="updateQ('${v.id}',1)">+</button>
+                        </div>
+                    </div>
                 </div>`;
             });
         }
+        function prepAdd() { document.getElementById('nom').value=""; document.getElementById('qteIn').value="1"; imgData=""; go('A'); }
     </script>
 </body>
 </html>
