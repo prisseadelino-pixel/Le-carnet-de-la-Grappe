@@ -87,16 +87,38 @@
             navigator.serviceWorker.register(URL.createObjectURL(blob));
         }
 
-        const firebaseConfig = { databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app/" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        let cave = [], curCat = "", imgData = "", noteData = 3;
+        const firebaseConfig = {
+  apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
+  authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
+  databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "le-carnet-de-la-grappe",
+  storageBucket: "le-carnet-de-la-grappe.firebasestorage.app",
+  messagingSenderId: "90122533942",
+  appId: "1:90122533942:web:0448a69951e95108ce6c97",
+  measurementId: "G-43WW8LLQ2S"
+};
 
-        db.ref('cave').on('value', snap => {
+// Initialisation
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const auth = firebase.auth();
+let currentUser = null, cave = [], curCat = "", imgData = "", noteData = 3;
+
+// Détecte quand l'utilisateur se connecte
+auth.onAuthStateChanged(user => {
+    if (user) {
+        currentUser = user;
+        // On va chercher uniquement la cave de cet utilisateur spécifique
+        db.ref('users/' + user.uid + '/cave').on('value', snap => {
             const data = snap.val();
             cave = data ? Object.entries(data).map(([id, v]) => ({id, ...v})) : [];
             if(curCat) draw();
         });
+        go('H'); // Envoie vers l'accueil une fois connecté
+    } else {
+        go('AUTH'); // Sinon, reste sur l'écran de connexion
+    }
+});
 
         function go(id) { 
             document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
