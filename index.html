@@ -15,7 +15,7 @@
         body, html { margin: 0; padding: 0; background: var(--bg); color: var(--txt); font-family: 'Montserrat', sans-serif; height: 100%; overflow-x: hidden; }
         .p { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active { display: flex !important; }
-        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; display: block; margin-left: auto; margin-right: auto; }
+        .header-img { width: 150px; height: auto; margin-bottom: 15px; border: 1px solid var(--gold); padding: 5px; border-radius: 8px; display: block; margin: 20px auto; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 5px 0; text-align: center; font-size: 1.6rem; }
         .subtitle { letter-spacing: 3px; font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 20px; text-align: center; }
         .btn-main { background: none; color: var(--gold); border: 1px solid var(--gold); padding: 14px; width: 90%; max-width: 320px; text-transform: uppercase; margin-top: 10px; font-weight: 600; cursor: pointer; }
@@ -93,7 +93,7 @@
 
         function go(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function op(n) { curCat = n; document.getElementById('T').innerText = n; draw(); go('L'); }
-        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; alert("Photo capturée !"); }; r.readAsDataURL(input.files[0]); }
+        function preview(input) { const r = new FileReader(); r.onload = e => { imgData = e.target.result; }; r.readAsDataURL(input.files[0]); }
         
         function save() {
             const n = document.getElementById('nom').value;
