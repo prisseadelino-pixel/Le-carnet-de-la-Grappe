@@ -19,9 +19,15 @@
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; }
         .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
         
+        /* Liste des vins */
         .card { background: #0a0a0a; border-bottom: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; align-items: center; }
         .thumb { width: 60px; height: 80px; object-fit: cover; border: 1px solid var(--gold); margin-right: 15px; cursor: pointer; }
-        
+        .stars { color: var(--gold); font-size: 0.9rem; margin-top: 5px; }
+
+        /* Système de notation étoiles */
+        .rating-input { font-size: 2rem; color: #333; cursor: pointer; margin: 10px 0; }
+        .rating-input span.selected { color: var(--gold); }
+
         #MODAL { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; justify-content:center; align-items:center; }
         #MODAL img { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); }
 
@@ -64,12 +70,16 @@
         <button class="btn-gold" onclick="document.getElementById('fileIn').click()">📸 Photo de l'étiquette</button>
         <input type="file" id="fileIn" accept="image/*" style="display:none" onchange="handleFile(this)">
         
+        <div class="rating-input" id="ratingInput">
+            <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
+        </div>
+
         <input type="text" id="nomVin" placeholder="Nom du Domaine">
         <input type="number" id="qteVin" placeholder="Nombre de bouteilles" value="1">
-        <textarea id="noteVin" placeholder="Commentaires (cépages, année...)"></textarea>
+        <textarea id="noteVin" placeholder="Commentaires..."></textarea>
         
         <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="saveVin()">Enregistrer</button>
-        <div id="deleteBtn" class="delete-link" onclick="deleteVin()" style="display:none">Supprimer ce vin de la cave</div>
+        <div id="deleteBtn" class="delete-link" onclick="deleteVin()" style="display:none">Supprimer ce vin</div>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
@@ -84,7 +94,7 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
-        let userUID = null, rayonActuel = "", currentImg = "", editID = null;
+        let userUID = null, rayonActuel = "", currentImg = "", editID = null, currentRating = 0;
 
         function login() { auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); }
         function logout() { auth.signOut().then(() => window.location.reload()); }
@@ -97,7 +107,12 @@
         function showPage(id) {
             document.querySelectorAll('.p').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
+        }
+
+        function setRating(n) {
+            currentRating = n;
+            const spans = document.getElementById('ratingInput').getElementsByTagName('span');
+            for(let i=0; i<5; i++) spans[i].className = (i < n) ? 'selected' : '';
         }
 
         function openRayon(nom) {
@@ -123,14 +138,10 @@
             const data = {
                 nom: nom, qte: document.getElementById('qteVin').value,
                 note: document.getElementById('noteVin').value,
-                cat: rayonActuel, img: currentImg
+                cat: rayonActuel, img: currentImg, rate: currentRating
             };
-            
-            if(editID) {
-                db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
-            } else {
-                db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
-            }
+            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
+            else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
         }
 
         function chargerVins() {
@@ -138,12 +149,14 @@
             db.ref('users/' + userUID + '/cave').orderByChild('cat').equalTo(rayonActuel).on('value', snap => {
                 container.innerHTML = "";
                 const data = snap.val();
-                if(!data) return container.innerHTML = "<p style='margin-top:20px; opacity:0.5;'>Rayon vide</p>";
+                if(!data) return container.innerHTML = "<p>Rayon vide</p>";
                 Object.entries(data).forEach(([id, v]) => {
+                    let stars = "★".repeat(v.rate || 0) + "☆".repeat(5 - (v.rate || 0));
                     container.innerHTML += `<div class="card">
                         <img src="${v.img || 'https://via.placeholder.com/60x80?text=Vin'}" class="thumb" onclick="zoom('${v.img || ''}')">
                         <div style="flex:1" onclick="goEdit('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">
                             <b style="color:var(--gold)">${v.nom}</b><br>
+                            <div class="stars">${stars}</div>
                             <small>${v.note || ''}</small>
                         </div>
                         <div style="font-weight:bold;">x${v.qte}</div>
@@ -159,10 +172,9 @@
         }
 
         function goAdd() {
-            editID = null;
+            editID = null; setRating(0);
             document.getElementById('formTitle').innerText = "Ajouter un Vin";
             document.getElementById('nomVin').value = "";
-            document.getElementById('qteVin').value = "1";
             document.getElementById('noteVin').value = "";
             document.getElementById('previewImg').style.display = "none";
             document.getElementById('deleteBtn').style.display = "none";
@@ -171,27 +183,19 @@
         }
 
         function goEdit(id, v) {
-            editID = id;
+            editID = id; setRating(v.rate || 0);
             document.getElementById('formTitle').innerText = "Modifier le Vin";
             document.getElementById('nomVin').value = v.nom;
             document.getElementById('qteVin').value = v.qte;
             document.getElementById('noteVin').value = v.note || "";
             currentImg = v.img || "";
-            if(currentImg) {
-                document.getElementById('previewImg').src = currentImg;
-                document.getElementById('previewImg').style.display = "block";
-            } else {
-                document.getElementById('previewImg').style.display = "none";
-            }
+            if(currentImg) { document.getElementById('previewImg').src = currentImg; document.getElementById('previewImg').style.display = "block"; }
+            else { document.getElementById('previewImg').style.display = "none"; }
             document.getElementById('deleteBtn').style.display = "block";
             showPage('PAGE_ADD');
         }
 
-        function deleteVin() {
-            if(confirm("Voulez-vous vraiment supprimer ce vin ?")) {
-                db.ref('users/' + userUID + '/cave/' + editID).remove().then(() => showPage('PAGE_LISTE'));
-            }
-        }
+        function deleteVin() { if(confirm("Supprimer ce vin ?")) db.ref('users/' + userUID + '/cave/' + editID).remove().then(() => showPage('PAGE_LISTE')); }
     </script>
 </body>
 </html>
