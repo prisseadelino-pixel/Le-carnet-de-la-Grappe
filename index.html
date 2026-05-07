@@ -89,14 +89,19 @@
         const db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentPhotoData = "";
 
+        // MODIFICATION POUR L'APPLI MOBILE
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            // Utilisation de signInWithPopup pour forcer l'ouverture d'une fenêtre propre
-            auth.signInWithPopup(provider).catch((err) => {
-                console.error(err);
-                auth.signInWithRedirect(provider);
-            });
+            // On utilise impérativement le Redirect pour les applis mobiles
+            auth.signInWithRedirect(provider);
         }
+
+        // On récupère le résultat de la connexion après le retour sur l'appli
+        auth.getRedirectResult().catch((error) => {
+            if(error.code === 'auth/internal-error') {
+                alert("Erreur de connexion. Essayez d'ouvrir le site dans votre navigateur Chrome avant d'utiliser l'appli.");
+            }
+        });
 
         function logout() { auth.signOut().then(() => window.location.reload()); }
 
