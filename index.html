@@ -15,19 +15,26 @@
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo { width: 120px; height: auto; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; }
-        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
+        .logo { width: 100px; height: auto; margin: 15px auto; border: 1px solid var(--gold); padding: 8px; border-radius: 5px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.4rem; margin: 10px 0; text-transform: uppercase; }
+        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 8px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
         .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; }
-        .stars { font-size: 30px; color: #444; margin: 15px 0; cursor: pointer; }
+        
+        /* ÉTOILES */
+        .stars { font-size: 30px; color: #444; margin: 10px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
-        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
-        .img-vin { width: 60px; height: 80px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); }
-        .actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; }
-        .btn-edit { color: #5bc0de; cursor: pointer; font-size: 14px; }
-        .btn-del { color: #d9534f; cursor: pointer; font-size: 14px; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; }
+        
+        /* CARTES ET PHOTOS */
+        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 12px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 8px; border-radius: 8px; align-items: center; position: relative; }
+        .img-vin { width: 50px; height: 70px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; }
+        .actions { position: absolute; top: 8px; right: 8px; display: flex; gap: 10px; font-size: 12px; }
+        
+        /* STYLE PHOTO DANS FORMULAIRE */
+        #photoPreview { width: 80px; height: 110px; background: #1a1a1a; border: 1px dashed var(--gold); margin: 10px 0; object-fit: cover; display: block; }
+        .camera-btn { background: #222; border: 1px solid #444; color: #fff; padding: 10px; width: 90%; margin: 5px 0; border-radius: 5px; cursor: pointer; }
+
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; z-index: 100; box-shadow: 0 0 15px var(--gold); }
+        input, textarea { width: 90%; padding: 12px; margin: 5px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -39,12 +46,12 @@
     </div>
 
     <div id="PAGE_HOME" class="p">
-        <h1 id="userName">Ma Cave</h1>
+        <h1>Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">Vins Rouges</button>
         <button class="btn-gold" onclick="openRayon('BLANCS')">Vins Blancs</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">Vins Rosés</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">Champagnes</button>
-        <button onclick="logout()" style="color:gray; background:none; border:none; margin-top:40px;">Déconnexion</button>
+        <button onclick="logout()" style="color:gray; background:none; border:none; margin-top:30px;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
@@ -57,14 +64,23 @@
     <div id="PAGE_ADD" class="p">
         <h1 id="formTitle">Ajouter un Vin</h1>
         <input type="hidden" id="editId">
+        
+        <img id="photoPreview" src="">
+        <label class="camera-btn">
+             📸 PRENDRE UNE PHOTO
+            <input type="file" id="inputFile" accept="image/*" capture="environment" style="display:none" onchange="previewImage(this)">
+        </label>
+
         <input type="text" id="nomVin" placeholder="Nom du Domaine">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <input type="text" id="imgVin" placeholder="Lien URL de la photo">
+        
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
+        
         <textarea id="noteVin" placeholder="Commentaires..."></textarea>
-        <button class="btn-gold" id="btnSave" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">Enregistrer</button>
+        
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">Enregistrer</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
@@ -79,7 +95,7 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
-        let userUID = null, rayonActuel = "", noteEtoiles = 0;
+        let userUID = null, rayonActuel = "", noteEtoiles = 0, currentPhotoData = "";
 
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
@@ -97,10 +113,21 @@
             document.getElementById(id).classList.add('active');
         }
 
+        // PHOTO : APPERCU ET CONVERSION
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPhotoData = e.target.result;
+                    document.getElementById('photoPreview').src = currentPhotoData;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         function setStars(n) {
             noteEtoiles = n;
-            const spans = document.querySelectorAll('#starRating span');
-            spans.forEach((s, i) => s.classList.toggle('selected', i < n));
+            document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n));
         }
 
         function openRayon(nom) {
@@ -112,15 +139,15 @@
             const container = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', snap => {
                 container.innerHTML = "";
-                if (!snap.val()) { container.innerHTML = "<p>Vide</p>"; return; }
+                if (!snap.val()) { container.innerHTML = "<p>Rayon vide</p>"; return; }
                 Object.entries(snap.val()).forEach(([id, v]) => {
                     let starHTML = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
                     container.innerHTML += `<div class="card">
                         <div class="actions">
-                            <span class="btn-edit" onclick="editVin('${id}')">Modifier</span>
-                            <span class="btn-del" onclick="deleteVin('${id}')">X</span>
+                            <span style="color:#5bc0de" onclick="editVin('${id}')">Modifier</span>
+                            <span style="color:#d9534f" onclick="deleteVin('${id}')">X</span>
                         </div>
-                        <img src="${v.image || 'https://via.placeholder.com/60x80?text=Vin'}" class="img-vin">
+                        <img src="${v.image || ''}" class="img-vin">
                         <div style="flex:1">
                             <b style="color:var(--gold)">${v.nom}</b><br>
                             <span style="color:var(--gold); font-size:12px;">${starHTML}</span><br>
@@ -136,7 +163,8 @@
             document.getElementById('editId').value = "";
             document.getElementById('formTitle').innerText = "Ajouter un Vin";
             document.getElementById('nomVin').value = "";
-            document.getElementById('imgVin').value = "";
+            document.getElementById('photoPreview').src = "";
+            currentPhotoData = "";
             document.getElementById('noteVin').value = "";
             setStars(0); showPage('PAGE_ADD');
         }
@@ -148,7 +176,8 @@
                 document.getElementById('formTitle').innerText = "Modifier le Vin";
                 document.getElementById('nomVin').value = v.nom;
                 document.getElementById('qteVin').value = v.qte;
-                document.getElementById('imgVin').value = v.image || "";
+                document.getElementById('photoPreview').src = v.image || "";
+                currentPhotoData = v.image || "";
                 document.getElementById('noteVin').value = v.note || "";
                 setStars(v.noteEtoiles || 0);
                 showPage('PAGE_ADD');
@@ -162,7 +191,7 @@
             const data = {
                 nom: document.getElementById('nomVin').value,
                 qte: document.getElementById('qteVin').value,
-                image: document.getElementById('imgVin').value,
+                image: currentPhotoData,
                 noteEtoiles: noteEtoiles,
                 note: document.getElementById('noteVin').value,
                 categorie: rayonActuel
