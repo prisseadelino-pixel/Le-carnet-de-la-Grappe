@@ -24,7 +24,7 @@
         .stars { font-size: 25px; color: #444; cursor: pointer; margin: 10px 0; }
         .stars .selected { color: var(--gold); }
         input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; font-family: 'Montserrat', sans-serif; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; z-index: 100; }
     </style>
 </head>
 <body>
@@ -32,7 +32,10 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Mon Carnet</h1>
-        <button class="btn-outline" onclick="login()" style="background:white; color:black; border:none;">Se connecter avec Google</button>
+        <input type="email" id="emailAuth" placeholder="Email">
+        <input type="password" id="passAuth" placeholder="Mot de passe">
+        <button class="btn-gold" onclick="connexion()">Se Connecter</button>
+        <button class="btn-outline" onclick="inscription()">Créer un compte</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -41,26 +44,26 @@
         <button class="btn-outline" onclick="openRayon('BLANCS')">Vins Blancs</button>
         <button class="btn-outline" onclick="openRayon('ROSES')">Vins Rosés</button>
         <button class="btn-outline" onclick="openRayon('CHAMPAGNES')">Champagnes</button>
-        <button onclick="logout()" style="color:gray; background:none; border:none; margin-top:20px;">Déconnexion</button>
+        <button onclick="deconnexion()" style="color:gray; background:none; border:none; margin-top:20px;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle">Rayon</h1>
         <div id="container-vins" style="width:100%"></div>
-        <button class="btn-add" onclick="prepareAdd()">+</button>
+        <button class="btn-add" onclick="ouvrirAjout()">+</button>
         <button class="btn-outline" onclick="showPage('PAGE_HOME')">Retour</button>
     </div>
 
     <div id="PAGE_FORM" class="p">
-        <h1 id="formTitle">Ajouter</h1>
+        <h1 id="formTitle">Ajouter un Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" value="1">
         <input type="text" id="imgVin" placeholder="Lien de la photo (URL)">
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" placeholder="Commentaires..."></textarea>
-        <button class="btn-gold" onclick="validerForm()">Valider</button>
+        <textarea id="noteVin" placeholder="Tes impressions..."></textarea>
+        <button class="btn-gold" onclick="validerVin()">Valider</button>
         <button class="btn-outline" onclick="showPage('PAGE_LISTE')">Annuler</button>
     </div>
 
@@ -75,19 +78,27 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
-        let userUID = null, rayonActuel = "", noteEtoiles = 0, idModif = null;
+        let userUID = null, rayonActuel = "", noteEtoiles = 0, idSelectionne = null;
 
-        function login() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
+        // AUTHENTIFICATION
+        function inscription() {
+            const email = document.getElementById('emailAuth').value;
+            const pass = document.getElementById('passAuth').value;
+            auth.createUserWithEmailAndPassword(email, pass).catch(e => alert(e.message));
         }
-        function logout() { auth.signOut().then(() => window.location.reload()); }
+        function connexion() {
+            const email = document.getElementById('emailAuth').value;
+            const pass = document.getElementById('passAuth').value;
+            auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+        }
+        function deconnexion() { auth.signOut().then(() => window.location.reload()); }
 
         auth.onAuthStateChanged(user => {
             if (user) { userUID = user.uid; showPage('PAGE_HOME'); }
             else { showPage('PAGE_AUTH'); }
         });
 
+        // NAVIGATION
         function showPage(id) {
             document.querySelectorAll('.p').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -105,18 +116,19 @@
             showPage('PAGE_LISTE');
         }
 
+        // LOGIQUE CAVE
         function chargerVins() {
             const container = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', snap => {
                 container.innerHTML = "";
-                if (!snap.val()) return container.innerHTML = "<p>Vide</p>";
+                if (!snap.val()) return container.innerHTML = "<p>Rayon vide</p>";
                 Object.entries(snap.val()).forEach(([id, v]) => {
-                    let stars = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5-(v.noteEtoiles || 0));
+                    let starsAffichees = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5-(v.noteEtoiles || 0));
                     container.innerHTML += `
-                        <div class="card" onclick="prepareModif('${id}')">
-                            <img src="${v.image || ''}" class="img-vin">
+                        <div class="card" onclick="ouvrirModif('${id}')">
+                            <img src="${v.image || 'https://via.placeholder.com/60x80'}" class="img-vin">
                             <div style="flex:1">
-                                <b>${v.nom}</b><br><small style="color:var(--gold)">${stars}</small>
+                                <b>${v.nom}</b><br><small style="color:var(--gold)">${starsAffichees}</small>
                             </div>
                             <b>x${v.qte}</b>
                         </div>`;
@@ -124,9 +136,9 @@
             });
         }
 
-        function prepareAdd() {
-            idModif = null;
-            document.getElementById('formTitle').innerText = "Ajouter";
+        function ouvrirAjout() {
+            idSelectionne = null;
+            document.getElementById('formTitle').innerText = "Ajouter un Vin";
             document.getElementById('nomVin').value = "";
             document.getElementById('imgVin').value = "";
             document.getElementById('noteVin').value = "";
@@ -134,11 +146,11 @@
             showPage('PAGE_FORM');
         }
 
-        function prepareModif(id) {
-            idModif = id;
+        function ouvrirModif(id) {
+            idSelectionne = id;
             db.ref('users/' + userUID + '/cave/' + id).once('value', snap => {
                 const v = snap.val();
-                document.getElementById('formTitle').innerText = "Modifier";
+                document.getElementById('formTitle').innerText = "Modifier le Vin";
                 document.getElementById('nomVin').value = v.nom;
                 document.getElementById('qteVin').value = v.qte;
                 document.getElementById('imgVin').value = v.image || "";
@@ -148,7 +160,7 @@
             });
         }
 
-        function validerForm() {
+        function validerVin() {
             const data = {
                 nom: document.getElementById('nomVin').value,
                 qte: document.getElementById('qteVin').value,
@@ -157,7 +169,7 @@
                 note: document.getElementById('noteVin').value,
                 categorie: rayonActuel
             };
-            if(idModif) db.ref('users/' + userUID + '/cave/' + idModif).set(data).then(() => showPage('PAGE_LISTE'));
+            if(idSelectionne) db.ref('users/' + userUID + '/cave/' + idSelectionne).set(data).then(() => showPage('PAGE_LISTE'));
             else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
         }
     </script>
