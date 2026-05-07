@@ -20,7 +20,7 @@
         .btn-gold { background: var(--gold); color: #000; border: none; padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
         .btn-outline { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; }
         .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
-        .img-vin { width: 60px; height: 80px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); }
+        .img-vin { width: 70px; height: 90px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--gold); }
         .stars { font-size: 25px; color: #444; cursor: pointer; margin: 10px 0; }
         .stars .selected { color: var(--gold); }
         input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; font-family: 'Montserrat', sans-serif; }
@@ -55,16 +55,17 @@
     </div>
 
     <div id="PAGE_FORM" class="p">
-        <h1 id="formTitle">Détails du Vin</h1>
+        <h1 id="formTitle">Détails</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" value="1">
         <input type="text" id="imgVin" placeholder="Colle ta photo ici">
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" placeholder="Tes impressions..."></textarea>
+        <textarea id="noteVin" placeholder="Notes..."></textarea>
         <button class="btn-gold" onclick="validerVin()">Valider</button>
         <button class="btn-outline" onclick="showPage('PAGE_LISTE')">Annuler</button>
+        <button onclick="supprimerVin()" id="btnSuppr" style="color:red; background:none; border:none; margin-top:15px; display:none;">Supprimer ce vin</button>
     </div>
 
     <script>
@@ -81,14 +82,10 @@
         let userUID = null, rayonActuel = "", noteEtoiles = 0, idSelectionne = null;
 
         function inscription() {
-            const email = document.getElementById('emailAuth').value;
-            const pass = document.getElementById('passAuth').value;
-            auth.createUserWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+            auth.createUserWithEmailAndPassword(document.getElementById('emailAuth').value, document.getElementById('passAuth').value).catch(e => alert(e.message));
         }
         function connexion() {
-            const email = document.getElementById('emailAuth').value;
-            const pass = document.getElementById('passAuth').value;
-            auth.signInWithEmailAndPassword(email, pass).catch(e => alert(e.message));
+            auth.signInWithEmailAndPassword(document.getElementById('emailAuth').value, document.getElementById('passAuth').value).catch(e => alert(e.message));
         }
         function deconnexion() { auth.signOut().then(() => window.location.reload()); }
 
@@ -118,14 +115,14 @@
             const container = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', snap => {
                 container.innerHTML = "";
-                if (!snap.val()) return container.innerHTML = "<p>Rayon vide</p>";
+                if (!snap.val()) return container.innerHTML = "<p>Vide</p>";
                 Object.entries(snap.val()).forEach(([id, v]) => {
-                    let starsAffichees = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5-(v.noteEtoiles || 0));
+                    let stars = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5-(v.noteEtoiles || 0));
                     container.innerHTML += `
                         <div class="card" onclick="ouvrirModif('${id}')">
-                            <img src="${v.image || ''}" class="img-vin" onerror="this.src='https://via.placeholder.com/60x80?text=Vin'">
+                            <img src="${v.image}" class="img-vin" onerror="this.src='https://via.placeholder.com/70x90?text=Erreur'">
                             <div style="flex:1">
-                                <b>${v.nom}</b><br><small style="color:var(--gold)">${starsAffichees}</small>
+                                <b>${v.nom}</b><br><small style="color:var(--gold)">${stars}</small>
                             </div>
                             <b>x${v.qte}</b>
                         </div>`;
@@ -138,12 +135,14 @@
             document.getElementById('nomVin').value = "";
             document.getElementById('imgVin').value = "";
             document.getElementById('noteVin').value = "";
+            document.getElementById('btnSuppr').style.display = "none";
             setStars(0);
             showPage('PAGE_FORM');
         }
 
         function ouvrirModif(id) {
             idSelectionne = id;
+            document.getElementById('btnSuppr').style.display = "block";
             db.ref('users/' + userUID + '/cave/' + id).once('value', snap => {
                 const v = snap.val();
                 document.getElementById('nomVin').value = v.nom;
@@ -166,6 +165,12 @@
             };
             if(idSelectionne) db.ref('users/' + userUID + '/cave/' + idSelectionne).set(data).then(() => showPage('PAGE_LISTE'));
             else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
+        }
+
+        function supprimerVin() {
+            if(confirm("Supprimer ce vin ?")) {
+                db.ref('users/' + userUID + '/cave/' + idSelectionne).remove().then(() => showPage('PAGE_LISTE'));
+            }
         }
     </script>
 </body>
