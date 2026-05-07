@@ -18,7 +18,7 @@
         .logo { width: 100px; height: auto; margin: 15px auto; border: 1px solid var(--gold); padding: 8px; border-radius: 5px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.4rem; margin: 10px 0; text-transform: uppercase; }
         .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 8px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
-        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: 1rem; }
         .stars { font-size: 30px; color: #444; margin: 10px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
         .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 12px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 8px; border-radius: 8px; align-items: center; position: relative; }
@@ -36,11 +36,14 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
-        <button class="btn-google" onclick="login()">Se connecter avec Google</button>
+        <button class="btn-google" onclick="login()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+            Continuer avec Google
+        </button>
     </div>
 
     <div id="PAGE_HOME" class="p">
-        <h1>Ma Cave</h1>
+        <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">Vins Rouges</button>
         <button class="btn-gold" onclick="openRayon('BLANCS')">Vins Blancs</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">Vins Rosés</button>
@@ -52,28 +55,23 @@
         <h1 id="rayonTitle">Rayon</h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← ACCUEIL</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
         <h1 id="formTitle">Ajouter un Vin</h1>
         <input type="hidden" id="editId">
-        
         <img id="photoPreview" src="">
         <label class="camera-btn">
              📸 PRENDRE UNE PHOTO
             <input type="file" id="inputFile" accept="image/*" capture="environment" style="display:none" onchange="previewImage(this)">
         </label>
-
-        <input type="text" id="nomVin" placeholder="Nom du Domaine">
-        <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        
+        <input type="text" id="nomVin" placeholder="Nom du Vin">
+        <input type="number" id="qteVin" placeholder="Bouteilles" value="1">
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        
         <textarea id="noteVin" placeholder="Commentaires..."></textarea>
-        
         <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">Enregistrer</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
@@ -91,10 +89,13 @@
         const db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentPhotoData = "";
 
-        // MODIFICATION ICI POUR LA COMPATIBILITE
         function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithRedirect(provider);
+            // Utilisation de signInWithPopup pour forcer l'ouverture d'une fenêtre propre
+            auth.signInWithPopup(provider).catch((err) => {
+                console.error(err);
+                auth.signInWithRedirect(provider);
+            });
         }
 
         function logout() { auth.signOut().then(() => window.location.reload()); }
@@ -140,18 +141,19 @@
             const container = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', snap => {
                 container.innerHTML = "";
-                if (!snap.val()) { container.innerHTML = "<p>Rayon vide</p>"; return; }
-                Object.entries(snap.val()).forEach(([id, v]) => {
+                const data = snap.val();
+                if (!data) { container.innerHTML = "<p>Aucun vin.</p>"; return; }
+                Object.entries(data).forEach(([id, v]) => {
                     let starHTML = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
                     container.innerHTML += `<div class="card">
                         <div class="actions">
-                            <span style="color:#5bc0de" onclick="editVin('${id}')">Modifier</span>
+                            <span style="color:#5bc0de" onclick="editVin('${id}')">Editer</span>
                             <span style="color:#d9534f" onclick="deleteVin('${id}')">X</span>
                         </div>
                         <img src="${v.image || ''}" class="img-vin">
                         <div style="flex:1">
-                            <b style="color:var(--gold); text-transform:uppercase;">${v.nom}</b><br>
-                            <span style="color:var(--gold); font-size:12px; letter-spacing:2px;">${starHTML}</span><br>
+                            <b>${v.nom}</b><br>
+                            <span style="color:var(--gold)">${starHTML}</span><br>
                             <small>${v.note || ''}</small>
                         </div>
                         <div style="font-weight:bold; color:var(--gold)">x${v.qte}</div>
@@ -197,7 +199,7 @@
                 note: document.getElementById('noteVin').value,
                 categorie: rayonActuel
             };
-            if(!data.nom) return alert("Veuillez entrer le nom du vin");
+            if(!data.nom) return alert("Le nom est obligatoire");
             const ref = id ? db.ref('users/' + userUID + '/cave/' + id) : db.ref('users/' + userUID + '/cave').push();
             ref.set(data).then(() => showPage('PAGE_LISTE'));
         }
