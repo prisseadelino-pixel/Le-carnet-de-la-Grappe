@@ -19,12 +19,13 @@
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); text-transform: uppercase; font-size: 1.5rem; }
         .btn-gold { background: var(--gold); color: #000; border: none; padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
         .btn-outline { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; }
-        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
+        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; }
         .img-vin { width: 70px; height: 90px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--gold); }
         .stars { font-size: 25px; color: #444; cursor: pointer; margin: 10px 0; }
         .stars .selected { color: var(--gold); }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; font-family: 'Montserrat', sans-serif; }
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; }
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; z-index: 100; }
+        #preview { width: 70px; height: 90px; object-fit: cover; margin-top: 10px; border: 1px solid var(--gold); display: none; }
     </style>
 </head>
 <body>
@@ -58,14 +59,18 @@
         <h1 id="formTitle">Détails</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" value="1">
-        <input type="text" id="imgVin" placeholder="Colle ta photo ici">
+        
+        <button class="btn-outline" onclick="document.getElementById('fileInp').click()">Choisir une photo</button>
+        <input type="file" id="fileInp" accept="image/*" style="display:none" onchange="handleFile(this)">
+        <img id="preview">
+        
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
         <textarea id="noteVin" placeholder="Notes..."></textarea>
         <button class="btn-gold" onclick="validerVin()">Valider</button>
         <button class="btn-outline" onclick="showPage('PAGE_LISTE')">Annuler</button>
-        <button onclick="supprimerVin()" id="btnSuppr" style="color:red; background:none; border:none; margin-top:15px; display:none;">Supprimer ce vin</button>
+        <button onclick="supprimerVin()" id="btnSuppr" style="color:red; background:none; border:none; margin-top:15px; display:none;">Supprimer</button>
     </div>
 
     <script>
@@ -79,61 +84,47 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
-        let userUID = null, rayonActuel = "", noteEtoiles = 0, idSelectionne = null;
+        let userUID = null, rayonActuel = "", noteEtoiles = 0, idSelectionne = null, currentImgData = "";
 
-        function inscription() {
-            auth.createUserWithEmailAndPassword(document.getElementById('emailAuth').value, document.getElementById('passAuth').value).catch(e => alert(e.message));
-        }
-        function connexion() {
-            auth.signInWithEmailAndPassword(document.getElementById('emailAuth').value, document.getElementById('passAuth').value).catch(e => alert(e.message));
-        }
+        function inscription() { auth.createUserWithEmailAndPassword(document.getElementById('emailAuth').value, document.getElementById('passAuth').value).catch(e => alert(e.message)); }
+        function connexion() { auth.signInWithEmailAndPassword(document.getElementById('emailAuth').value, document.getElementById('passAuth').value).catch(e => alert(e.message)); }
         function deconnexion() { auth.signOut().then(() => window.location.reload()); }
 
-        auth.onAuthStateChanged(user => {
-            if (user) { userUID = user.uid; showPage('PAGE_HOME'); }
-            else { showPage('PAGE_AUTH'); }
-        });
+        auth.onAuthStateChanged(user => { if (user) { userUID = user.uid; showPage('PAGE_HOME'); } else { showPage('PAGE_AUTH'); } });
 
-        function showPage(id) {
-            document.querySelectorAll('.p').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
+
+        // GESTION IMAGE
+        function handleFile(input) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImgData = e.target.result;
+                document.getElementById('preview').src = currentImgData;
+                document.getElementById('preview').style.display = "block";
+            }
+            reader.readAsDataURL(input.files[0]);
         }
 
-        function setStars(n) {
-            noteEtoiles = n;
-            document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n));
-        }
-
-        function openRayon(nom) {
-            rayonActuel = nom;
-            document.getElementById('rayonTitle').innerText = nom;
-            chargerVins();
-            showPage('PAGE_LISTE');
-        }
+        function openRayon(nom) { rayonActuel = nom; document.getElementById('rayonTitle').innerText = nom; chargerVins(); showPage('PAGE_LISTE'); }
 
         function chargerVins() {
-            const container = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', snap => {
+                const container = document.getElementById('container-vins');
                 container.innerHTML = "";
-                if (!snap.val()) return container.innerHTML = "<p>Vide</p>";
+                if (!snap.val()) return;
                 Object.entries(snap.val()).forEach(([id, v]) => {
-                    let stars = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5-(v.noteEtoiles || 0));
-                    container.innerHTML += `
-                        <div class="card" onclick="ouvrirModif('${id}')">
-                            <img src="${v.image}" class="img-vin" onerror="this.src='https://via.placeholder.com/70x90?text=Erreur'">
-                            <div style="flex:1">
-                                <b>${v.nom}</b><br><small style="color:var(--gold)">${stars}</small>
-                            </div>
-                            <b>x${v.qte}</b>
-                        </div>`;
+                    let s = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5-(v.noteEtoiles || 0));
+                    container.innerHTML += `<div class="card" onclick="ouvrirModif('${id}')"><img src="${v.image || ''}" class="img-vin" onerror="this.src='https://via.placeholder.com/70x90?text=Vin'"><div style="flex:1"><b>${v.nom}</b><br><small style="color:var(--gold)">${s}</small></div><b>x${v.qte}</b></div>`;
                 });
             });
         }
 
         function ouvrirAjout() {
-            idSelectionne = null;
+            idSelectionne = null; currentImgData = "";
             document.getElementById('nomVin').value = "";
-            document.getElementById('imgVin').value = "";
+            document.getElementById('preview').style.display = "none";
             document.getElementById('noteVin').value = "";
             document.getElementById('btnSuppr').style.display = "none";
             setStars(0);
@@ -147,7 +138,8 @@
                 const v = snap.val();
                 document.getElementById('nomVin').value = v.nom;
                 document.getElementById('qteVin').value = v.qte;
-                document.getElementById('imgVin').value = v.image || "";
+                currentImgData = v.image || "";
+                if(currentImgData) { document.getElementById('preview').src = currentImgData; document.getElementById('preview').style.display = "block"; }
                 document.getElementById('noteVin').value = v.note || "";
                 setStars(v.noteEtoiles || 0);
                 showPage('PAGE_FORM');
@@ -155,23 +147,12 @@
         }
 
         function validerVin() {
-            const data = {
-                nom: document.getElementById('nomVin').value,
-                qte: document.getElementById('qteVin').value,
-                image: document.getElementById('imgVin').value,
-                noteEtoiles: noteEtoiles,
-                note: document.getElementById('noteVin').value,
-                categorie: rayonActuel
-            };
+            const data = { nom: document.getElementById('nomVin').value, qte: document.getElementById('qteVin').value, image: currentImgData, noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value, categorie: rayonActuel };
             if(idSelectionne) db.ref('users/' + userUID + '/cave/' + idSelectionne).set(data).then(() => showPage('PAGE_LISTE'));
             else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
         }
 
-        function supprimerVin() {
-            if(confirm("Supprimer ce vin ?")) {
-                db.ref('users/' + userUID + '/cave/' + idSelectionne).remove().then(() => showPage('PAGE_LISTE'));
-            }
-        }
+        function supprimerVin() { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + idSelectionne).remove().then(() => showPage('PAGE_LISTE')); }
     </script>
 </body>
 </html>
