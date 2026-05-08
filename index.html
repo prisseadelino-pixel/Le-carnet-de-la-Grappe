@@ -13,27 +13,37 @@
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo { width: 120px; height: auto; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; }
-        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
+        .logo { width: 100px; height: auto; margin-bottom: 10px; border: 1px solid var(--gold); padding: 5px; border-radius: 5px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.4rem; margin: 10px 0; text-transform: uppercase; }
+        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 8px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; border-radius: 4px; }
         .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; width: 90%; max-width: 320px; justify-content: center; }
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
-        .stars { font-size: 30px; color: #444; margin: 15px 0; cursor: pointer; }
-        .stars .selected { color: var(--gold); }
-        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
-        .img-vin { width: 60px; height: 80px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); cursor: zoom-in; }
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        #zoomImg { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; box-sizing: border-box; }
+        
+        /* SYSTÈME D'ÉTOILES */
+        .stars { font-size: 35px; color: #444; margin: 15px 0; cursor: pointer; user-select: none; }
+        .stars span { transition: 0.2s; }
+        .stars .selected { color: var(--gold); text-shadow: 0 0 10px rgba(197,160,89,0.5); }
+        
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 12px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
+        .img-vin { width: 55px; height: 75px; object-fit: cover; background: #1a1a1a; margin-right: 12px; border-radius: 4px; border: 1px solid var(--brd); cursor: zoom-in; }
+        .btn-del { position: absolute; top: 8px; right: 8px; color: #ff4444; background: none; border: none; font-size: 18px; cursor: pointer; opacity: 0.6; }
+        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
+        #zoomImg { max-width: 90%; max-height: 80%; border: 1px solid var(--gold); }
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; box-sizing: border-box; font-family: 'Montserrat'; }
     </style>
 </head>
 <body>
     <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
+    
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Mon Carnet</h1>
-        <button class="btn-google" id="btn-google-login">Se connecter avec Google</button>
+        <button class="btn-google" id="googleLogin">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            Se connecter avec Google
+        </button>
     </div>
+
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">Vins Rouges</button>
@@ -42,21 +52,29 @@
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">Champagnes</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:20px;">Déconnexion</button>
     </div>
+
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
     </div>
+
     <div id="PAGE_ADD" class="p">
-        <h1>Ajouter</h1>
-        <input type="text" id="nomVin" placeholder="Nom">
+        <h1>Nouveau Vin</h1>
+        <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <input type="text" id="imgVin" placeholder="Lien image (URL)">
-        <div class="stars" id="starRating"><span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span></div>
-        <textarea id="noteVin" placeholder="Note perso"></textarea>
-        <button class="btn-gold" onclick="sauvegarderVin()">Sauver</button>
+        <input type="text" id="imgVin" placeholder="Lien photo (URL)">
+        
+        <div class="stars" id="starRating">
+            <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
+        </div>
+        
+        <textarea id="noteVin" placeholder="Notes perso..."></textarea>
+        <button class="btn-gold" onclick="sauvegarderVin()">Sauvegarder</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none;">Annuler</button>
     </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
@@ -69,62 +87,75 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0;
 
-        document.getElementById('btn-google-login').onclick = function() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
+        document.getElementById('googleLogin').onclick = () => {
+            const p = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(p).catch(() => auth.signInWithRedirect(p));
         };
 
-        auth.onAuthStateChanged(u => { 
-            if(u) { 
-                userUID = u.uid; 
-                document.getElementById('userName').innerText = "Cave de " + u.displayName; 
-                showPage('PAGE_HOME'); 
-            } else { 
-                showPage('PAGE_AUTH'); 
-            }
+        auth.onAuthStateChanged(u => {
+            if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName; showPage('PAGE_HOME'); } 
+            else { showPage('PAGE_AUTH'); }
         });
 
-        function showPage(id) { 
-            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
+        function showPage(id) {
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
-        function setStars(n) { 
-            noteEtoiles = n; 
-            document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); 
+        // FONCTION POUR GÉRER LE CLIC SUR LES ÉTOILES
+        function setStars(n) {
+            noteEtoiles = n;
+            document.querySelectorAll('#starRating span').forEach((s, i) => {
+                s.classList.toggle('selected', i < n);
+            });
         }
 
-        function openRayon(n) { 
-            rayonActuel = n; 
-            document.getElementById('rayonTitle').innerText = n; 
-            chargerVins(); 
-            showPage('PAGE_LISTE'); 
-        }
+        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
 
         function chargerVins() {
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                c.innerHTML = ""; 
-                const data = s.val(); 
-                if(!data) { c.innerHTML = "<p>Rayon vide</p>"; return; }
-                Object.entries(data).forEach(([id, v]) => {
+                c.innerHTML = "";
+                if(!s.exists()) { c.innerHTML = "<p>Aucun vin ici</p>"; return; }
+                s.forEach(child => {
+                    const v = child.val(), id = child.key;
                     let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
-                    c.innerHTML += `<div class="card"><img src="${v.image || 'https://via.placeholder.com/60'}" class="img-vin" onclick="document.getElementById('zoomImg').src=this.src; document.getElementById('zoomOverlay').style.display='flex'"><div><b>${v.nom}</b><br><span style="color:var(--gold)">${st}</span></div><div style="margin-left:auto">x${v.qte}</div></div>`;
+                    c.innerHTML += `
+                        <div class="card">
+                            <img src="${v.image || 'https://via.placeholder.com/60'}" class="img-vin" onclick="zoom('${v.image}')">
+                            <div style="flex:1">
+                                <b>${v.nom}</b><br>
+                                <span style="color:var(--gold)">${st}</span>
+                            </div>
+                            <div style="font-weight:bold; margin-right:20px;">x${v.qte}</div>
+                            <button class="btn-del" onclick="supprimer('${id}')">✕</button>
+                        </div>`;
                 });
             });
         }
 
-        function goToAdd() { setStars(0); showPage('PAGE_ADD'); }
+        function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
+        
+        function supprimer(id) { if(confirm("Supprimer ce vin ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+
+        function goToAdd() { 
+            document.getElementById('nomVin').value = "";
+            document.getElementById('imgVin').value = "";
+            document.getElementById('noteVin').value = "";
+            setStars(0); 
+            showPage('PAGE_ADD'); 
+        }
 
         function sauvegarderVin() {
-            const n = document.getElementById('nomVin').value; 
+            const n = document.getElementById('nomVin').value;
             if(!n) return;
-            db.ref('users/' + userUID + '/cave').push({ 
-                nom: n, 
-                qte: document.getElementById('qteVin').value, 
-                image: document.getElementById('imgVin').value, 
-                noteEtoiles: noteEtoiles, 
-                categorie: rayonActuel 
+            db.ref('users/' + userUID + '/cave').push({
+                nom: n,
+                qte: document.getElementById('qteVin').value || 1,
+                image: document.getElementById('imgVin').value || "",
+                noteEtoiles: noteEtoiles,
+                note: document.getElementById('noteVin').value,
+                categorie: rayonActuel
             }).then(() => showPage('PAGE_LISTE'));
         }
     </script>
