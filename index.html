@@ -18,26 +18,19 @@
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2.4rem; margin: 20px 0; text-transform: uppercase; letter-spacing: 3px; }
         .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 22px; width: 95%; max-width: 500px; margin: 12px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.2rem; border-radius: 10px; }
         .btn-google { background: white; color: #000; border: none; padding: 22px; border-radius: 10px; font-weight: 700; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 50px; width: 95%; max-width: 500px; justify-content: center; }
-        
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 25px; display: flex; width: 95%; max-width: 600px; text-align: left; margin-bottom: 20px; border-radius: 15px; align-items: center; position: relative; }
         .img-vin { width: 90px; height: 120px; object-fit: cover; background: #1a1a1a; margin-right: 20px; border-radius: 8px; border: 1.5px solid var(--gold); cursor: zoom-in; }
         .vin-info { flex: 1; cursor: pointer; }
         .vin-info b { font-size: 1.6rem; display: block; margin-bottom: 8px; color: var(--gold); }
         .vin-qte { font-size: 1.8rem; font-weight: 700; color: #fff; padding-right: 10px; }
-        
         .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 15px; filter: sepia(1) saturate(5) hue-rotate(10deg); }
-
         .btn-add { position: fixed; bottom: 40px; right: 25px; background: var(--gold); width: 80px; height: 80px; border-radius: 50%; border: none; font-size: 50px; color: #000; box-shadow: 0 6px 25px rgba(197,160,89,0.6); z-index: 100; font-weight: bold; cursor: pointer; }
         .stars { font-size: 50px; color: #333; margin: 25px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
-        
         input, textarea { width: 95%; max-width: 500px; padding: 20px; margin: 10px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.2rem; box-sizing: border-box; font-family: 'Montserrat'; }
-        
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
         #zoomImg { max-width: 95%; max-height: 85%; border: 2px solid var(--gold); border-radius: 10px; }
-        .note-box { background: #111; border: 2px solid var(--gold); padding: 30px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: left; }
-        
-        /* Style spécial pour le bouton QR Code */
+        .note-box { background: #111; border: 2px solid var(--gold); padding: 30px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: center; }
         .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 10px; border-radius: 5px; margin-top: 10px; cursor: pointer; font-size: 0.9rem; }
     </style>
 </head>
@@ -45,19 +38,18 @@
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
     
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
-        <div class="note-box">
+        <div class="note-box" style="text-align:left;">
             <h2 style="color:var(--gold); margin-top:0;">Commentaire :</h2>
             <p id="noteText" style="font-size:1.3rem; line-height:1.6;"></p>
             <p style="color:gray; font-size:0.9rem; text-align:center; margin-top:20px;">(Cliquer pour fermer)</p>
         </div>
     </div>
 
-    <!-- Overlay QR Code -->
     <div id="qrOverlay" class="overlay" onclick="this.style.display='none'">
-        <div class="note-box" style="text-align:center;">
+        <div class="note-box">
             <h2 style="color:var(--gold);">Partager le carnet</h2>
             <div id="qrContainer" style="background:white; padding:15px; display:inline-block; border-radius:10px; margin:20px 0;"></div>
-            <p style="color:gray;">Fais scanner ce code pour ouvrir l'appli</p>
+            <p style="color:gray;">Scan ce code pour ouvrir l'appli</p>
         </div>
     </div>
 
@@ -73,9 +65,7 @@
         <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
-        
         <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
-        
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px; font-size:1.1rem; text-decoration:underline;">Déconnexion</button>
     </div>
 
@@ -125,9 +115,9 @@
         });
 
         function showQR() {
-            const url = window.location.href;
-            const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chl=${encodeURIComponent(url)}&chs=200x200`;
-            document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
+            const currentUrl = encodeURIComponent(window.location.origin + window.location.pathname);
+            const qrUrl = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + currentUrl;
+            document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;" alt="QR Code">`;
             document.getElementById('qrOverlay').style.display = 'flex';
         }
 
