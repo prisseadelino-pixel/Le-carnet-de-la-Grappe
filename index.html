@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
+    
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#c5a059">
+
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -32,11 +35,13 @@
 </head>
 <body>
     <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; max-height:80%; border:1px solid var(--gold);"></div>
+    
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Mon Carnet</h1>
         <button class="btn-google" id="googleBtn">Se connecter avec Google</button>
     </div>
+
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 Vins Rouges</button>
@@ -45,12 +50,14 @@
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 Champagnes</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; cursor:pointer;">Se déconnecter</button>
     </div>
+
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="prepAdd()">+</button>
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px; font-weight:bold; cursor:pointer;">← RETOUR</button>
     </div>
+
     <div id="PAGE_FORM" class="p">
         <h1 id="formTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -65,6 +72,7 @@
         <button class="btn-gold" onclick="sauvegarder()">Enregistrer</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
@@ -76,17 +84,21 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, editId = null;
+
         document.getElementById('googleBtn').onclick = () => {
             const p = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(p).catch(() => auth.signInWithRedirect(p));
         };
+
         auth.onAuthStateChanged(u => { 
             if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; showPage('PAGE_HOME'); } 
             else { showPage('PAGE_AUTH'); }
         });
+
         function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
+
         function chargerVins() {
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
@@ -106,7 +118,9 @@
                 });
             });
         }
+
         function prepAdd() { editId = null; document.getElementById('formTitle').innerText = "Nouveau Vin"; resetForm(); showPage('PAGE_FORM'); }
+
         function editVin(id) {
             editId = id;
             db.ref('users/' + userUID + '/cave/' + id).once('value', s => {
@@ -120,13 +134,16 @@
                 showPage('PAGE_FORM');
             });
         }
+
         function resetForm() { document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('fileVin').value = ""; document.getElementById('imgUrlHidden').value = ""; setStars(0); }
         function suppr(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+
         document.getElementById('fileVin').onchange = function(e) {
             const reader = new FileReader();
             reader.onload = function() { document.getElementById('imgUrlHidden').value = reader.result; };
             reader.readAsDataURL(e.target.files[0]);
         };
+
         function sauvegarder() {
             const n = document.getElementById('nomVin').value; if(!n) return;
             const data = { nom: n, qte: document.getElementById('qteVin').value, image: document.getElementById('imgUrlHidden').value, noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value, categorie: rayonActuel };
