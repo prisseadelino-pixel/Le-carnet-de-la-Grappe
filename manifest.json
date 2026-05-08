@@ -1,15 +1,16 @@
 {
   "name": "Le Carnet de la Grappe",
-  "short_name": "CarnetGrappe",
-  "start_url": "index.html",
+  "short_name": "Grappe",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#c5a059",
   "icons": [
     {
-      "src": "https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg",
+      "src": "https://prisseadelino-pixel.github.io/Le-carnet-de-la-Grappe/picsar10.jpg",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ]
 }
