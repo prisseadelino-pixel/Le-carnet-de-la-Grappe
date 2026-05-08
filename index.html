@@ -4,61 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
-    
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@300;600&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.1); }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo { width: 120px; height: auto; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; }
-        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
-        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; width: 90%; max-width: 320px; justify-content: center; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
-        .stars { font-size: 30px; color: #444; margin: 15px 0; cursor: pointer; }
-        .stars .selected { color: var(--gold); }
-        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
-        .img-vin { width: 60px; height: 80px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); cursor: zoom-in; }
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        #zoomImg { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; box-sizing: border-box; }
+        .logo { width: 100px; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.5rem; text-transform: uppercase; margin: 10px 0; }
+        input { width: 90%; max-width: 300px; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; }
+        .btn-gold { background: var(--gold); border: none; color: #000; padding: 15px; width: 90%; max-width: 300px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        .btn-google { background: white; color: #000; border: none; padding: 12px; width: 90%; max-width: 300px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+        .btn-outline { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 12px; width: 90%; max-width: 300px; margin-top: 10px; cursor: pointer; border-radius: 5px; }
+        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; }
+        .img-vin { width: 60px; height: 80px; object-fit: cover; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); }
     </style>
 </head>
 <body>
-    <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Mon Carnet</h1>
-        <button class="btn-google" id="btn-google-login">Se connecter avec Google</button>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Mot de passe">
+        <button class="btn-gold" onclick="loginEmail()">Se connecter</button>
+        <button class="btn-outline" onclick="registerEmail()">Créer un compte</button>
+        <div style="margin: 20px 0; color: #444;">─ OU ─</div>
+        <button class="btn-google" onclick="loginGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> Continuer avec Google
+        </button>
+        <p id="error" style="color:red; font-size: 0.8rem; margin-top: 10px;"></p>
     </div>
+
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">Vins Rouges</button>
         <button class="btn-gold" onclick="openRayon('BLANCS')">Vins Blancs</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">Vins Rosés</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">Champagnes</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:20px;">Déconnexion</button>
+        <button onclick="auth.signOut()" style="color:gray; background:none; border:none; margin-top:30px; cursor:pointer;">Déconnexion</button>
     </div>
+
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
-        <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
+        <button class="btn-gold" onclick="showPage('PAGE_ADD')">Ajouter une bouteille</button>
+        <button class="btn-outline" onclick="showPage('PAGE_HOME')">← Retour</button>
     </div>
+
     <div id="PAGE_ADD" class="p">
-        <h1>Ajouter</h1>
-        <input type="text" id="nomVin" placeholder="Nom">
+        <h1>Ajouter un vin</h1>
+        <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <input type="text" id="imgVin" placeholder="Lien image (URL)">
-        <div class="stars" id="starRating"><span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span></div>
-        <textarea id="noteVin" placeholder="Note perso"></textarea>
-        <button class="btn-gold" onclick="sauvegarderVin()">Sauver</button>
+        <input type="text" id="imgVin" placeholder="Lien de la photo (URL)">
+        <button class="btn-gold" onclick="sauvegarderVin()">Enregistrer</button>
+        <button class="btn-outline" onclick="showPage('PAGE_LISTE')">Annuler</button>
     </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
@@ -69,32 +73,58 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "", noteEtoiles = 0;
+        let userUID = null, rayonActuel = "";
 
-        // LA MÉCANIQUE DU BOUTON GOOGLE
-        document.getElementById('btn-google-login').onclick = function() {
+        // FONCTIONS DE CONNEXION
+        function loginEmail() {
+            const e = document.getElementById('email').value, p = document.getElementById('password').value;
+            auth.signInWithEmailAndPassword(e, p).catch(err => document.getElementById('error').innerText = "Erreur de connexion");
+        }
+        function registerEmail() {
+            const e = document.getElementById('email').value, p = document.getElementById('password').value;
+            auth.createUserWithEmailAndPassword(e, p).catch(err => document.getElementById('error').innerText = "Compte déjà existant ou mot de passe trop court");
+        }
+        function loginGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
-        };
+        }
 
-        auth.onAuthStateChanged(u => { if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName; showPage('PAGE_HOME'); } else { showPage('PAGE_AUTH'); }});
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
-        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
+        // GESTION DES PAGES
+        auth.onAuthStateChanged(u => {
+            if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + (u.displayName || u.email.split('@')[0]); showPage('PAGE_HOME'); }
+            else { showPage('PAGE_AUTH'); }
+        });
+
+        function showPage(id) {
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function openRayon(n) {
+            rayonActuel = n; document.getElementById('rayonTitle').innerText = n;
+            chargerVins(); showPage('PAGE_LISTE');
+        }
+
         function chargerVins() {
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                c.innerHTML = ""; const data = s.val(); if(!data) { c.innerHTML = "<p>Rayon vide</p>"; return; }
+                c.innerHTML = ""; const data = s.val();
+                if(!data) { c.innerHTML = "<p style='color:gray'>Aucun vin dans ce rayon.</p>"; return; }
                 Object.entries(data).forEach(([id, v]) => {
-                    let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
-                    c.innerHTML += `<div class="card"><img src="${v.image || 'https://via.placeholder.com/60'}" class="img-vin" onclick="document.getElementById('zoomImg').src=this.src; document.getElementById('zoomOverlay').style.display='flex'"><div><b>${v.nom}</b><br><span style="color:var(--gold)">${st}</span></div><div style="margin-left:auto">x${v.qte}</div></div>`;
+                    c.innerHTML += `<div class="card"><img src="${v.image || 'https://via.placeholder.com/60'}" class="img-vin"><div><b>${v.nom}</b></div><div style="margin-left:auto">x${v.qte}</div></div>`;
                 });
             });
         }
-        function goToAdd() { setStars(0); showPage('PAGE_ADD'); }
+
         function sauvegarderVin() {
             const n = document.getElementById('nomVin').value; if(!n) return;
-            db.ref('users/' + userUID + '/cave').push({ nom: n, qte: document.getElementById('qteVin').value, image: document.getElementById('imgVin').value, noteEtoiles: noteEtoiles, categorie: rayonActuel }).then(() => showPage('PAGE_LISTE'));
+            db.ref('users/' + userUID + '/cave').push({
+                nom: n, qte: document.getElementById('qteVin').value,
+                image: document.getElementById('imgVin').value, categorie: rayonActuel
+            }).then(() => { 
+                document.getElementById('nomVin').value = ""; 
+                showPage('PAGE_LISTE'); 
+            });
         }
     </script>
 </body>
