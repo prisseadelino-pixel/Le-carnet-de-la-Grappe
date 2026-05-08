@@ -4,36 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
+    
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@300;600&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.1); }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo { width: 100px; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); text-transform: uppercase; font-size: 1.4rem; }
+        .logo { width: 100px; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.4rem; text-transform: uppercase; }
         .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 300px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
-        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin: 20px auto; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; z-index: 100; cursor: pointer; }
-        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 10px; display: flex; width: 100%; margin-bottom: 10px; align-items: center; text-align: left; border-radius: 5px; position: relative; }
-        .img-vin { width: 50px; height: 70px; object-fit: cover; margin-right: 15px; background: #1a1a1a; cursor: zoom-in; }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; }
-        .stars span { font-size: 30px; color: #444; cursor: pointer; }
+        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin: 20px auto; justify-content: center; width: 90%; max-width: 300px; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; z-index: 100; }
+        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; text-align: left; }
+        .img-vin { width: 60px; height: 80px; object-fit: cover; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); }
+        .stars span { font-size: 25px; color: #444; cursor: pointer; }
         .stars .selected { color: var(--gold); }
-        #preview { width: 80px; height: 100px; object-fit: cover; margin: 10px; border: 1px solid var(--gold); display: none; }
-        .delete-btn { position: absolute; top: 5px; right: 10px; color: #ff4444; font-size: 20px; cursor: pointer; }
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; }
+        #preview, #editPreview { width: 60px; height: 80px; object-fit: cover; margin: 10px; border: 1px solid var(--gold); display: none; }
     </style>
 </head>
 <body>
-    <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; max-height:80%; border:2px solid var(--gold);"></div>
+
+    <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border:2px solid var(--gold);"></div>
 
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
-        <h1>Le Carnet</h1>
+        <h1>Mon Carnet</h1>
         <button class="btn-google" onclick="login()">Se connecter avec Google</button>
     </div>
 
@@ -55,77 +57,65 @@
 
     <div id="PAGE_ADD" class="p">
         <h1>Nouveau Vin</h1>
-        <input type="text" id="nomVin" placeholder="Nom du vin">
+        <input type="text" id="nomVin" placeholder="Nom">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        
-        <label for="cameraInput" class="btn-gold" style="display:inline-block; font-size: 0.8rem;">📸 Prendre une photo</label>
-        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="previewPhoto(this)">
+        <label for="cameraInput" class="btn-gold" style="display:inline-block; font-size: 0.7rem;">📸 Photo</label>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;" onchange="previewImg(this, 'preview', 'add')">
         <img id="preview" src="">
-
-        <div class="stars" id="starRating">
-            <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
-        </div>
-        <textarea id="noteVin" placeholder="Notes perso..."></textarea>
-        <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">Enregistrer</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
+        <div class="stars" id="addStars"><span onclick="setS(1,'add')">★</span><span onclick="setS(2,'add')">★</span><span onclick="setS(3,'add')">★</span><span onclick="setS(4,'add')">★</span><span onclick="setS(5,'add')">★</span></div>
+        <textarea id="noteVin" placeholder="Notes..."></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauver()">Enregistrer</button>
     </div>
 
     <script>
-        const firebaseConfig = {
+        const config = {
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
             authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
             databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "le-carnet-de-la-grappe",
             appId: "1:90122533942:web:0448a69951e95108ce6c97"
         };
-        firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(config);
         const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "", noteEtoiles = 0, base64Img = "";
+        let userUID = null, rayon = "", starsA = 0, b64A = "";
 
-        function login() { const p = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p).catch(() => auth.signInWithRedirect(p)); }
-        auth.onAuthStateChanged(u => { if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName; showPage('PAGE_HOME'); } else { showPage('PAGE_AUTH'); }});
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
+        function login() { const p = new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p); }
+        auth.onAuthStateChanged(u => { if(u){ userUID=u.uid; document.getElementById('userName').innerText="Cave de "+u.displayName; showPage('PAGE_HOME'); } else { showPage('PAGE_AUTH'); }});
+        function showPage(id) { document.querySelectorAll('.p').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function setS(n, mode) { starsA=n; document.querySelectorAll('#addStars span').forEach((s,i)=>s.classList.toggle('selected',i<n)); }
 
-        function previewPhoto(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    base64Img = e.target.result;
-                    document.getElementById('preview').src = base64Img;
-                    document.getElementById('preview').style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
+        function previewImg(input, preId, mode) {
+            if(input.files && input.files[0]) {
+                const r = new FileReader();
+                r.onload = (e) => { b64A=e.target.result; document.getElementById(preId).src=b64A; document.getElementById(preId).style.display='block'; };
+                r.readAsDataURL(input.files[0]);
             }
         }
 
-        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; showPage('PAGE_LISTE'); chargerVins(); }
+        function openRayon(n) { rayon=n; document.getElementById('rayonTitle').innerText=n; showPage('PAGE_LISTE'); charger(); }
 
-        function chargerVins() {
+        function charger() {
             const c = document.getElementById('container-vins');
-            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                c.innerHTML = ""; const data = s.val(); if(!data) { c.innerHTML = "<p>Aucun vin.</p>"; return; }
+            db.ref('users/'+userUID+'/cave').orderByChild('categorie').equalTo(rayon).on('value', s => {
+                c.innerHTML = ""; const data = s.val(); if(!data){ c.innerHTML="<p>Vide</p>"; return; }
                 Object.entries(data).forEach(([id, v]) => {
-                    let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
-                    c.innerHTML += `<div class="card"><span class="delete-btn" onclick="supprimerVin('${id}')">×</span><img src="${v.image || 'https://via.placeholder.com/50'}" class="img-vin" onclick="document.getElementById('zoomImg').src=this.src; document.getElementById('zoomOverlay').style.display='flex'"><div><b>${v.nom}</b><br><span style="color:var(--gold)">${st}</span><br><small>${v.note || ''}</small></div><div style="margin-left:auto">x${v.qte}</div></div>`;
+                    let st = "★".repeat(v.noteEtoiles||0)+"☆".repeat(5-(v.noteEtoiles||0));
+                    c.innerHTML += `<div class="card">
+                        <img src="${v.image||''}" class="img-vin" onclick="document.getElementById('zoomImg').src=this.src; document.getElementById('zoomOverlay').style.display='flex'">
+                        <div style="flex:1"><b>${v.nom}</b><br><span style="color:var(--gold)">${st}</span></div>
+                        <div>x${v.qte}</div>
+                        <span style="margin-left:10px; color:red" onclick="if(confirm('Supprimer ?')) db.ref('users/${userUID}/cave/${id}').remove()">×</span>
+                    </div>`;
                 });
             });
         }
 
-        function sauvegarderVin() {
-            const n = document.getElementById('nomVin').value;
-            if(!n) return alert("Nom requis");
-            document.getElementById('btnSave').innerText = "Enregistrement...";
-            db.ref('users/' + userUID + '/cave').push({
-                nom: n, qte: document.getElementById('qteVin').value, image: base64Img, noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value, categorie: rayonActuel
-            }).then(() => {
-                document.getElementById('btnSave').innerText = "Enregistrer";
-                base64Img = ""; document.getElementById('preview').style.display = 'none';
-                showPage('PAGE_LISTE');
-            });
+        function sauver() {
+            const n = document.getElementById('nomVin').value; if(!n) return;
+            db.ref('users/'+userUID+'/cave').push({
+                nom:n, qte:document.getElementById('qteVin').value, image:b64A, noteEtoiles:starsA, note:document.getElementById('noteVin').value, categorie:rayon
+            }).then(()=> { b64A=""; document.getElementById('preview').style.display='none'; showPage('PAGE_LISTE'); });
         }
-
-        function supprimerVin(id) { if(confirm("Supprimer ce vin ?")) { db.ref('users/' + userUID + '/cave/' + id).remove(); } }
     </script>
 </body>
 </html>
