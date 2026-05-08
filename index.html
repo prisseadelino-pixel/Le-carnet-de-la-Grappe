@@ -14,92 +14,93 @@
         
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         
-        /* Conteneur principal plus large */
-        .p { display: none; flex-direction: column; align-items: center; padding: 30px 15px; min-height: 100vh; box-sizing: border-box; }
+        /* Conteneur principal */
+        .p { display: none; flex-direction: column; align-items: center; padding: 40px 15px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         
         .logo { width: 140px; height: auto; margin-bottom: 20px; border: 1.5px solid var(--gold); padding: 10px; border-radius: 8px; }
         
-        /* Titres plus imposants */
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2.2rem; margin: 20px 0; text-transform: uppercase; letter-spacing: 3px; }
+        /* Titres XL */
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2.4rem; margin: 20px 0; text-transform: uppercase; letter-spacing: 3px; }
         
-        /* Boutons du menu agrandis */
+        /* Boutons Menu XL */
         .btn-gold { 
             background: rgba(197,160,89,0.05); 
-            border: 1.5px solid var(--gold); 
+            border: 2px solid var(--gold); 
             color: var(--gold); 
-            padding: 22px; 
+            padding: 25px; 
             width: 95%; 
-            max-width: 450px; 
-            margin: 12px 0; 
+            max-width: 500px; 
+            margin: 15px 0; 
             text-transform: uppercase; 
             cursor: pointer; 
             font-weight: 700; 
-            font-size: 1.1rem; 
-            border-radius: 8px; 
-            letter-spacing: 1px;
+            font-size: 1.2rem; 
+            border-radius: 10px; 
+            letter-spacing: 2px;
         }
 
-        /* Bouton Google plus large */
+        /* Google XL */
         .btn-google { 
             background: white; 
             color: #000; 
             border: none; 
-            padding: 20px; 
-            border-radius: 8px; 
+            padding: 22px; 
+            border-radius: 10px; 
             font-weight: 700; 
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer; 
             display: flex; 
             align-items: center; 
             gap: 15px; 
-            margin-top: 40px; 
+            margin-top: 50px; 
             width: 95%; 
-            max-width: 450px; 
+            max-width: 500px; 
             justify-content: center; 
         }
 
-        /* Fiches vins (Cards) agrandies */
+        /* Fiches Vins XL */
         .card { 
             background: #0d0d0d; 
             border: 1px solid var(--brd); 
-            padding: 20px; 
+            padding: 25px; 
             display: flex; 
             width: 95%; 
             max-width: 600px; 
             text-align: left; 
-            margin-bottom: 15px; 
-            border-radius: 12px; 
+            margin-bottom: 20px; 
+            border-radius: 15px; 
             align-items: center; 
             position: relative;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
         }
         
-        .img-vin { width: 80px; height: 110px; object-fit: cover; background: #1a1a1a; margin-right: 20px; border-radius: 6px; border: 1px solid var(--gold); }
+        .img-vin { width: 90px; height: 120px; object-fit: cover; background: #1a1a1a; margin-right: 20px; border-radius: 8px; border: 1.5px solid var(--gold); cursor: zoom-in; }
         
-        .vin-info b { font-size: 1.4rem; display: block; margin-bottom: 5px; }
-        .vin-qte { font-size: 1.6rem; font-weight: 700; color: #fff; margin-left: auto; padding-right: 15px; }
+        .vin-info b { font-size: 1.6rem; display: block; margin-bottom: 8px; }
+        .vin-qte { font-size: 1.8rem; font-weight: 700; color: #fff; margin-left: auto; padding-right: 10px; }
 
-        .btn-add { position: fixed; bottom: 40px; right: 25px; background: var(--gold); width: 75px; height: 75px; border-radius: 50%; border: none; font-size: 45px; color: #000; box-shadow: 0 6px 20px rgba(197,160,89,0.5); z-index: 100; font-weight: bold; }
+        .btn-add { position: fixed; bottom: 40px; right: 25px; background: var(--gold); width: 80px; height: 80px; border-radius: 50%; border: none; font-size: 50px; color: #000; box-shadow: 0 6px 25px rgba(197,160,89,0.6); z-index: 100; font-weight: bold; cursor: pointer; }
         
-        .stars { font-size: 45px; color: #333; margin: 20px 0; }
+        .stars { font-size: 50px; color: #333; margin: 25px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
         
         input, textarea { 
             width: 95%; 
-            max-width: 450px; 
-            padding: 18px; 
-            margin: 12px 0; 
+            max-width: 500px; 
+            padding: 20px; 
+            margin: 15px 0; 
             background: #111; 
             color: #fff; 
             border: 1.5px solid var(--brd); 
-            border-radius: 8px; 
-            font-size: 1.1rem;
+            border-radius: 10px; 
+            font-size: 1.2rem;
             box-sizing: border-box;
+            font-family: 'Montserrat';
         }
 
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
-        #zoomImg { max-width: 90%; max-height: 85%; border: 2px solid var(--gold); border-radius: 10px; }
+        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; }
+        #zoomImg { max-width: 95%; max-height: 85%; border: 2px solid var(--gold); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -109,7 +110,7 @@
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Mon Carnet</h1>
         <button class="btn-google" id="googleLogin">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="30">
             SE CONNECTER AVEC GOOGLE
         </button>
     </div>
@@ -120,14 +121,14 @@
         <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 VINS BLANCS</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 VINS ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px; font-size:1rem; cursor:pointer; text-decoration: underline;">Se déconnecter</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:50px; font-size:1.1rem; cursor:pointer; text-decoration: underline;">Se déconnecter</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-size:1.2rem; font-weight:700;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:40px; font-size:1.4rem; font-weight:700;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
@@ -138,9 +139,9 @@
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" rows="4" placeholder="Notes de dégustation..."></textarea>
-        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">Enregistrer</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px; font-size:1.1rem;">Annuler</button>
+        <textarea id="noteVin" rows="5" placeholder="Notes de dégustation..."></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:20px; font-size:1.2rem;">Annuler</button>
     </div>
 
     <script>
@@ -182,35 +183,45 @@
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 c.innerHTML = "";
-                if(!s.exists()) { c.innerHTML = "<p style='margin-top:30px; font-size:1.2rem; color:gray;'>Aucune bouteille ici.</p>"; return; }
+                if(!s.exists()) { c.innerHTML = "<p style='margin-top:40px; font-size:1.4rem; color:gray;'>Rayon vide.</p>"; return; }
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
                     c.innerHTML += `
                         <div class="card">
-                            <img src="${v.image || 'https://via.placeholder.com/100?text=Vin'}" class="img-vin" onclick="zoom('${v.image}')">
+                            <img src="${v.image || 'https://via.placeholder.com/150?text=Vin'}" class="img-vin" onclick="zoom('${v.image}')">
                             <div class="vin-info">
                                 <b>${v.nom}</b>
-                                <span style="color:var(--gold); font-size:1.4rem">${st}</span>
+                                <span style="color:var(--gold); font-size:1.6rem">${st}</span>
                             </div>
                             <div class="vin-qte">x${v.qte}</div>
-                            <button style="position:absolute; top:10px; right:10px; background:none; border:none; color:#ff4444; font-size:1.5rem;" onclick="supprimer('${id}')">✕</button>
+                            <button style="position:absolute; top:15px; right:15px; background:none; border:none; color:#ff4444; font-size:2rem; font-weight:bold; cursor:pointer;" onclick="supprimer('${id}')">✕</button>
                         </div>`;
                 });
             });
         }
 
         function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
+        
         function supprimer(id) { if(confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
-        function goToAdd() { document.getElementById('nomVin').value=""; document.getElementById('imgVin').value=""; document.getElementById('noteVin').value=""; setStars(0); showPage('PAGE_ADD'); }
+
+        function goToAdd() { 
+            document.getElementById('nomVin').value=""; 
+            document.getElementById('imgVin').value=""; 
+            document.getElementById('noteVin').value=""; 
+            setStars(0); 
+            showPage('PAGE_ADD'); 
+        }
 
         function sauvegarderVin() {
             const n = document.getElementById('nomVin').value;
-            if(!n) return;
+            if(!n) { alert("Le nom est obligatoire"); return; }
             db.ref('users/' + userUID + '/cave').push({
-                nom: n, qte: document.getElementById('qteVin').value || 1,
+                nom: n, 
+                qte: document.getElementById('qteVin').value || 1,
                 image: document.getElementById('imgVin').value || "",
-                noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value,
+                noteEtoiles: noteEtoiles, 
+                note: document.getElementById('noteVin').value,
                 categorie: rayonActuel
             }).then(() => showPage('PAGE_LISTE'));
         }
