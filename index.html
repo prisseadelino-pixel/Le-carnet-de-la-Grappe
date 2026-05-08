@@ -33,22 +33,31 @@
         
         input, textarea { width: 95%; max-width: 500px; padding: 20px; margin: 10px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.2rem; box-sizing: border-box; font-family: 'Montserrat'; }
         
-        /* Overlays pour Zoom et Notes */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
         #zoomImg { max-width: 95%; max-height: 85%; border: 2px solid var(--gold); border-radius: 10px; }
         .note-box { background: #111; border: 2px solid var(--gold); padding: 30px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: left; }
+        
+        /* Style spécial pour le bouton QR Code */
+        .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 10px; border-radius: 5px; margin-top: 10px; cursor: pointer; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <!-- Overlay Zoom -->
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
     
-    <!-- Overlay Notes -->
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box">
             <h2 style="color:var(--gold); margin-top:0;">Commentaire :</h2>
             <p id="noteText" style="font-size:1.3rem; line-height:1.6;"></p>
             <p style="color:gray; font-size:0.9rem; text-align:center; margin-top:20px;">(Cliquer pour fermer)</p>
+        </div>
+    </div>
+
+    <!-- Overlay QR Code -->
+    <div id="qrOverlay" class="overlay" onclick="this.style.display='none'">
+        <div class="note-box" style="text-align:center;">
+            <h2 style="color:var(--gold);">Partager le carnet</h2>
+            <div id="qrContainer" style="background:white; padding:15px; display:inline-block; border-radius:10px; margin:20px 0;"></div>
+            <p style="color:gray;">Fais scanner ce code pour ouvrir l'appli</p>
         </div>
     </div>
 
@@ -64,6 +73,9 @@
         <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
+        
+        <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
+        
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px; font-size:1.1rem; text-decoration:underline;">Déconnexion</button>
     </div>
 
@@ -111,6 +123,13 @@
             if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; showPage('PAGE_HOME'); } 
             else { showPage('PAGE_AUTH'); }
         });
+
+        function showQR() {
+            const url = window.location.href;
+            const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chl=${encodeURIComponent(url)}&chs=200x200`;
+            document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
+            document.getElementById('qrOverlay').style.display = 'flex';
+        }
 
         function handleFile(input) {
             const reader = new FileReader();
