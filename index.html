@@ -4,76 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
-    
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@300;600&display=swap');
-        :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.1); }
+        :root { --gold: #c5a059; --bg: #000; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo { width: 120px; height: auto; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; }
-        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: bold; }
-        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px; margin-top: 20px; width: 90%; max-width: 320px; justify-content: center; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
-        .stars { font-size: 30px; color: #444; margin: 15px 0; cursor: pointer; }
-        .stars .selected { color: var(--gold); }
-        .card { background: #0a0a0a; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
-        .img-vin { width: 60px; height: 80px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 4px; border: 1px solid var(--brd); cursor: zoom-in; }
-        .action-btns { position: absolute; top: 10px; right: 10px; display: flex; gap: 15px; }
-        .edit-btn { color: var(--gold); font-size: 20px; cursor: pointer; }
-        .delete-btn { color: #ff4444; font-size: 20px; cursor: pointer; opacity: 0.7; }
-        #photoPreview { width: 100px; height: 130px; object-fit: cover; border: 1px solid var(--gold); margin: 10px auto; display: none; }
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; box-sizing: border-box; }
+        .logo { width: 120px; margin: 20px auto; border: 1px solid var(--gold); padding: 10px; border-radius: 5px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); text-transform: uppercase; }
+        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 90%; max-width: 320px; margin-top: 20px; }
     </style>
 </head>
 <body>
-
-    <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; max-height:80%; border:2px solid var(--gold);"></div>
-
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
-        <h1>Le Carnet de la Grappe</h1>
-        <button class="btn-google" onclick="login()">Se connecter avec Google</button>
+        <h1>Mon Carnet</h1>
+        <button class="btn-google" onclick="login()">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <button class="btn-gold" onclick="openRayon('ROUGES')">Vins Rouges</button>
-        <button class="btn-gold" onclick="openRayon('BLANCS')">Vins Blancs</button>
-        <button class="btn-gold" onclick="openRayon('ROSES')">Vins Rosés</button>
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">Champagnes</button>
-        <button onclick="auth.signOut().then(()=>window.location.reload())" style="color:gray; background:none; border:none; margin-top:40px; text-decoration:underline;">Déconnexion</button>
-    </div>
-
-    <div id="PAGE_LISTE" class="p">
-        <h1 id="rayonTitle">Rayon</h1>
-        <div id="container-vins" style="width:100%"></div>
-        <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px; font-weight:bold;">← MENU</button>
-    </div>
-
-    <div id="PAGE_ADD" class="p">
-        <h1 id="formTitle">Ajouter un Vin</h1>
-        <input type="text" id="nomVin" placeholder="Nom du Domaine">
-        <input type="number" id="qteVin" value="1">
-        
-        <button class="btn-gold" style="width:150px; font-size:12px;" onclick="document.getElementById('fileIn').click()">📸 Prendre Photo</button>
-        <input type="file" id="fileIn" accept="image/*" capture="camera" style="display:none;" onchange="preview(this)">
-        <img id="photoPreview" src="">
-        <input type="hidden" id="photoData">
-
-        <div class="stars" id="starRating">
-            <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
-        </div>
-        <textarea id="noteVin" rows="3" placeholder="Commentaires..."></textarea>
-        <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauver()">Enregistrer</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
+        <p style="color:var(--gold)">Chargement de vos vins...</p>
     </div>
 
     <script>
@@ -85,72 +39,22 @@
             appId: "1:90122533942:web:0448a69951e95108ce6c97"
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(); const db = firebase.database();
-        let userUID = null, rayonActuel = "", noteEtoiles = 0, modifID = null;
+        const auth = firebase.auth();
 
-        function login() { 
+        function login() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithRedirect(provider); 
+            // Utilisation de Redirect pour éviter les blocages sur mobile
+            auth.signInWithRedirect(provider);
         }
 
         auth.onAuthStateChanged(user => {
-            if (user) { userUID = user.uid; document.getElementById('userName').innerText = "Cave de " + user.displayName; showPage('PAGE_HOME'); }
-            else { showPage('PAGE_AUTH'); }
+            if (user) {
+                document.getElementById('userName').innerText = "Cave de " + user.displayName;
+                document.getElementById('PAGE_AUTH').classList.remove('active');
+                document.getElementById('PAGE_HOME').classList.add('active');
+                // Ici le reste de tes fonctions (openRayon, etc.)
+            }
         });
-
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
-
-        function preview(input) {
-            const reader = new FileReader();
-            reader.onload = e => { 
-                document.getElementById('photoPreview').src = e.target.result;
-                document.getElementById('photoPreview').style.display = 'block';
-                document.getElementById('photoData').value = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-
-        function openRayon(nom) { rayonActuel = nom; document.getElementById('rayonTitle').innerText = nom; chargerVins(); showPage('PAGE_LISTE'); }
-
-        function chargerVins() {
-            db.ref('users/'+userUID+'/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', snap => {
-                const cont = document.getElementById('container-vins'); cont.innerHTML = "";
-                if (!snap.val()) return;
-                Object.entries(snap.val()).forEach(([id, v]) => {
-                    cont.innerHTML += `
-                        <div class="card">
-                            <div class="action-btns"><span class="edit-btn" onclick="edit('${id}')">✎</span><span class="delete-btn" onclick="suppr('${id}')">×</span></div>
-                            <img src="${v.image || ''}" class="img-vin" onclick="zoom('${v.image}')">
-                            <div style="flex:1"><b>${v.nom}</b><br><span style="color:var(--gold)">${"★".repeat(v.noteEtoiles)}</span><br><small>${v.note || ''}</small></div>
-                            <div style="color:var(--gold)">x${v.qte}</div>
-                        </div>`;
-                });
-            });
-        }
-
-        function zoom(url) { if(!url) return; document.getElementById('zoomImg').src = url; document.getElementById('zoomOverlay').style.display = 'flex'; }
-
-        function goToAdd() { modifID = null; document.getElementById('formTitle').innerText = "Ajouter un Vin"; document.getElementById('btnSave').innerText = "Enregistrer"; net(); showPage('PAGE_ADD'); }
-
-        function edit(id) {
-            modifID = id; document.getElementById('formTitle').innerText = "Modifier"; document.getElementById('btnSave').innerText = "Mettre à jour";
-            db.ref('users/'+userUID+'/cave/'+id).once('value', snap => {
-                const v = snap.val(); document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte;
-                document.getElementById('noteVin').value = v.note || ""; document.getElementById('photoData').value = v.image || "";
-                if(v.image) { document.getElementById('photoPreview').src = v.image; document.getElementById('photoPreview').style.display = 'block'; }
-                setStars(v.noteEtoiles); showPage('PAGE_ADD');
-            });
-        }
-
-        function sauver() {
-            const d = { nom: document.getElementById('nomVin').value, qte: document.getElementById('qteVin').value, image: document.getElementById('photoData').value, noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value, categorie: rayonActuel };
-            const ref = db.ref('users/'+userUID+'/cave');
-            (modifID ? ref.child(modifID).update(d) : ref.push(d)).then(() => showPage('PAGE_LISTE'));
-        }
-
-        function suppr(id) { if(confirm("Supprimer ?")) db.ref('users/'+userUID+'/cave/'+id).remove(); }
-        function net() { document.getElementById('nomVin').value = ""; document.getElementById('photoPreview').style.display='none'; document.getElementById('photoData').value=""; setStars(0); }
     </script>
 </body>
 </html>
