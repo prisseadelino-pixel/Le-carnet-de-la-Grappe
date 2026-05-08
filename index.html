@@ -11,27 +11,32 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
-        .p { display: none; flex-direction: column; align-items: center; padding: 40px 15px; min-height: 100vh; box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
+        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo { width: 140px; height: auto; margin-bottom: 20px; border: 1.5px solid var(--gold); padding: 10px; border-radius: 8px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2.4rem; margin: 20px 0; text-transform: uppercase; letter-spacing: 3px; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 22px; width: 95%; max-width: 500px; margin: 12px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.2rem; border-radius: 10px; }
-        .btn-google { background: white; color: #000; border: none; padding: 22px; border-radius: 10px; font-weight: 700; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 50px; width: 95%; max-width: 500px; justify-content: center; }
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 25px; display: flex; width: 95%; max-width: 600px; text-align: left; margin-bottom: 20px; border-radius: 15px; align-items: center; position: relative; }
-        .img-vin { width: 90px; height: 120px; object-fit: cover; background: #1a1a1a; margin-right: 20px; border-radius: 8px; border: 1.5px solid var(--gold); cursor: zoom-in; }
+        .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 10px; }
+        .btn-google { background: white; color: #000; border: none; padding: 20px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 40px; width: 95%; max-width: 500px; justify-content: center; }
+        
+        /* Ajustement des cartes pour plus de stabilité */
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; position: relative; box-sizing: border-box; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); cursor: zoom-in; }
         .vin-info { flex: 1; cursor: pointer; }
-        .vin-info b { font-size: 1.6rem; display: block; margin-bottom: 8px; color: var(--gold); }
-        .vin-qte { font-size: 1.8rem; font-weight: 700; color: #fff; padding-right: 10px; }
-        .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 15px; filter: sepia(1) saturate(5) hue-rotate(10deg); }
-        .btn-add { position: fixed; bottom: 40px; right: 25px; background: var(--gold); width: 80px; height: 80px; border-radius: 50%; border: none; font-size: 50px; color: #000; box-shadow: 0 6px 25px rgba(197,160,89,0.6); z-index: 100; font-weight: bold; cursor: pointer; }
-        .stars { font-size: 50px; color: #333; margin: 25px 0; cursor: pointer; }
+        .vin-info b { font-size: 1.3rem; display: block; margin-bottom: 5px; color: var(--gold); line-height: 1.2; }
+        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; padding-right: 5px; }
+        
+        .btn-note { font-size: 1.5rem; background: none; border: none; cursor: pointer; margin-right: 10px; filter: sepia(1) saturate(5) hue-rotate(10deg); }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 40px; color: #000; box-shadow: 0 4px 20px rgba(197,160,89,0.5); z-index: 100; font-weight: bold; cursor: pointer; }
+        .stars { font-size: 40px; color: #333; margin: 20px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
-        input, textarea { width: 95%; max-width: 500px; padding: 20px; margin: 10px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.2rem; box-sizing: border-box; font-family: 'Montserrat'; }
+        
+        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; font-family: 'Montserrat'; }
+        
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
-        #zoomImg { max-width: 95%; max-height: 85%; border: 2px solid var(--gold); border-radius: 10px; }
-        .note-box { background: #111; border: 2px solid var(--gold); padding: 30px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: center; }
-        .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 10px; border-radius: 5px; margin-top: 10px; cursor: pointer; font-size: 0.9rem; }
+        #zoomImg { max-width: 95%; max-height: 80%; border: 2px solid var(--gold); border-radius: 10px; }
+        .note-box { background: #111; border: 2px solid var(--gold); padding: 25px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: center; }
+        .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 8px; border-radius: 5px; margin-top: 10px; cursor: pointer; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -40,15 +45,15 @@
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" style="text-align:left;">
             <h2 style="color:var(--gold); margin-top:0;">Commentaire :</h2>
-            <p id="noteText" style="font-size:1.3rem; line-height:1.6;"></p>
-            <p style="color:gray; font-size:0.9rem; text-align:center; margin-top:20px;">(Cliquer pour fermer)</p>
+            <p id="noteText" style="font-size:1.1rem; line-height:1.5;"></p>
+            <p style="color:gray; font-size:0.8rem; text-align:center; margin-top:15px;">(Cliquer pour fermer)</p>
         </div>
     </div>
 
     <div id="qrOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box">
             <h2 style="color:var(--gold);">Partager le carnet</h2>
-            <div id="qrContainer" style="background:white; padding:15px; display:inline-block; border-radius:10px; margin:20px 0;"></div>
+            <div id="qrContainer" style="background:white; padding:10px; display:inline-block; border-radius:10px; margin:15px 0;"></div>
             <p style="color:gray;">Scan ce code pour ouvrir l'appli</p>
         </div>
     </div>
@@ -56,7 +61,7 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
-        <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="30"> CONNEXION GOOGLE</button>
+        <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -66,30 +71,30 @@
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
         <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px; font-size:1.1rem; text-decoration:underline;">Déconnexion</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; font-size:1rem; text-decoration:underline;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
-        <h1 id="rayonTitle"></h1>
+        <h1 id="rayonTitle" style="font-size:1.8rem; margin-bottom:10px;"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:40px; font-size:1.4rem; font-weight:700;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-size:1.2rem; font-weight:700;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
-        <h1 id="addTitle">Nouveau Vin</h1>
+        <h1 id="addTitle" style="font-size:1.8rem;">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="padding:15px; font-size:1rem; border-style:dashed;">📷 PHOTO / GALERIE</button>
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="padding:12px; font-size:0.9rem; border-style:dashed;">📷 PHOTO / GALERIE</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <input type="hidden" id="imgData">
         <div id="previewContainer"></div>
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" rows="3" placeholder="Notes..."></textarea>
+        <textarea id="noteVin" rows="2" placeholder="Notes..."></textarea>
         <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:20px; font-size:1.2rem;">Annuler</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px; font-size:1.1rem;">Annuler</button>
     </div>
 
     <script>
@@ -114,11 +119,9 @@
             else { showPage('PAGE_AUTH'); }
         });
 
-        // FONCTION QR CODE MISE À JOUR POUR GITHUB
         function showQR() {
-            // On appelle exactement le fichier que l'on voit sur ton GitHub (image_1.png)
             const monImage = "mon-qrcode.png"; 
-            document.getElementById('qrContainer').innerHTML = `<img src="${monImage}" style="width:220px; height:220px; object-fit:contain;" alt="QR Code">`;
+            document.getElementById('qrContainer').innerHTML = `<img src="${monImage}" style="width:200px; height:200px; object-fit:contain;" alt="QR Code">`;
             document.getElementById('qrOverlay').style.display = 'flex';
         }
 
@@ -126,7 +129,7 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 document.getElementById('imgData').value = e.target.result;
-                document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:100px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`;
+                document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`;
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -139,7 +142,7 @@
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 c.innerHTML = "";
-                if(!s.exists()) { c.innerHTML = "<p style='margin-top:40px; font-size:1.4rem; color:gray;'>Rayon vide.</p>"; return; }
+                if(!s.exists()) { c.innerHTML = "<p style='margin-top:40px; font-size:1.2rem; color:gray;'>Rayon vide.</p>"; return; }
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
@@ -148,11 +151,11 @@
                             <img src="${v.image || 'https://via.placeholder.com/150?text=Vin'}" class="img-vin" onclick="zoom('${v.image}')">
                             <div class="vin-info" onclick="editVin('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">
                                 <b>${v.nom}</b>
-                                <span style="color:var(--gold); font-size:1.6rem">${st}</span>
+                                <span style="color:var(--gold); font-size:1.2rem">${st}</span>
                             </div>
                             <button class="btn-note" onclick="voirNote('${v.note || 'Aucune note.'}')">📝</button>
                             <div class="vin-qte">x${v.qte}</div>
-                            <button style="background:none; border:none; color:#ff4444; font-size:2rem; margin-left:10px;" onclick="supprimer('${id}')">✕</button>
+                            <button style="background:none; border:none; color:#ff4444; font-size:1.8rem; margin-left:8px;" onclick="supprimer('${id}')">✕</button>
                         </div>`;
                 });
             });
