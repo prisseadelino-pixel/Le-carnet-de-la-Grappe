@@ -33,11 +33,13 @@
 </head>
 <body>
     <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
+    
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
-        <h1>Mon Carnet</h1>
+        <h1>Le Carnet de la Grappe</h1>
         <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="30"> CONNEXION GOOGLE</button>
     </div>
+
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
@@ -46,18 +48,19 @@
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px; font-size:1.1rem; text-decoration:underline;">Déconnexion</button>
     </div>
+
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:40px; font-size:1.4rem; font-weight:700;">← RETOUR</button>
     </div>
+
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
         
-        <!-- PHOTO DEPUIS MOBILE -->
         <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="padding:15px; font-size:1rem; border-style:dashed;">📷 PHOTO / GALERIE</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <input type="hidden" id="imgData">
