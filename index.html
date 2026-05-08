@@ -14,18 +14,18 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         .logo { width: 100px; border: 1px solid var(--gold); padding: 5px; border-radius: 5px; margin-bottom: 10px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); text-transform: uppercase; font-size: 1.4rem; }
-        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 8px 0; text-transform: uppercase; font-weight: bold; cursor: pointer; }
-        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; width: 90%; max-width: 320px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
-        .stars { font-size: 30px; color: #444; margin: 10px 0; cursor: pointer; }
-        .stars .selected { color: var(--gold); }
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 12px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; }
-        .img-vin { width: 60px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid var(--brd); margin-right: 12px; }
-        .controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; }
-        .btn-icon { background: none; border: none; font-size: 18px; cursor: pointer; padding: 5px; }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; font-family: 'Montserrat'; }
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); text-transform: uppercase; font-size: 1.4rem; letter-spacing: 2px; }
+        .btn-gold { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 15px; width: 90%; max-width: 320px; margin: 8px 0; text-transform: uppercase; font-weight: bold; cursor: pointer; border-radius: 4px; }
+        .btn-google { background: white; color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; width: 90%; max-width: 320px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; cursor: pointer; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 35px; color: #000; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; cursor: pointer; }
+        .stars { font-size: 32px; color: #333; margin: 10px 0; cursor: pointer; }
+        .stars .selected { color: var(--gold); text-shadow: 0 0 8px rgba(197,160,89,0.5); }
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 12px; display: flex; width: 100%; max-width: 500px; text-align: left; margin-bottom: 10px; border-radius: 8px; align-items: center; position: relative; box-sizing: border-box; }
+        .img-vin { width: 65px; height: 85px; object-fit: cover; border-radius: 4px; border: 1px solid var(--brd); margin-right: 12px; cursor: zoom-in; }
+        .controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 12px; align-items: center; }
+        .btn-icon { background: none; border: none; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 5px; font-family: 'Montserrat'; box-sizing: border-box; }
+        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
@@ -34,23 +34,26 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Mon Carnet</h1>
-        <button class="btn-google" id="googleBtn">Se connecter avec Google</button>
+        <button class="btn-google" id="googleBtn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20">
+            Se connecter avec Google
+        </button>
     </div>
 
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <button class="btn-gold" onclick="openRayon('ROUGES')">Vins Rouges</button>
-        <button class="btn-gold" onclick="openRayon('BLANCS')">Vins Blancs</button>
-        <button class="btn-gold" onclick="openRayon('ROSES')">Vins Rosés</button>
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">Champagnes</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:20px;">Déconnexion</button>
+        <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 Vins Rouges</button>
+        <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 Vins Blancs</button>
+        <button class="btn-gold" onclick="openRayon('ROSES')">🌸 Vins Rosés</button>
+        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 Champagnes</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; cursor:pointer;">Se déconnecter</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="prepAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px; font-weight:bold; cursor:pointer;">← RETOUR</button>
     </div>
 
     <div id="PAGE_FORM" class="p">
@@ -58,16 +61,17 @@
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
         
-        <p style="font-size:0.8rem; margin-bottom:5px;">Photo du vin :</p>
-        <input type="file" id="fileVin" accept="image/*" capture="environment" style="border:none;">
+        <p style="font-size:0.8rem; margin: 10px 0 5px 0; color:var(--gold)">Prendre une photo :</p>
+        <input type="file" id="fileVin" accept="image/*" capture="environment" style="border:none; color:gray; font-size:0.8rem;">
         <input type="hidden" id="imgUrlHidden">
 
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" placeholder="Commentaires (arômes, accords...)"></textarea>
-        <button class="btn-gold" id="btnSave" onclick="sauvegarder()">Enregistrer</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none;">Annuler</button>
+        <textarea id="noteVin" rows="4" placeholder="Notes de dégustation, commentaires..."></textarea>
+        
+        <button class="btn-gold" id="btnSave" onclick="sauvegarder()">Enregistrer dans ma cave</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px; cursor:pointer;">Annuler</button>
     </div>
 
     <script>
@@ -87,27 +91,49 @@
             auth.signInWithPopup(p).catch(() => auth.signInWithRedirect(p));
         };
 
-        auth.onAuthStateChanged(u => { if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName; showPage('PAGE_HOME'); } else { showPage('PAGE_AUTH'); }});
+        auth.onAuthStateChanged(u => { 
+            if(u) { 
+                userUID = u.uid; 
+                document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; 
+                showPage('PAGE_HOME'); 
+            } else { showPage('PAGE_AUTH'); }
+        });
 
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
+        function showPage(id) { 
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0);
+        }
+
+        function setStars(n) { 
+            noteEtoiles = n; 
+            document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); 
+        }
+
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
 
         function chargerVins() {
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 c.innerHTML = "";
+                if(!s.exists()) { c.innerHTML = "<p style='color:gray; margin-top:20px;'>Rayon vide</p>"; return; }
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
                     c.innerHTML += `
                         <div class="card">
-                            <img src="${v.image || 'https://via.placeholder.com/60'}" class="img-vin" onclick="document.getElementById('zoomImg').src=this.src; document.getElementById('zoomOverlay').style.display='flex'">
-                            <div style="flex:1"><b>${v.nom}</b><br><span style="color:var(--gold)">${st}</span><br><small>${v.note || ''}</small></div>
-                            <div style="font-weight:bold; margin-right:35px;">x${v.qte}</div>
+                            <img src="${v.image || 'https://via.placeholder.com/100?text=Vin'}" class="img-vin" onclick="document.getElementById('zoomImg').src=this.src; document.getElementById('zoomOverlay').style.display='flex'">
+                            <div style="flex:1; padding-right:40px;">
+                                <b style="font-size:1.1rem">${v.nom}</b><br>
+                                <span style="color:var(--gold); font-size:1.2rem">${st}</span><br>
+                                <small style="color:#aaa; display:block; margin-top:4px;">${v.note || ''}</small>
+                            </div>
+                            <div style="font-weight:bold; font-size:1.2rem; margin-right:10px;">x${v.qte}</div>
                             <div class="controls">
-                                <button class="btn-icon" onclick="editVin('${id}')">✏️</button>
-                                <button class="btn-icon" onclick="suppr('${id}')" style="color:red">✕</button>
+                                <button class="btn-icon" onclick="editVin('${id}')" title="Modifier">
+                                    <span style="color:var(--gold); font-size:22px;">✒️</span>
+                                </button>
+                                <button class="btn-icon" onclick="suppr('${id}')" style="color:#444; font-size:18px;">✕</button>
                             </div>
                         </div>`;
                 });
@@ -125,15 +151,22 @@
                 document.getElementById('noteVin').value = v.note || "";
                 document.getElementById('imgUrlHidden').value = v.image || "";
                 setStars(v.noteEtoiles || 0);
-                document.getElementById('formTitle').innerText = "Modifier";
+                document.getElementById('formTitle').innerText = "Modifier le vin";
                 showPage('PAGE_FORM');
             });
         }
 
-        function resetForm() { document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('fileVin').value = ""; setStars(0); }
-        function suppr(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        function resetForm() { 
+            document.getElementById('nomVin').value = ""; 
+            document.getElementById('qteVin').value = 1; 
+            document.getElementById('noteVin').value = ""; 
+            document.getElementById('fileVin').value = ""; 
+            document.getElementById('imgUrlHidden').value = "";
+            setStars(0); 
+        }
 
-        // GESTION PHOTO (Conversion en texte pour stockage simple)
+        function suppr(id) { if(confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+
         document.getElementById('fileVin').onchange = function(e) {
             const reader = new FileReader();
             reader.onload = function() { document.getElementById('imgUrlHidden').value = reader.result; };
@@ -141,11 +174,13 @@
         };
 
         function sauvegarder() {
-            const n = document.getElementById('nomVin').value; if(!n) return;
+            const n = document.getElementById('nomVin').value; if(!n) { alert("Le nom est obligatoire"); return; }
             const data = {
-                nom: n, qte: document.getElementById('qteVin').value,
+                nom: n, 
+                qte: document.getElementById('qteVin').value,
                 image: document.getElementById('imgUrlHidden').value,
-                noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value,
+                noteEtoiles: noteEtoiles, 
+                note: document.getElementById('noteVin').value,
                 categorie: rayonActuel
             };
             if(editId) db.ref('users/' + userUID + '/cave/' + editId).update(data).then(() => showPage('PAGE_LISTE'));
