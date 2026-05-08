@@ -18,22 +18,40 @@
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2.4rem; margin: 20px 0; text-transform: uppercase; letter-spacing: 3px; }
         .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 22px; width: 95%; max-width: 500px; margin: 12px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.2rem; border-radius: 10px; }
         .btn-google { background: white; color: #000; border: none; padding: 22px; border-radius: 10px; font-weight: 700; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 50px; width: 95%; max-width: 500px; justify-content: center; }
+        
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 25px; display: flex; width: 95%; max-width: 600px; text-align: left; margin-bottom: 20px; border-radius: 15px; align-items: center; position: relative; }
         .img-vin { width: 90px; height: 120px; object-fit: cover; background: #1a1a1a; margin-right: 20px; border-radius: 8px; border: 1.5px solid var(--gold); cursor: zoom-in; }
         .vin-info { flex: 1; cursor: pointer; }
         .vin-info b { font-size: 1.6rem; display: block; margin-bottom: 8px; color: var(--gold); }
         .vin-qte { font-size: 1.8rem; font-weight: 700; color: #fff; padding-right: 10px; }
+        
+        .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 15px; filter: sepia(1) saturate(5) hue-rotate(10deg); }
+
         .btn-add { position: fixed; bottom: 40px; right: 25px; background: var(--gold); width: 80px; height: 80px; border-radius: 50%; border: none; font-size: 50px; color: #000; box-shadow: 0 6px 25px rgba(197,160,89,0.6); z-index: 100; font-weight: bold; cursor: pointer; }
         .stars { font-size: 50px; color: #333; margin: 25px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
+        
         input, textarea { width: 95%; max-width: 500px; padding: 20px; margin: 10px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.2rem; box-sizing: border-box; font-family: 'Montserrat'; }
-        #zoomOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; }
+        
+        /* Overlays pour Zoom et Notes */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
         #zoomImg { max-width: 95%; max-height: 85%; border: 2px solid var(--gold); border-radius: 10px; }
+        .note-box { background: #111; border: 2px solid var(--gold); padding: 30px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: left; }
     </style>
 </head>
 <body>
-    <div id="zoomOverlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
+    <!-- Overlay Zoom -->
+    <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" src=""></div>
     
+    <!-- Overlay Notes -->
+    <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
+        <div class="note-box">
+            <h2 style="color:var(--gold); margin-top:0;">Commentaire :</h2>
+            <p id="noteText" style="font-size:1.3rem; line-height:1.6;"></p>
+            <p style="color:gray; font-size:0.9rem; text-align:center; margin-top:20px;">(Cliquer pour fermer)</p>
+        </div>
+    </div>
+
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
@@ -60,12 +78,10 @@
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        
         <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="padding:15px; font-size:1rem; border-style:dashed;">📷 PHOTO / GALERIE</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <input type="hidden" id="imgData">
         <div id="previewContainer"></div>
-
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
@@ -124,11 +140,17 @@
                                 <b>${v.nom}</b>
                                 <span style="color:var(--gold); font-size:1.6rem">${st}</span>
                             </div>
+                            <button class="btn-note" onclick="voirNote('${v.note || 'Aucune note.'}')">📝</button>
                             <div class="vin-qte">x${v.qte}</div>
                             <button style="background:none; border:none; color:#ff4444; font-size:2rem; margin-left:10px;" onclick="supprimer('${id}')">✕</button>
                         </div>`;
                 });
             });
+        }
+
+        function voirNote(txt) {
+            document.getElementById('noteText').innerText = txt;
+            document.getElementById('noteOverlay').style.display = 'flex';
         }
 
         function editVin(id, data) {
@@ -144,13 +166,7 @@
 
         function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
         function supprimer(id) { if(confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
-        
-        function goToAdd() { 
-            editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin";
-            document.getElementById('nomVin').value=""; document.getElementById('imgData').value=""; 
-            document.getElementById('noteVin').value=""; document.getElementById('previewContainer').innerHTML="";
-            setStars(0); showPage('PAGE_ADD'); 
-        }
+        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value=""; document.getElementById('imgData').value=""; document.getElementById('noteVin').value=""; document.getElementById('previewContainer').innerHTML=""; setStars(0); showPage('PAGE_ADD'); }
 
         function sauvegarderVin() {
             const n = document.getElementById('nomVin').value;
