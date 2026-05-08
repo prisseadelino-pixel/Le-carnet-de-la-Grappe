@@ -114,10 +114,11 @@
             else { showPage('PAGE_AUTH'); }
         });
 
+        // FONCTION QR CODE MISE À JOUR POUR GITHUB
         function showQR() {
-            const currentUrl = encodeURIComponent(window.location.origin + window.location.pathname);
-            const qrUrl = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + currentUrl;
-            document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;" alt="QR Code">`;
+            // On appelle exactement le fichier que l'on voit sur ton GitHub (image_1.png)
+            const monImage = "mon-qrcode.png"; 
+            document.getElementById('qrContainer').innerHTML = `<img src="${monImage}" style="width:220px; height:220px; object-fit:contain;" alt="QR Code">`;
             document.getElementById('qrOverlay').style.display = 'flex';
         }
 
