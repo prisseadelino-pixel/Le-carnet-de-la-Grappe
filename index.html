@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
+    
+    <!-- CONFIGURATION PWA (Ce qui manquait pour l'installation) -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
+    
+    <!-- Manifest Inline (pour éviter un fichier externe) -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Le Carnet de la Grappe","short_name":"Grappe","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#c5a059","icons":[{"src":"https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg","sizes":"192x192","type":"image/png"}]}'>
+
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -45,9 +55,16 @@
     </style>
 </head>
 <body>
+    <!-- Script pour le Service Worker (Nécessaire pour l'installation sur Android) -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        const sw = 'data:application/javascript,self.addEventListener("fetch", function(e){})';
+        navigator.serviceWorker.register('data:application/javascript,' + encodeURIComponent(sw));
+      }
+    </script>
+
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border-radius:10px; border:2px solid var(--gold)"></div>
     
-    <!-- MODAL NOTES -->
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); margin-top:0; border-bottom:1px solid var(--brd); padding-bottom:10px;">Dégustation</h2>
@@ -56,16 +73,14 @@
         </div>
     </div>
 
-    <!-- MODAL QR CODE -->
     <div id="qrOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" style="text-align:center;">
             <h2 style="color:var(--gold);">Partager le carnet</h2>
             <div id="qrContainer" style="background:white; padding:10px; display:inline-block; border-radius:10px; margin:15px 0;"></div>
-            <p style="color:gray;">Scanne ce code pour ouvrir l'appli</p>
+            <p style="color:gray;">Scannez pour ouvrir l'appli</p>
         </div>
     </div>
 
-    <!-- CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
@@ -76,7 +91,6 @@
         <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE</button>
     </div>
 
-    <!-- ACCUEIL -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
@@ -87,7 +101,6 @@
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- LISTE VINS -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -95,7 +108,6 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- AJOUT / MODIF -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -107,7 +119,7 @@
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" rows="10" placeholder="Notes de dégustation (10 lignes)..."></textarea>
+        <textarea id="noteVin" rows="10" placeholder="Notes de dégustation..."></textarea>
         <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
     </div>
@@ -139,7 +151,9 @@
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
 
         function showQR() {
-            document.getElementById('qrContainer').innerHTML = `<img src="mon-qrcode.png" style="width:200px; height:200px; object-fit:contain;">`;
+            const currentUrl = window.location.href;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+            document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;" alt="QR Code">`;
             document.getElementById('qrOverlay').style.display = 'flex';
         }
 
