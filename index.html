@@ -8,7 +8,6 @@
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-    <link rel="manifest" href="manifest.json">
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -24,38 +23,38 @@
         .logo { width: 110px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
         
-        /* Style Doré pour le résumé */
-        .resume-projet { color: var(--gold); font-size: 0.9rem; font-style: italic; max-width: 85%; margin: 20px 0; line-height: 1.4; border-top: 1px solid rgba(197,160,89,0.3); padding-top: 15px; }
+        /* Nouveau Résumé Doré */
+        .intro-text { color: var(--gold); font-size: 0.95rem; max-width: 90%; margin: 25px 0; line-height: 1.6; border-top: 1px solid rgba(197,160,89,0.3); padding-top: 20px; }
+        .intro-text b { color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
         
         .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 18px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
         .vin-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 12px; margin: 8px 0; border-radius: 12px; width: 95%; max-width: 400px; display: flex; align-items: center; gap: 12px; text-align: left; }
         .vin-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid var(--gold); }
         .vin-info { flex: 1; }
-        .btn-read-note { background: none; border: none; color: var(--gold); font-size: 1.3rem; }
+        .btn-read-note { background: none; border: none; color: var(--gold); font-size: 1.3rem; cursor: pointer; }
         
         #COMMENT_MODAL { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:none; align-items:center; justify-content:center; z-index:2000; }
-        .comment-box { background:#fdf6e3; color:#333; padding:25px; width:85%; border-radius:4px; font-family:serif; box-shadow: 8px 8px 0 var(--gold); }
+        .comment-box { background:#fdf6e3; color:#333; padding:25px; width:85%; border-radius:4px; font-family:serif; box-shadow: 8px 8px 0 var(--gold); text-align: left; }
         
         input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; }
         #photo-preview { width: 100px; height: 100px; border: 2px dashed var(--gold); border-radius: 10px; margin: 10px 0; background-size: cover; display: flex; align-items: center; justify-content: center; }
-        
-        /* QR Code sur accueil */
-        #qrcode-home { margin-top: 25px; padding: 12px; background: white; border-radius: 10px; border: 3px solid var(--gold); }
+        #qrcode-home { margin-top: 25px; padding: 10px; background: white; border-radius: 10px; border: 3px solid var(--gold); }
     </style>
 </head>
 <body>
 
-    <!-- PAGE CONNEXION AVEC RÉSUMÉ DORÉ -->
+    <!-- PAGE CONNEXION AVEC TON RÉSUMÉ PRÉFÉRÉ -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
-        <div class="resume-projet">
-            "Une application prestigieuse pour la gestion de votre cave personnelle, alliant l'élégance du vin à la technologie moderne."
+        <div class="intro-text">
+            <b>Votre cave, toujours dans votre poche.</b><br>
+            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b> accompagnées de photos. Simple, privé et élégant.
         </div>
-        <button class="btn-gold" id="googleLogin" style="background:white; color:#000; margin-top:30px;">SE CONNECTER</button>
+        <button class="btn-gold" id="googleLogin" style="background:white; color:#000;">SE CONNECTER</button>
     </div>
 
-    <!-- PAGE ACCUEIL AVEC QR CODE -->
+    <!-- PAGE ACCUEIL AVEC QR CODE D'ADELINO -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
@@ -63,22 +62,21 @@
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
         
-        <!-- Emplacement du QR Code -->
         <div id="qrcode-home"></div>
         <p style="color:var(--gold); font-size:0.7rem; margin-top:5px;">VOTRE ACCÈS PRIVÉ</p>
 
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:20px;">Déconnexion</button>
     </div>
 
-    <!-- PAGE LISTE -->
+    <!-- PAGE LISTE (AVEC BULLE DE NOTE) -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
-        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="preparerAjout()">+ AJOUTER</button>
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="preparerAjout()">+ AJOUTER UN VIN</button>
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:10px;">← RETOUR</button>
     </div>
 
-    <!-- PAGE FICHE VIN (SANS QR CODE ICI) -->
+    <!-- PAGE FICHE VIN -->
     <div id="PAGE_ADD" class="p">
         <h1>Fiche Vin</h1>
         <div id="photo-preview" onclick="document.getElementById('fileInput').click()">📸</div>
@@ -87,17 +85,18 @@
         
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité">
-        <textarea id="noteVin" rows="6" placeholder="Commentaires de dégustation..."></textarea>
+        <textarea id="noteVin" rows="6" placeholder="Notes et commentaires..."></textarea>
         
         <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button id="btnDelete" style="color:red; background:none; border:none; margin-top:10px; display:none;" onclick="supprimerVin()">Supprimer</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
+    <!-- MODAL POUR LES NOTES -->
     <div id="COMMENT_MODAL" onclick="this.style.display='none'">
         <div class="comment-box" onclick="event.stopPropagation()">
-            <h3 style="margin-top:0; color:var(--gold); font-family:'Montserrat'; border-bottom:1px solid #ddd;">Notes</h3>
-            <p id="commentText"></p>
+            <h3 style="margin-top:0; color:var(--gold); font-family:'Montserrat';">DÉGUSTATION</h3>
+            <p id="commentText" style="line-height:1.4; white-space: pre-wrap;"></p>
         </div>
     </div>
 
@@ -130,7 +129,7 @@
         function genererQRCodeAccueil(uid) {
             const qrDiv = document.getElementById('qrcode-home');
             qrDiv.innerHTML = "";
-            new QRCode(qrDiv, { text: "https://le-carnet-de-la-grappe.web.app/?user=" + uid, width: 100, height: 100 });
+            new QRCode(qrDiv, { text: "https://le-carnet-de-la-grappe.web.app/?user=" + uid, width: 110, height: 110 });
         }
 
         function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
@@ -157,7 +156,7 @@
                             <img src="${img}" class="vin-img" onclick="preparerModif('${child.key}', '${v.nom.replace(/'/g, "\\'")}', ${v.qte}, '${(v.note||'').replace(/'/g, "\\'")}', '${img}')">
                             <div class="vin-info" onclick="preparerModif('${child.key}', '${v.nom.replace(/'/g, "\\'")}', ${v.qte}, '${(v.note||'').replace(/'/g, "\\'")}', '${img}')">
                                 <b style="color:var(--gold)">${v.nom}</b>
-                                <span style="font-size:0.8rem">Quantité : ${v.qte}</span>
+                                <span style="font-size:0.8rem">Qte: ${v.qte}</span>
                             </div>
                             <button class="btn-read-note" onclick="showNote('${(v.note||'').replace(/'/g, "\\'")}')">📝</button>
                         </div>`;
@@ -166,16 +165,14 @@
         }
 
         function showNote(txt) {
-            document.getElementById('commentText').innerText = txt || "Aucune note.";
+            document.getElementById('commentText').innerText = txt || "Aucun commentaire pour ce vin.";
             document.getElementById('COMMENT_MODAL').style.display = 'flex';
         }
 
         function preparerAjout() {
             currentEditKey = null;
-            document.getElementById('nomVin').value = "";
-            document.getElementById('qteVin').value = 1;
-            document.getElementById('noteVin').value = "";
-            document.getElementById('imgData').value = "";
+            document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1;
+            document.getElementById('noteVin').value = ""; document.getElementById('imgData').value = "";
             document.getElementById('photo-preview').style.backgroundImage = "";
             document.getElementById('btnDelete').style.display = "none";
             showPage('PAGE_ADD');
@@ -206,7 +203,7 @@
         }
 
         function supprimerVin() {
-            if(confirm("Supprimer cette bouteille ?")) {
+            if(confirm("Confirmer la suppression ?")) {
                 db.ref('users/' + userUID + '/cave/' + currentEditKey).remove();
                 showPage('PAGE_LISTE');
             }
