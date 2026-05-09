@@ -9,7 +9,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Le Carnet de la Grappe","short_name":"Grappe","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#c5a059","icons":[{"src":"https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg","sizes":"192x192","type":"image/png"}]}'>
+    
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Le Carnet de la Grappe","short_name":"Grappe","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#c5a059","icons":[{"src":"https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg","sizes":"192x192","type":"image/png"}]}'>
 
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
@@ -31,30 +32,29 @@
         .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); cursor: zoom-in; }
         .vin-info { flex: 1; cursor: pointer; }
         .vin-info b { font-size: 1.3rem; display: block; margin-bottom: 5px; color: var(--gold); line-height: 1.2; }
-        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; padding-right: 5px; }
-        .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 10px; z-index: 10; padding: 10px; }
+        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 10px; }
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 40px; color: #000; box-shadow: 0 4px 20px rgba(197,160,89,0.5); z-index: 100; font-weight: bold; cursor: pointer; }
-        .stars { font-size: 40px; color: #333; margin: 20px 0; cursor: pointer; }
+        .stars { font-size: 40px; color: #333; margin: 20px 0; }
         .stars .selected { color: var(--gold); }
         input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; font-family: 'Montserrat'; }
-        textarea { min-height: 200px; resize: none; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
-        .note-box { background: #111; border: 2px solid var(--gold); padding: 25px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: left; max-height: 80vh; overflow-y: auto; }
-        #noteText { font-size: 1.1rem; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; color: #eee; }
+        .note-box { background: #111; border: 2px solid var(--gold); padding: 25px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; }
         .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 8px; border-radius: 5px; margin-top: 15px; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <script>
-      // Enregistrement correct du Service Worker pour l'installation
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-      }
+        if ('serviceWorker' in navigator) {
+            const code = 'self.addEventListener("fetch", (e) => {});';
+            const blob = new Blob([code], {type: 'text/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(blob));
+        }
     </script>
 
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border-radius:10px; border:2px solid var(--gold)"></div>
-    <div id="noteOverlay" class="overlay" onclick="this.style.display='none'"><div class="note-box" onclick="event.stopPropagation()"><h2 style="color:var(--gold); margin-top:0; border-bottom:1px solid var(--brd); padding-bottom:10px;">Dégustation</h2><div id="noteText"></div><button onclick="document.getElementById('noteOverlay').style.display='none'" style="width:100%; background:var(--gold); border:none; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer;">FERMER</button></div></div>
-    <div id="qrOverlay" class="overlay" onclick="this.style.display='none'"><div class="note-box" style="text-align:center;"><h2 style="color:var(--gold);">Partager le carnet</h2><div id="qrContainer" style="background:white; padding:10px; display:inline-block; border-radius:10px; margin:15px 0;"></div><p style="color:gray;">Scannez pour ouvrir l'appli</p></div></div>
+    <div id="noteOverlay" class="overlay" onclick="this.style.display='none'"><div class="note-box" onclick="event.stopPropagation()"><h2 style="color:var(--gold);">Dégustation</h2><div id="noteText" style="text-align:left; margin-bottom:20px; white-space:pre-wrap;"></div><button onclick="document.getElementById('noteOverlay').style.display='none'" style="width:100%; background:var(--gold); border:none; padding:15px; border-radius:10px; font-weight:bold;">FERMER</button></div></div>
+    <div id="qrOverlay" class="overlay" onclick="this.style.display='none'"><div class="note-box" style="text-align:center;"><h2 style="color:var(--gold);">Partager</h2><div id="qrContainer" style="background:white; padding:10px; display:inline-block; border-radius:10px; margin:15px 0;"></div><p style="color:gray;">Scannez pour ouvrir</p></div></div>
 
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
@@ -63,7 +63,7 @@
             <b>Votre cave, toujours dans votre poche.</b><br>
             Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b> accompagnées de photos. Simple, privé et élégant.
         </div>
-        <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE</button>
+        <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25" style="margin-right:10px;"> CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -87,13 +87,13 @@
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed;">📷 PHOTO / GALERIE</button>
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed;">📷 PHOTO</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <div id="previewContainer"></div>
         <input type="hidden" id="imgData">
         <div class="stars" id="starRating"><span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span></div>
-        <textarea id="noteVin" rows="10" placeholder="Notes de dégustation..."></textarea>
-        <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
+        <textarea id="noteVin" rows="8" placeholder="Notes de dégustation..."></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
     </div>
 
@@ -108,7 +108,7 @@
         function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
-        function showQR() { const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`; document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;" alt="QR Code">`; document.getElementById('qrOverlay').style.display = 'flex'; }
+        function showQR() { const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`; document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;">`; document.getElementById('qrOverlay').style.display = 'flex'; }
         function chargerVins() { const c = document.getElementById('container-vins'); db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => { c.innerHTML = ""; if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Rayon vide.</p>"; return; } s.forEach(child => { const v = child.val(), id = child.key; let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0)); c.innerHTML += `<div class="card"><img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="zoom('${v.image}')"><div class="vin-info" onclick="editVin('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})"><b>${v.nom}</b><span style="color:var(--gold);">${st}</span></div><button class="btn-note" onclick="event.stopPropagation(); voirNote(\`${v.note ? v.note.replace(/`/g, '\\`').replace(/\n/g, '\\n') : 'Aucune note.'}\`)">📝</button><div class="vin-qte">x${v.qte}</div><button style="background:none; border:none; color:#ff4444; font-size:1.5rem;" onclick="event.stopPropagation(); supprimer('${id}')">✕</button></div>`; }); }); }
         function voirNote(txt) { document.getElementById('noteText').innerText = txt; document.getElementById('noteOverlay').style.display = 'flex'; }
         function handleFile(input) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('imgData').value = e.target.result; document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`; }; reader.readAsDataURL(input.files[0]); }
