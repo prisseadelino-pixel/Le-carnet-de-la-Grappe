@@ -8,30 +8,24 @@
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="manifest" href="manifest.json">
 
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
-        :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
-        
+        :root { --gold: #c5a059; --bg: #000; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        
-        .logo { width: 120px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
+        .logo { width: 110px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
-        
-        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
-        
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; margin: 10px 0; width: 95%; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
-        input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 10px; font-size: 1rem; }
+        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; }
+        input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -39,11 +33,11 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
-        <p>Votre inventaire de vins privé.</p>
         <button class="btn-google" id="googleLogin">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> CONNEXION GOOGLE
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> SE CONNECTER
         </button>
-        <p id="status" style="font-size: 0.8rem; color: gray; margin-top: 10px;"></p>
+        <p id="errorLog" style="color:red; font-size:0.7rem; margin-top:20px; max-width:90%;"></p>
+        <button onclick="location.reload(true)" style="background:none; border:none; color:gray; text-decoration:underline; margin-top:40px;">Réactualiser l'application</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -52,27 +46,26 @@
         <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
-        <button class="btn-gold" onclick="showPage('PAGE_ADD')">+ AJOUTER UN VIN</button>
+        <button class="btn-gold" onclick="showPage('PAGE_ADD')">+ AJOUTER</button>
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
         <h1>Nouveau Vin</h1>
-        <input type="text" id="nomVin" placeholder="Nom du cru">
+        <input type="text" id="nomVin" placeholder="Nom">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <textarea id="noteVin" rows="4" placeholder="Commentaires..."></textarea>
+        <textarea id="noteVin" rows="3" placeholder="Notes..."></textarea>
         <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
     <script>
-        // CONFIGURATION FIREBASE
         const firebaseConfig = { 
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8", 
             authDomain: "le-carnet-de-la-grappe.firebaseapp.com", 
@@ -80,26 +73,24 @@
             projectId: "le-carnet-de-la-grappe", 
             appId: "1:90122533942:web:0448a69951e95108ce6c97" 
         };
-        
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
-        let userUID = null;
-        let rayonActuel = "";
+        const auth = firebase.auth(), db = firebase.database();
+        let userUID = null, rayonActuel = "";
 
-        // GESTION CONNEXION
-        const loginBtn = document.getElementById('googleLogin');
-        const statusTxt = document.getElementById('status');
-
-        loginBtn.onclick = () => {
-            statusTxt.innerText = "Redirection vers Google...";
+        // STRATÉGIE DE CONNEXION HYBRIDE
+        document.getElementById('googleLogin').onclick = () => {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithRedirect(provider);
+            auth.signInWithRedirect(provider).catch(e => {
+                document.getElementById('errorLog').innerText = "Erreur : " + e.message;
+                auth.signInWithPopup(provider); // Secours si la redirection échoue
+            });
         };
 
-        // Gérer le retour de redirection
-        auth.getRedirectResult().catch(err => {
-            statusTxt.innerText = "Erreur : " + err.message;
+        // Gérer le retour après redirection
+        auth.getRedirectResult().then(res => {
+            if (res.user) console.log("Connecté avec succès");
+        }).catch(e => {
+            document.getElementById('errorLog').innerText = "Détail : " + e.message;
         });
 
         auth.onAuthStateChanged(u => { 
@@ -112,49 +103,22 @@
             } 
         });
 
-        // FONCTIONS APP
-        function showPage(id) { 
-            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
-        }
-
-        function openRayon(n) { 
-            rayonActuel = n; 
-            document.getElementById('rayonTitle').innerText = n; 
-            chargerVins(); 
-            showPage('PAGE_LISTE'); 
-        }
-
+        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
         function chargerVins() {
-            const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
+                const c = document.getElementById('container-vins');
                 c.innerHTML = "";
-                if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Aucun vin ici.</p>"; return; }
                 s.forEach(child => {
                     const v = child.val();
-                    c.innerHTML += `
-                        <div class="card">
-                            <div><b style="color:var(--gold);">${v.nom}</b><br><small>${v.note || ''}</small></div>
-                            <div style="font-weight:bold;">x${v.qte}</div>
-                        </div>`;
+                    c.innerHTML += `<div style="background:#111; border:1px solid rgba(255,255,255,0.1); padding:15px; margin:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;"><b>${v.nom}</b><span>x${v.qte}</span></div>`;
                 });
             });
         }
-
         function sauvegarderVin() {
-            const n = document.getElementById('nomVin').value;
-            if(!n) return;
-            db.ref('users/' + userUID + '/cave').push({
-                nom: n, 
-                qte: document.getElementById('qteVin').value || 1, 
-                note: document.getElementById('noteVin').value, 
-                categorie: rayonActuel 
-            }).then(() => {
-                document.getElementById('nomVin').value = "";
-                showPage('PAGE_LISTE');
-            });
+            const n = document.getElementById('nomVin').value; if(!n) return;
+            db.ref('users/' + userUID + '/cave').push({ nom: n, qte: document.getElementById('qteVin').value || 1, note: document.getElementById('noteVin').value, categorie: rayonActuel }).then(() => showPage('PAGE_LISTE'));
         }
-
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
