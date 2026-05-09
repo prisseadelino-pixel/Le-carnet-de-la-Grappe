@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-    <link rel="manifest" href="manifest.json?v=3">
+    <link rel="manifest" href="manifest.json">
 
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
@@ -23,10 +23,11 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         .logo { width: 120px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
         .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; }
         input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 10px; }
+        #error-msg { color: #ff4444; font-size: 0.8rem; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
@@ -34,10 +35,11 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
-        <p>Connectez-vous pour gérer votre cave.</p>
+        <p>Gérez votre cave en toute simplicité.</p>
         <button class="btn-google" id="googleLogin">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> SE CONNECTER AVEC GOOGLE
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> CONNEXION GOOGLE
         </button>
+        <div id="error-msg"></div>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -51,9 +53,9 @@
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
-        <div id="container-vins" style="width:100%"></div>
-        <button class="btn-gold" onclick="showPage('PAGE_ADD')">AJOUTER UN VIN</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
+        <div id="container-vins" style="width:100%; margin-bottom: 80px;"></div>
+        <button class="btn-gold" onclick="showPage('PAGE_ADD')" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); width:90%;">+ AJOUTER</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:10px;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
@@ -73,36 +75,94 @@
             projectId: "le-carnet-de-la-grappe", 
             appId: "1:90122533942:web:0448a69951e95108ce6c97" 
         };
+        
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "";
+        const auth = firebase.auth();
+        const db = firebase.database();
+        let userUID = null;
+        let rayonActuel = "";
 
-        // GESTION CONNEXION HYBRIDE
-        document.getElementById('googleLogin').onclick = () => {
+        // GESTION DE LA CONNEXION
+        const loginBtn = document.getElementById('googleLogin');
+        const errorDiv = document.getElementById('error-msg');
+
+        loginBtn.onclick = () => {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(() => {
-                auth.signInWithRedirect(provider);
+            // Utilisation systématique de Redirect pour la compatibilité PWA
+            auth.signInWithRedirect(provider).catch(err => {
+                errorDiv.style.display = "block";
+                errorDiv.innerText = "Erreur : " + err.message;
             });
         };
 
+        // Écouteur d'état de connexion
         auth.onAuthStateChanged(u => { 
             if(u) { 
                 userUID = u.uid; 
                 document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; 
                 showPage('PAGE_HOME'); 
             } else { 
+                // Vérifie si on revient d'une tentative de redirection avec erreur
+                auth.getRedirectResult().catch(err => {
+                    errorDiv.style.display = "block";
+                    errorDiv.innerText = "Erreur après redirection : " + err.message;
+                });
                 showPage('PAGE_AUTH'); 
             } 
         });
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js?v=3');
-        }
-
         function showPage(id) { 
             document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0);
         }
 
         function openRayon(n) { 
-            rayonActuel
+            rayonActuel = n; 
+            document.getElementById('rayonTitle').innerText = n; 
+            chargerVins(); 
+            showPage('PAGE_LISTE'); 
+        }
+
+        function chargerVins() {
+            const c = document.getElementById('container-vins');
+            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
+                c.innerHTML = "";
+                if(!s.exists()) { c.innerHTML = "<p style='color:gray; margin-top:20px;'>Le rayon est vide.</p>"; return; }
+                s.forEach(child => {
+                    const v = child.val();
+                    c.innerHTML += `
+                        <div style="background:#0d0d0d; border:1px solid var(--brd); padding:15px; margin:10px; border-radius:10px; text-align:left; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <b style="color:var(--gold); font-size:1.1rem;">${v.nom}</b><br>
+                                <small style="color:gray;">${v.note || ''}</small>
+                            </div>
+                            <div style="font-size:1.3rem; font-weight:bold;">x${v.qte}</div>
+                        </div>`;
+                });
+            });
+        }
+
+        function sauvegarderVin() {
+            const n = document.getElementById('nomVin').value;
+            const q = document.getElementById('qteVin').value;
+            if(!n) return;
+            db.ref('users/' + userUID + '/cave').push({
+                nom: n, 
+                qte: q || 1, 
+                note: document.getElementById('noteVin').value, 
+                categorie: rayonActuel 
+            }).then(() => {
+                document.getElementById('nomVin').value = "";
+                document.getElementById('noteVin').value = "";
+                showPage('PAGE_LISTE');
+            });
+        }
+
+        // Service Worker pour l'installation PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
