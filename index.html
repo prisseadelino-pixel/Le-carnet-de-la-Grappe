@@ -7,7 +7,7 @@
     
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="manifest" href='data:application/manifest+json,{"name":"Le Carnet de la Grappe","short_name":"Grappe","start_url":"index.html","display":"standalone","background_color":"#000000","theme_color":"#c5a059","icons":[{"src":"https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg","sizes":"192x192","type":"image/png"}]}'>
 
@@ -55,7 +55,7 @@
         <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
-        <button onclick="showQR()" style="background:none; border:1px solid gray; color:gray; padding:8px; border-radius:5px; margin-top:15px; cursor:pointer;">🔗 MON QR CODE</button>
+        <button onclick="showQR()" style="background:none; border:1px solid gray; color:gray; padding:8px; border-radius:5px; margin-top:15px;">🔗 MON QR CODE</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
 
@@ -70,7 +70,7 @@
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed;">📷 PHOTO / GALERIE</button>
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed;">📷 PHOTO</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <div id="previewContainer"></div>
         <input type="hidden" id="imgData">
@@ -85,16 +85,15 @@
     <div id="qrOverlay" class="overlay" onclick="this.style.display='none'"><div class="note-box" style="text-align:center;"><h2 style="color:var(--gold);">Partager</h2><div id="qrContainer" style="background:white; padding:10px; border-radius:10px; margin:15px 0;"></div><p style="color:gray;">Scannez pour ouvrir</p></div></div>
 
     <script>
-        // CONFIG FIREBASE
         const firebaseConfig = { apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8", authDomain: "le-carnet-de-la-grappe.firebaseapp.com", databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app", projectId: "le-carnet-de-la-grappe", appId: "1:90122533942:web:0448a69951e95108ce6c97" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, editID = null;
 
-        // AUTHENTIFICATION GOOGLE CORRIGÉE
+        // Connexion avec POPUP (plus stable si le redirect bloque)
         document.getElementById('googleLogin').onclick = () => {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithRedirect(provider);
+            auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
         };
 
         auth.onAuthStateChanged(u => {
@@ -102,23 +101,21 @@
             else { showPage('PAGE_AUTH'); }
         });
 
-        // SERVICE WORKER SIMPLE (Pour installation sans bug)
+        // Service Worker simplifié au maximum pour l'installation
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",()=>{} )');
+            navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",()=>{})');
         }
 
-        // FONCTIONS NAVIGATION
         function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
         function showQR() { const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`; document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;">`; document.getElementById('qrOverlay').style.display = 'flex'; }
 
-        // GESTION CAVE
         function chargerVins() {
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 c.innerHTML = "";
-                if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Rayon vide.</p>"; return; }
+                if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Vide.</p>"; return; }
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
@@ -127,4 +124,13 @@
             });
         }
 
-        function handleFile(input) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('imgData').value = e.target.result; document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1
+        function handleFile(input) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('imgData').value = e.target.result; document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`; }; reader.readAsDataURL(input.files[0]); }
+        function editVin(id, data) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = data.nom; document.getElementById('qteVin').value = data.qte; document.getElementById('imgData').value = data.image || ""; document.getElementById('noteVin').value = data.note || ""; if(data.image) document.getElementById('previewContainer').innerHTML = `<img src="${data.image}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`; setStars(data.noteEtoiles || 0); showPage('PAGE_ADD'); }
+        function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
+        function voirNote(txt) { document.getElementById('noteText').innerText = txt; document.getElementById('noteOverlay').style.display = 'flex'; }
+        function supprimer(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value=""; document.getElementById('imgData').value=""; document.getElementById('noteVin').value=""; document.getElementById('previewContainer').innerHTML=""; setStars(0); showPage('PAGE_ADD'); }
+        function sauvegarderVin() { const n = document.getElementById('nomVin').value; if(!n) return; const d = { nom: n, qte: document.getElementById('qteVin').value || 1, image: document.getElementById('imgData').value || "", noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value, categorie: rayonActuel }; if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(d).then(() => showPage('PAGE_LISTE')); else db.ref('users/' + userUID + '/cave').push(d).then(() => showPage('PAGE_LISTE')); }
+    </script>
+</body>
+</html>
