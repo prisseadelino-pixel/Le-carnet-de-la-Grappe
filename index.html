@@ -9,53 +9,65 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
 
-    <!-- Firebase SDK (Version Stable) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <!-- QR Code standard pour éviter les bugs de script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
-        :root { --gold: #c5a059; --bg: #000; --card: #0d0d0d; }
+        :root { --gold: #c5a059; --bg: #000; }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        .logo-main { width: 110px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
         
-        .intro-text { color: var(--gold); font-size: 0.95rem; max-width: 90%; margin: 25px 0; line-height: 1.6; border-top: 1px solid rgba(197,160,89,0.3); padding-top: 20px; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 18px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        /* Style fidèle à ton image */
+        .logo-main { width: 140px; border: 1px solid var(--gold); padding: 5px; margin-top: 30px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2rem; letter-spacing: 2px; margin: 40px 0; text-transform: uppercase; }
+        
+        .box-info { border-left: 2px solid var(--gold); background: rgba(197, 160, 89, 0.05); padding: 20px; text-align: left; max-width: 400px; margin-bottom: 40px; }
+        .box-info p { margin: 0; line-height: 1.5; font-size: 0.95rem; color: #ccc; }
+        .box-info b { color: var(--gold); }
 
-        /* Modal & QR avec Logo */
-        #QR_MODAL { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 9999; }
-        .qr-wrapper { background: white; padding: 15px; border-radius: 15px; border: 4px solid var(--gold); position: relative; display: inline-block; }
-        #qrcode { padding: 10px; }
-        .qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border: 2px solid white; border-radius: 5px; background: white; }
+        .btn-google { background: white; color: #000; border: none; padding: 15px; width: 100%; max-width: 400px; border-radius: 12px; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; text-transform: uppercase; }
+        .btn-google img { width: 24px; margin-right: 15px; }
+
+        /* Modal QR */
+        #QR_MODAL { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .qr-wrapper { background: white; padding: 15px; border-radius: 15px; border: 4px solid var(--gold); position: relative; }
+        .qr-logo-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); width: 40px; height: 40px; background: white; padding: 2px; border-radius: 5px; }
+        
+        .btn-rayon { background: rgba(197, 160, 89, 0.1); border: 2px solid var(--gold); color: var(--gold); padding: 18px; width: 95%; max-width: 400px; margin: 10px 0; font-weight: 700; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
+    <!-- PAGE CONNEXION (STYLE IMAGE) -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo-main">
         <h1>Le Carnet de la Grappe</h1>
-        <div class="intro-text"><b>Votre cave, toujours dans votre poche.</b><br>Gérez vos stocks et vos notes de dégustation avec élégance.</div>
-        <button class="btn-gold" id="btnConnect" style="background:white; color:#000;">SE CONNECTER AVEC GOOGLE</button>
+        
+        <div class="box-info">
+            <p><b>Votre cave, toujours dans votre poche.</b><br>
+            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b> accompagnées de photos. Simple, privé et élégant.</p>
+        </div>
+
+        <button class="btn-google" id="btnConnect">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
+            Connexion Google
+        </button>
     </div>
 
+    <!-- PAGE ACCUEIL -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <button class="btn-gold" onclick="alert('Rouges en cours...')">🍷 ROUGES</button>
-        <button class="btn-gold" onclick="alert('Blancs en cours...')">🥂 BLANCS</button>
-        <button class="btn-gold" onclick="toggleQR()">📱 MON ACCÈS QR</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px;">Déconnexion</button>
+        <button class="btn-rayon" onclick="toggleQR()">📱 MON ACCÈS QR</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px;">Déconnexion</button>
     </div>
 
+    <!-- MODAL QR -->
     <div id="QR_MODAL" onclick="toggleQR()">
         <div class="qr-wrapper" onclick="event.stopPropagation()">
             <div id="qrcode"></div>
-            <!-- Ton logo superposé au centre -->
             <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="qr-logo-overlay">
             <button onclick="toggleQR()" style="background:var(--gold); border:none; color:white; padding:10px; width:100%; margin-top:10px; border-radius:5px; font-weight:bold;">FERMER</button>
         </div>
@@ -72,13 +84,9 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // Fix de la connexion
         document.getElementById('btnConnect').onclick = () => {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(err => {
-                console.error(err);
-                auth.signInWithRedirect(provider);
-            });
+            auth.signInWithRedirect(provider);
         };
 
         auth.onAuthStateChanged(u => { 
@@ -94,8 +102,8 @@
             container.innerHTML = "";
             new QRCode(container, {
                 text: "https://le-carnet-de-la-grappe.web.app/?user=" + uid,
-                width: 180,
-                height: 180,
+                width: 200,
+                height: 200,
                 correctLevel: QRCode.CorrectLevel.H
             });
         }
