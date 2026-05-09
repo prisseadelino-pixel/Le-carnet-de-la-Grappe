@@ -10,8 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-    
-    <link rel="manifest" href="manifest.json?v=2">
+    <link rel="manifest" href="manifest.json?v=3">
 
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
@@ -20,30 +19,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
-        
-        /* PAGES */
-        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
+        .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
-        
-        /* DESIGN */
-        .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
-        
-        .intro-text { width: 90%; max-width: 450px; margin: 20px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
-        .intro-text b { color: var(--gold); }
-
-        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 20px; width: 95%; max-width: 500px; justify-content: center; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; border-radius: 10px; }
-        
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
-        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; }
-        .vin-info { flex: 1; }
-        .vin-info b { font-size: 1.2rem; color: var(--gold); display: block; }
-        
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 40px; color: #000; z-index: 100; box-shadow: 0 4px 20px rgba(197,160,89,0.5); font-weight: bold; }
-        
-        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; }
+        .logo { width: 120px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; }
+        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid var(--brd); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -51,12 +34,9 @@
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
-        <div class="intro-text">
-            <b>Votre cave, toujours dans votre poche.</b><br>
-            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre vos <b>stocks</b> et de consigner vos <b>notes de dégustation</b>. Simple et élégant.
-        </div>
+        <p>Connectez-vous pour gérer votre cave.</p>
         <button class="btn-google" id="googleLogin">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"> SE CONNECTER AVEC GOOGLE
         </button>
     </div>
 
@@ -72,21 +52,20 @@
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
-        <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
+        <button class="btn-gold" onclick="showPage('PAGE_ADD')">AJOUTER UN VIN</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
         <h1>Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <textarea id="noteVin" rows="5" placeholder="Notes de dégustation..."></textarea>
+        <textarea id="noteVin" rows="4" placeholder="Notes..."></textarea>
         <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
     </div>
 
     <script>
-        // CONFIGURATION FIREBASE
         const firebaseConfig = { 
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8", 
             authDomain: "le-carnet-de-la-grappe.firebaseapp.com", 
@@ -98,9 +77,14 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "";
 
-        // GESTION CONNEXION
-        document.getElementById('googleLogin').onclick = () => auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
-        
+        // GESTION CONNEXION HYBRIDE
+        document.getElementById('googleLogin').onclick = () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).catch(() => {
+                auth.signInWithRedirect(provider);
+            });
+        };
+
         auth.onAuthStateChanged(u => { 
             if(u) { 
                 userUID = u.uid; 
@@ -111,63 +95,14 @@
             } 
         });
 
-        // ENREGISTREMENT DU SERVICE WORKER (AVEC FORCE RELOAD)
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js?v=2').then(reg => {
-                    console.log('SW OK');
-                    reg.update(); // Force la mise à jour si le fichier a changé
-                });
-            });
+            navigator.serviceWorker.register('sw.js?v=3');
         }
 
-        // FONCTIONS NAVIGATION & CAVE
         function showPage(id) { 
             document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
-            window.scrollTo(0,0); 
         }
 
         function openRayon(n) { 
-            rayonActuel = n; 
-            document.getElementById('rayonTitle').innerText = n; 
-            chargerVins(); 
-            showPage('PAGE_LISTE'); 
-        }
-
-        function chargerVins() {
-            const c = document.getElementById('container-vins');
-            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                c.innerHTML = "";
-                if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Le rayon est vide.</p>"; return; }
-                s.forEach(child => {
-                    const v = child.val();
-                    c.innerHTML += `
-                        <div class="card">
-                            <img src="https://via.placeholder.com/150" class="img-vin">
-                            <div class="vin-info">
-                                <b>${v.nom}</b>
-                                <small style="color:gray;">${v.note || ''}</small>
-                            </div>
-                            <div style="font-size:1.5rem; font-weight:bold;">x${v.qte}</div>
-                        </div>`;
-                });
-            });
-        }
-
-        function goToAdd() { showPage('PAGE_ADD'); }
-
-        function sauvegarderVin() {
-            const n = document.getElementById('nomVin').value;
-            if(!n) return;
-            const d = { 
-                nom: n, 
-                qte: document.getElementById('qteVin').value || 1, 
-                note: document.getElementById('noteVin').value, 
-                categorie: rayonActuel 
-            };
-            db.ref('users/' + userUID + '/cave').push(d).then(() => showPage('PAGE_LISTE'));
-        }
-    </script>
-</body>
-</html>
+            rayonActuel
