@@ -7,9 +7,11 @@
     
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="manifest" href="manifest.json">
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -17,30 +19,66 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; -webkit-tap-highlight-color: transparent; }
+        
         .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
+        
         .logo { width: 110px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
-        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        #debug { color: #ff4444; font-size: 0.8rem; margin-top: 20px; padding: 10px; }
+        
+        /* Boutons & Inputs */
+        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; font-size: 1rem; }
+        
+        /* Liste des vins */
+        .vin-card { background: #111; border: 1px solid rgba(255,255,255,0.1); padding: 15px; margin: 10px 0; border-radius: 10px; width: 95%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+        .vin-info b { color: var(--gold); display: block; font-size: 1.1rem; }
+        .vin-info small { color: #888; font-size: 0.8rem; }
+        .qte-badge { background: var(--gold); color: #000; padding: 5px 12px; border-radius: 20px; font-weight: 800; }
+        
+        #debug { color: #ff4444; font-size: 0.7rem; margin-top: 20px; max-width: 90%; word-break: break-all; }
     </style>
 </head>
 <body>
 
+    <!-- PAGE CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
         <button class="btn-google" id="googleLogin">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> SE CONNECTER
         </button>
-        <div id="debug">Attente de clic...</div>
+        <div id="debug"></div>
     </div>
 
+    <!-- PAGE ACCUEIL (CHOIX RAYON) -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <p>Connexion réussie !</p>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px;">Déconnexion</button>
+        <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
+        <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
+        <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
+        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px;">Déconnexion</button>
+    </div>
+
+    <!-- PAGE LISTE DES VINS -->
+    <div id="PAGE_LISTE" class="p">
+        <h1 id="rayonTitle">Rayon</h1>
+        <div id="container-vins" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="showPage('PAGE_ADD')">+ AJOUTER UN VIN</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px; font-weight:bold;">← RETOUR À LA CAVE</button>
+    </div>
+
+    <!-- PAGE AJOUT -->
+    <div id="PAGE_ADD" class="p">
+        <h1>Nouveau Vin</h1>
+        <input type="text" id="nomVin" placeholder="Nom du vin / Domaine">
+        <input type="number" id="qteVin" placeholder="Nombre de bouteilles" value="1">
+        <textarea id="noteVin" rows="3" placeholder="Notes (Millésime, garde...)"></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
     <script>
@@ -52,32 +90,89 @@
             appId: "1:90122533942:web:0448a69951e95108ce6c97" 
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const debug = document.getElementById('debug');
+        const auth = firebase.auth(), db = firebase.database();
+        let userUID = null, rayonActuel = "";
 
+        // AUTHENTIFICATION
         document.getElementById('googleLogin').onclick = () => {
-            debug.innerText = "Lancement de la fenêtre Google...";
             const provider = new firebase.auth.GoogleAuthProvider();
-            
-            // On utilise PopUp ici car ta capture montre que la redirection semble bloquée
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    debug.innerText = "Bienvenue " + result.user.displayName;
-                })
-                .catch((error) => {
-                    debug.innerText = "ERREUR : " + error.code + " - " + error.message;
-                    // Si le popup est bloqué, on tente quand même la redirection en dernier recours
-                    auth.signInWithRedirect(provider);
-                });
+            document.getElementById('debug').innerText = "Ouverture de la connexion...";
+            auth.signInWithPopup(provider).catch(e => {
+                document.getElementById('debug').innerText = "Erreur: " + e.message;
+                auth.signInWithRedirect(provider);
+            });
         };
 
         auth.onAuthStateChanged(u => { 
             if(u) { 
-                document.getElementById('userName').innerText = "Cave de " + u.displayName; 
-                document.getElementById('PAGE_AUTH').classList.remove('active');
-                document.getElementById('PAGE_HOME').classList.add('active');
+                userUID = u.uid; 
+                document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; 
+                showPage('PAGE_HOME'); 
+            } else { 
+                showPage('PAGE_AUTH'); 
             } 
         });
+
+        // NAVIGATION
+        function showPage(id) { 
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0);
+        }
+
+        function openRayon(n) { 
+            rayonActuel = n; 
+            document.getElementById('rayonTitle').innerText = n; 
+            chargerVins(); 
+            showPage('PAGE_LISTE'); 
+        }
+
+        // LOGIQUE DATA
+        function chargerVins() {
+            const container = document.getElementById('container-vins');
+            container.innerHTML = "<p style='color:gray'>Chargement...</p>";
+            
+            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
+                container.innerHTML = "";
+                if(!s.exists()) {
+                    container.innerHTML = "<p style='color:gray; margin:20px;'>Aucun vin dans ce rayon.</p>";
+                }
+                s.forEach(child => {
+                    const v = child.val();
+                    const key = child.key;
+                    container.innerHTML += `
+                        <div class="vin-card">
+                            <div class="vin-info">
+                                <b>${v.nom}</b>
+                                <small>${v.note || ''}</small>
+                            </div>
+                            <div class="qte-badge">x${v.qte}</div>
+                        </div>`;
+                });
+            });
+        }
+
+        function sauvegarderVin() {
+            const n = document.getElementById('nomVin').value;
+            const q = document.getElementById('qteVin').value;
+            const note = document.getElementById('noteVin').value;
+            
+            if(!n) { alert("Donne un nom au vin !"); return; }
+            
+            db.ref('users/' + userUID + '/cave').push({
+                nom: n,
+                qte: q,
+                note: note,
+                categorie: rayonActuel,
+                date: Date.now()
+            }).then(() => {
+                document.getElementById('nomVin').value = "";
+                document.getElementById('noteVin').value = "";
+                showPage('PAGE_LISTE');
+            });
+        }
+
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
