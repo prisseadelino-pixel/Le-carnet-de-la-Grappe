@@ -7,7 +7,6 @@
     
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="manifest" href="manifest.json">
 
@@ -24,8 +23,7 @@
         .logo { width: 110px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
         .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; }
-        #debug { color: #ff4444; font-size: 0.7rem; background: #111; padding: 10px; border-radius: 5px; margin-top: 20px; width: 90%; display: none; word-break: break-all; }
+        #debug { color: #ff4444; font-size: 0.8rem; margin-top: 20px; padding: 10px; }
     </style>
 </head>
 <body>
@@ -36,15 +34,12 @@
         <button class="btn-google" id="googleLogin">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> SE CONNECTER
         </button>
-        <div id="debug"></div>
+        <div id="debug">Attente de clic...</div>
     </div>
 
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
-        <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
-        <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
+        <p>Connexion réussie !</p>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px;">Déconnexion</button>
     </div>
 
@@ -57,42 +52,32 @@
             appId: "1:90122533942:web:0448a69951e95108ce6c97" 
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth(), db = firebase.database();
-        const debugDiv = document.getElementById('debug');
-
-        function logError(msg) {
-            debugDiv.style.display = "block";
-            debugDiv.innerText = "LOG: " + msg;
-        }
+        const auth = firebase.auth();
+        const debug = document.getElementById('debug');
 
         document.getElementById('googleLogin').onclick = () => {
+            debug.innerText = "Lancement de la fenêtre Google...";
             const provider = new firebase.auth.GoogleAuthProvider();
-            logError("Tentative de connexion...");
             
-            // On essaie d'abord le Redirect (mieux pour PWA)
-            auth.signInWithRedirect(provider).catch(e => {
-                logError("Erreur Redirect: " + e.message);
-                // Si ça rate, on tente le Popup (mieux pour Chrome mobile classique)
-                auth.signInWithPopup(provider).catch(e2 => {
-                    logError("Erreur Popup: " + e2.message);
+            // On utilise PopUp ici car ta capture montre que la redirection semble bloquée
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    debug.innerText = "Bienvenue " + result.user.displayName;
+                })
+                .catch((error) => {
+                    debug.innerText = "ERREUR : " + error.code + " - " + error.message;
+                    // Si le popup est bloqué, on tente quand même la redirection en dernier recours
+                    auth.signInWithRedirect(provider);
                 });
-            });
         };
-
-        // Capturer le résultat de la redirection au chargement
-        auth.getRedirectResult().catch(e => {
-            logError("Retour redirection échoué: " + e.message);
-        });
 
         auth.onAuthStateChanged(u => { 
             if(u) { 
-                document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; 
-                document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
-                document.getElementById('PAGE_HOME').classList.add('active'); 
+                document.getElementById('userName').innerText = "Cave de " + u.displayName; 
+                document.getElementById('PAGE_AUTH').classList.remove('active');
+                document.getElementById('PAGE_HOME').classList.add('active');
             } 
         });
-
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
 </html>
