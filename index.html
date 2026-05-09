@@ -19,36 +19,35 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2rem; margin: 15px 0; text-transform: uppercase; }
         .intro-text { width: 90%; max-width: 450px; margin: 20px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
-        .intro-text b { color: var(--gold); }
-        .btn-google { background: white; color: #000; border: none; padding: 20px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 20px; width: 95%; max-width: 500px; justify-content: center; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 10px; }
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; position: relative; box-sizing: border-box; }
-        .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); cursor: zoom-in; }
-        .vin-info { flex: 1; cursor: pointer; }
-        .vin-info b { font-size: 1.3rem; display: block; margin-bottom: 5px; color: var(--gold); line-height: 1.2; }
+        .btn-google { background: white; color: #000; border: none; padding: 20px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 500px; margin-top: 20px; cursor: pointer; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; }
+        .vin-info { flex: 1; }
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; }
-        .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 10px; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 40px; color: #000; box-shadow: 0 4px 20px rgba(197,160,89,0.5); z-index: 100; font-weight: bold; cursor: pointer; }
-        .stars { font-size: 40px; color: #333; margin: 20px 0; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 40px; color: #000; box-shadow: 0 4px 20px rgba(197,160,89,0.5); z-index: 100; font-weight: bold; }
+        .stars { font-size: 40px; color: #333; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
-        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; font-family: 'Montserrat'; }
+        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
-        .note-box { background: #111; border: 2px solid var(--gold); padding: 25px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; }
-        .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 8px; border-radius: 5px; margin-top: 15px; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
+        .note-box { background: #111; border: 2px solid var(--gold); padding: 25px; width: 85%; max-width: 500px; border-radius: 15px; }
     </style>
 </head>
 <body>
     <script>
+        // Ce script permet au navigateur de valider l'installation
         if ('serviceWorker' in navigator) {
-            const code = 'self.addEventListener("fetch", (e) => {});';
-            const blob = new Blob([code], {type: 'text/javascript'});
-            navigator.serviceWorker.register(URL.createObjectURL(blob));
+            window.addEventListener('load', () => {
+                const code = 'self.addEventListener("fetch", () => {});';
+                const blob = new Blob([code], {type: 'text/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(blob));
+            });
         }
     </script>
 
@@ -63,7 +62,7 @@
             <b>Votre cave, toujours dans votre poche.</b><br>
             Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b> accompagnées de photos. Simple, privé et élégant.
         </div>
-        <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25" style="margin-right:10px;"> CONNEXION GOOGLE</button>
+        <button class="btn-google" id="googleLogin">CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -72,7 +71,7 @@
         <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
-        <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
+        <button onclick="showQR()" style="background:none; border:1px solid gray; color:gray; padding:8px; border-radius:5px; margin-top:15px;">🔗 MON QR CODE</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
 
@@ -109,10 +108,10 @@
         function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
         function showQR() { const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`; document.getElementById('qrContainer').innerHTML = `<img src="${qrUrl}" style="width:200px; height:200px;">`; document.getElementById('qrOverlay').style.display = 'flex'; }
-        function chargerVins() { const c = document.getElementById('container-vins'); db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => { c.innerHTML = ""; if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Rayon vide.</p>"; return; } s.forEach(child => { const v = child.val(), id = child.key; let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0)); c.innerHTML += `<div class="card"><img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="zoom('${v.image}')"><div class="vin-info" onclick="editVin('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})"><b>${v.nom}</b><span style="color:var(--gold);">${st}</span></div><button class="btn-note" onclick="event.stopPropagation(); voirNote(\`${v.note ? v.note.replace(/`/g, '\\`').replace(/\n/g, '\\n') : 'Aucune note.'}\`)">📝</button><div class="vin-qte">x${v.qte}</div><button style="background:none; border:none; color:#ff4444; font-size:1.5rem;" onclick="event.stopPropagation(); supprimer('${id}')">✕</button></div>`; }); }); }
+        function chargerVins() { const c = document.getElementById('container-vins'); db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => { c.innerHTML = ""; if(!s.exists()) { c.innerHTML = "<p style='color:gray;'>Vide.</p>"; return; } s.forEach(child => { const v = child.val(), id = child.key; let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0)); c.innerHTML += `<div class="card"><img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="zoom('${v.image}')"><div class="vin-info" onclick="editVin('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})"><b>${v.nom}</b><span style="color:var(--gold);">${st}</span></div><button style="font-size:1.8rem; background:none; border:none;" onclick="event.stopPropagation(); voirNote(\`${v.note ? v.note.replace(/`/g, '\\`').replace(/\n/g, '\\n') : 'Pas de note.'}\`)">📝</button><div class="vin-qte">x${v.qte}</div><button style="background:none; border:none; color:#ff4444; font-size:1.5rem;" onclick="event.stopPropagation(); supprimer('${id}')">✕</button></div>`; }); }); }
         function voirNote(txt) { document.getElementById('noteText').innerText = txt; document.getElementById('noteOverlay').style.display = 'flex'; }
-        function handleFile(input) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('imgData').value = e.target.result; document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`; }; reader.readAsDataURL(input.files[0]); }
-        function editVin(id, data) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = data.nom; document.getElementById('qteVin').value = data.qte; document.getElementById('imgData').value = data.image || ""; document.getElementById('noteVin').value = data.note || ""; if(data.image) document.getElementById('previewContainer').innerHTML = `<img src="${data.image}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`; setStars(data.noteEtoiles || 0); showPage('PAGE_ADD'); }
+        function handleFile(input) { const reader = new FileReader(); reader.onload = (e) => { document.getElementById('imgData').value = e.target.result; document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin-top:10px; border-radius:5px; border:1px solid var(--gold)">`; }; reader.readAsDataURL(input.files[0]); }
+        function editVin(id, data) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = data.nom; document.getElementById('qteVin').value = data.qte; document.getElementById('imgData').value = data.image || ""; document.getElementById('noteVin').value = data.note || ""; if(data.image) document.getElementById('previewContainer').innerHTML = `<img src="${data.image}" style="width:80px; margin-top:10px; border-radius:5px; border:1px solid var(--gold)">`; setStars(data.noteEtoiles || 0); showPage('PAGE_ADD'); }
         function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
         function supprimer(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
         function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value=""; document.getElementById('imgData').value=""; document.getElementById('noteVin').value=""; document.getElementById('previewContainer').innerHTML=""; setStars(0); showPage('PAGE_ADD'); }
