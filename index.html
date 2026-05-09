@@ -23,9 +23,9 @@
         .active { display: flex !important; }
         .logo { width: 110px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; margin-top: 20px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin: 20px 0; }
-        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; }
+        .btn-google { background: white; color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 700; width: 95%; max-width: 400px; margin-top: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 400px; margin: 10px 0; text-transform: uppercase; font-weight: 700; border-radius: 10px; }
-        input, textarea { width: 95%; max-width: 400px; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; }
+        #debug { color: #ff4444; font-size: 0.7rem; background: #111; padding: 10px; border-radius: 5px; margin-top: 20px; width: 90%; display: none; word-break: break-all; }
     </style>
 </head>
 <body>
@@ -36,8 +36,7 @@
         <button class="btn-google" id="googleLogin">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22"> SE CONNECTER
         </button>
-        <p id="errorLog" style="color:red; font-size:0.7rem; margin-top:20px; max-width:90%;"></p>
-        <button onclick="location.reload(true)" style="background:none; border:none; color:gray; text-decoration:underline; margin-top:40px;">Réactualiser l'application</button>
+        <div id="debug"></div>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -47,22 +46,6 @@
         <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px;">Déconnexion</button>
-    </div>
-
-    <div id="PAGE_LISTE" class="p">
-        <h1 id="rayonTitle"></h1>
-        <div id="container-vins" style="width:100%"></div>
-        <button class="btn-gold" onclick="showPage('PAGE_ADD')">+ AJOUTER</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:20px;">← RETOUR</button>
-    </div>
-
-    <div id="PAGE_ADD" class="p">
-        <h1>Nouveau Vin</h1>
-        <input type="text" id="nomVin" placeholder="Nom">
-        <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <textarea id="noteVin" rows="3" placeholder="Notes..."></textarea>
-        <button class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
     <script>
@@ -75,50 +58,40 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "";
+        const debugDiv = document.getElementById('debug');
 
-        // STRATÉGIE DE CONNEXION HYBRIDE
+        function logError(msg) {
+            debugDiv.style.display = "block";
+            debugDiv.innerText = "LOG: " + msg;
+        }
+
         document.getElementById('googleLogin').onclick = () => {
             const provider = new firebase.auth.GoogleAuthProvider();
+            logError("Tentative de connexion...");
+            
+            // On essaie d'abord le Redirect (mieux pour PWA)
             auth.signInWithRedirect(provider).catch(e => {
-                document.getElementById('errorLog').innerText = "Erreur : " + e.message;
-                auth.signInWithPopup(provider); // Secours si la redirection échoue
+                logError("Erreur Redirect: " + e.message);
+                // Si ça rate, on tente le Popup (mieux pour Chrome mobile classique)
+                auth.signInWithPopup(provider).catch(e2 => {
+                    logError("Erreur Popup: " + e2.message);
+                });
             });
         };
 
-        // Gérer le retour après redirection
-        auth.getRedirectResult().then(res => {
-            if (res.user) console.log("Connecté avec succès");
-        }).catch(e => {
-            document.getElementById('errorLog').innerText = "Détail : " + e.message;
+        // Capturer le résultat de la redirection au chargement
+        auth.getRedirectResult().catch(e => {
+            logError("Retour redirection échoué: " + e.message);
         });
 
         auth.onAuthStateChanged(u => { 
             if(u) { 
-                userUID = u.uid; 
                 document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; 
-                showPage('PAGE_HOME'); 
-            } else { 
-                showPage('PAGE_AUTH'); 
+                document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
+                document.getElementById('PAGE_HOME').classList.add('active'); 
             } 
         });
 
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
-        function chargerVins() {
-            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                const c = document.getElementById('container-vins');
-                c.innerHTML = "";
-                s.forEach(child => {
-                    const v = child.val();
-                    c.innerHTML += `<div style="background:#111; border:1px solid rgba(255,255,255,0.1); padding:15px; margin:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;"><b>${v.nom}</b><span>x${v.qte}</span></div>`;
-                });
-            });
-        }
-        function sauvegarderVin() {
-            const n = document.getElementById('nomVin').value; if(!n) return;
-            db.ref('users/' + userUID + '/cave').push({ nom: n, qte: document.getElementById('qteVin').value || 1, note: document.getElementById('noteVin').value, categorie: rayonActuel }).then(() => showPage('PAGE_LISTE'));
-        }
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
     </script>
 </body>
