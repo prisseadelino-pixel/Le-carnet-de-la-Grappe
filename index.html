@@ -47,7 +47,6 @@
 <body>
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border-radius:10px; border:2px solid var(--gold)"></div>
     
-    <!-- MODAL NOTES -->
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); margin-top:0; border-bottom:1px solid var(--brd); padding-bottom:10px;">Dégustation</h2>
@@ -56,7 +55,6 @@
         </div>
     </div>
 
-    <!-- MODAL QR CODE -->
     <div id="qrOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" style="text-align:center;">
             <h2 style="color:var(--gold);">Partager le carnet</h2>
@@ -65,7 +63,6 @@
         </div>
     </div>
 
-    <!-- CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
@@ -76,7 +73,6 @@
         <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE</button>
     </div>
 
-    <!-- ACCUEIL -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
@@ -87,7 +83,6 @@
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- LISTE VINS -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -95,7 +90,6 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- AJOUT / MODIF -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -160,54 +154,4 @@
                             </div>
                             <button class="btn-note" onclick="event.stopPropagation(); voirNote(\`${v.note ? v.note.replace(/`/g, '\\`').replace(/\n/g, '\\n') : 'Aucune note.'}\`)">📝</button>
                             <div class="vin-qte">x${v.qte}</div>
-                            <button style="background:none; border:none; color:#ff4444; font-size:1.5rem;" onclick="event.stopPropagation(); supprimer('${id}')">✕</button>
-                        </div>`;
-                });
-            });
-        }
-
-        function voirNote(txt) {
-            document.getElementById('noteText').innerText = txt;
-            document.getElementById('noteOverlay').style.display = 'flex';
-        }
-
-        function handleFile(input) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('imgData').value = e.target.result;
-                document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-
-        function editVin(id, data) {
-            editID = id;
-            document.getElementById('addTitle').innerText = "Modifier";
-            document.getElementById('nomVin').value = data.nom;
-            document.getElementById('qteVin').value = data.qte;
-            document.getElementById('imgData').value = data.image || "";
-            document.getElementById('noteVin').value = data.note || "";
-            if(data.image) document.getElementById('previewContainer').innerHTML = `<img src="${data.image}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`;
-            setStars(data.noteEtoiles || 0);
-            showPage('PAGE_ADD');
-        }
-
-        function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
-        function supprimer(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
-        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value=""; document.getElementById('imgData').value=""; document.getElementById('noteVin').value=""; document.getElementById('previewContainer').innerHTML=""; setStars(0); showPage('PAGE_ADD'); }
-
-        function sauvegarderVin() {
-            const n = document.getElementById('nomVin').value;
-            if(!n) return;
-            const data = {
-                nom: n, qte: document.getElementById('qteVin').value || 1,
-                image: document.getElementById('imgData').value || "",
-                noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value,
-                categorie: rayonActuel
-            };
-            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
-            else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
-        }
-    </script>
-</body>
-</html>
+                            <button style="background:none; border:none
