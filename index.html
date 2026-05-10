@@ -174,9 +174,12 @@
         function handleFile(input) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                document.getElementById('imgData').value = e.target.result;
-                document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border-radius:5px; border:1px solid var(--gold)">`;
-            };
+                document.getElementById('googleLogin').onclick = () => {
+    const p = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(p).catch((error) => {
+        alert("Erreur : " + error.message);
+    });
+};
             reader.readAsDataURL(input.files[0]);
         }
 
