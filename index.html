@@ -112,9 +112,7 @@
 
         document.getElementById('googleLogin').onclick = () => {
             const p = new firebase.auth.GoogleAuthProvider();
-            const p = new firebase.auth.GoogleAuthProvider();
-p.setCustomParameters({ redirect_uri: 'https://prisseadelino-pixel.github.io/Le-carnet-de-la-Grappe/' });
-auth.signInWithRedirect(p);
+            p.setCustomParameters({ redirect_uri: 'https://prisseadelino-pixel.github.io/Le-carnet-de-la-Grappe/' });
             auth.signInWithRedirect(p);
         };
 
