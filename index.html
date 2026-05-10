@@ -110,13 +110,31 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, editID = null;
 
+        // Détecte si l'appli est ouverte en PWA (écran d'accueil) ou dans le navigateur
+        const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
         document.getElementById('googleLogin').addEventListener('click', async () => {
             const p = new firebase.auth.GoogleAuthProvider();
-            try {
-                await auth.signInWithPopup(p);
-            } catch(e) {
-                alert("Erreur : " + e.message);
+            if (isPWA) {
+                // Mode appli : utilise redirect
+                auth.signInWithRedirect(p);
+            } else {
+                // Mode navigateur : utilise popup
+                try {
+                    await auth.signInWithPopup(p);
+                } catch(e) {
+                    alert("Erreur : " + e.message);
+                }
             }
+        });
+
+        // Nécessaire pour récupérer le résultat après redirect en mode PWA
+        auth.getRedirectResult().then(result => {
+            if (result && result.user) {
+                console.log("Connecté via redirect :", result.user.displayName);
+            }
+        }).catch(error => {
+            console.error("Erreur redirect :", error.message);
         });
 
         auth.onAuthStateChanged(u => {
