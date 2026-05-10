@@ -126,7 +126,7 @@
 
         document.getElementById('googleLogin').onclick = () => {
             const p = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(p).catch(() => auth.signInWithRedirect(p));
+            auth.signInWithPopup(p));
         };
 
         auth.onAuthStateChanged(u => {
