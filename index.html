@@ -101,7 +101,7 @@
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
-            authDomain: "prisseadelino-pixel.github.io",
+            authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
             databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "le-carnet-de-la-grappe",
             appId: "1:90122533942:web:0448a69951e95108ce6c97"
@@ -112,6 +112,9 @@
 
         document.getElementById('googleLogin').onclick = () => {
             const p = new firebase.auth.GoogleAuthProvider();
+            const p = new firebase.auth.GoogleAuthProvider();
+p.setCustomParameters({ redirect_uri: 'https://prisseadelino-pixel.github.io/Le-carnet-de-la-Grappe/' });
+auth.signInWithRedirect(p);
             auth.signInWithRedirect(p);
         };
 
