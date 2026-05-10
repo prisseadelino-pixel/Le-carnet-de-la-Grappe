@@ -4,96 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
-    
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
         
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
-        .p { display: none; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; box-sizing: border-box; }
+        /* Conteneurs de pages */
+        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         
-        /* Design Entête */
-        .logo-box { border: 1px solid var(--gold); padding: 5px; margin-top: 20px; }
-        .logo-img { width: 120px; display: block; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 30px 0; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Bloc Info (Style image) */
-        .info-card { border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); padding: 20px; text-align: left; max-width: 400px; margin-bottom: 30px; }
-        .info-card p { margin: 0; font-size: 0.9rem; line-height: 1.5; color: #ccc; }
-        .info-card b { color: var(--gold); }
-
-        /* Formulaire Authentification */
-        .form-auth { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
-        input, textarea { width: 100%; padding: 18px; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 12px; font-size: 1rem; box-sizing: border-box; font-family: 'Montserrat'; }
+        .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .intro-text { width: 90%; max-width: 450px; margin: 10px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.9rem; color: #ddd; line-height: 1.4; text-align: left; }
+        
+        /* Formulaire */
+        .auth-form { width: 95%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        input, textarea { width: 100%; padding: 16px; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1rem; box-sizing: border-box; font-family: 'Montserrat'; }
         input:focus { border-color: var(--gold); outline: none; }
         
-        .btn-main { background: var(--gold); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
-        .btn-outline { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-
-        /* Éléments de la Cave */
-        .card-vin { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 100%; max-width: 500px; margin-bottom: 10px; border-radius: 12px; align-items: center; }
-        .img-vin { width: 60px; height: 90px; object-fit: cover; border: 1px solid var(--gold); border-radius: 5px; margin-right: 15px; }
-        .vin-details { flex: 1; text-align: left; }
-        .vin-details b { color: var(--gold); font-size: 1.1rem; display: block; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 30px; font-weight: bold; cursor: pointer; z-index: 100; }
+        .btn-main { background: var(--gold); color: #000; border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .btn-gold { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 15px; width: 100%; margin: 5px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; border-radius: 10px; }
         
-        #errorMsg { color: #ff4444; font-size: 0.85rem; margin-top: 10px; min-height: 1em; }
+        /* Liste & Cartes */
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; }
+        .vin-info { flex: 1; }
+        .vin-info b { font-size: 1.2rem; color: var(--gold); display: block; }
+        .vin-qte { font-size: 1.4rem; font-weight: 700; }
+        
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; z-index: 100; cursor: pointer; font-weight: bold; }
+        .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
+        .stars .selected { color: var(--gold); }
+        #authError { color: #ff4444; font-size: 0.85rem; margin-top: 10px; min-height: 20px; }
     </style>
 </head>
 <body>
 
     <div id="PAGE_AUTH" class="p active">
-        <div class="logo-box">
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo-img">
-        </div>
+        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
+        <div class="intro-text"><b>Votre cave, toujours dans votre poche.</b></div>
         
-        <div class="info-card">
-            <p><b>Votre cave, toujours dans votre poche.</b><br>
-            Inventorier vos crus, suivez vos <b>stocks</b> et consignez vos <b>notes</b>. Simple et élégant.</p>
-        </div>
-
-        <div class="form-auth">
+        <div class="auth-form">
             <input type="email" id="email" placeholder="Adresse Email">
             <input type="password" id="password" placeholder="Mot de passe">
-            <button class="btn-main" onclick="handleLogin()">Se Connecter</button>
-            <button class="btn-outline" onclick="handleSignup()" style="font-size: 0.8rem;">Créer un compte</button>
-            <div id="errorMsg"></div>
+            <button class="btn-main" onclick="connexion()">Se Connecter</button>
+            <button class="btn-gold" style="font-size: 0.8rem; border-color: #444; color: #888;" onclick="inscription()">Créer un compte</button>
+            <div id="authError"></div>
         </div>
     </div>
 
     <div id="PAGE_HOME" class="p">
-        <h1 id="userTitle">Ma Cave</h1>
-        <button class="btn-outline" style="width:100%; max-width:400px; margin:5px;" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
-        <button class="btn-outline" style="width:100%; max-width:400px; margin:5px;" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
-        <button class="btn-outline" style="width:100%; max-width:400px; margin:5px;" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
-        <button class="btn-outline" style="width:100%; max-width:400px; margin:5px;" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:40px; text-decoration:underline;">Déconnexion</button>
+        <h1 id="userName">Ma Cave</h1>
+        <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
+        <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
+        <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
+        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
+        <button onclick="auth.signOut()" style="color:gray; background:none; border:none; margin-top:40px; text-decoration:underline; cursor:pointer;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
-        <h1 id="rayonName"></h1>
-        <div id="vin-container" style="width:100%;"></div>
+        <h1 id="rayonTitle">Rayon</h1>
+        <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:bold;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
-        <h1 id="formTitle">Nouveau Vin</h1>
+        <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <textarea id="noteVin" placeholder="Notes de dégustation..." style="margin-top:10px;"></textarea>
-        <button class="btn-main" style="width:100%; max-width:400px; margin-top:20px;" onclick="saveVin()">ENREGISTRER</button>
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed;">📷 AJOUTER UNE PHOTO</button>
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+        <div id="previewContainer"></div>
+        <input type="hidden" id="imgData">
+        <div class="stars" id="starRating">
+            <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
+        </div>
+        <textarea id="noteVin" placeholder="Notes de dégustation..."></textarea>
+        <button id="btnSave" class="btn-main" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
     </div>
 
     <script>
-        // Ta configuration Firebase
+        // CONFIGURATION FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCoxRyIrC3xKKLhTt6nmJTFQ-54kNjCIQ8",
             authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
@@ -103,70 +102,122 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "", editID = null;
+        let userUID = null, rayonActuel = "", noteEtoiles = 0, editID = null;
 
-        // Gestion de l'Auth
-        function handleLogin() {
-            const e = document.getElementById('email').value, p = document.getElementById('password').value;
-            auth.signInWithEmailAndPassword(e, p).catch(err => {
-                document.getElementById('errorMsg').innerText = "Email ou mot de passe incorrect.";
-            });
+        // --- FONCTIONS AUTHENTIFICATION ---
+        function connexion() {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            if(!e || !p) { infoErreur("Remplissez les champs !"); return; }
+            auth.signInWithEmailAndPassword(e, p).catch(err => infoErreur("Email ou mot de passe incorrect."));
         }
 
-        function handleSignup() {
-            const e = document.getElementById('email').value, p = document.getElementById('password').value;
-            if(p.length < 6) { alert("6 caractères minimum pour le mot de passe."); return; }
-            auth.createUserWithEmailAndPassword(e, p).then(() => {
-                alert("Compte créé ! Vous pouvez maintenant gérer votre cave.");
-            }).catch(err => {
-                document.getElementById('errorMsg').innerText = "Erreur : Compte déjà existant ou email invalide.";
-            });
+        function inscription() {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('password').value;
+            if(p.length < 6) { infoErreur("Mot de passe : 6 caractères min."); return; }
+            auth.createUserWithEmailAndPassword(e, p).catch(err => infoErreur("Erreur : Compte déjà existant ou email invalide."));
         }
 
+        // Surveillant de connexion (C'est lui qui change la page)
         auth.onAuthStateChanged(u => {
-            if(u) { userUID = u.uid; showPage('PAGE_HOME'); } 
-            else { showPage('PAGE_AUTH'); }
+            if(u) { 
+                userUID = u.uid; 
+                showPage('PAGE_HOME'); 
+            } else { 
+                showPage('PAGE_AUTH'); 
+            }
         });
 
-        // Navigation
+        function infoErreur(txt) { document.getElementById('authError').innerText = txt; }
+
+        // --- NAVIGATION ET LOGIQUE CAVE ---
         function showPage(id) { 
             document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0); 
         }
 
-        function openRayon(r) { rayonActuel = r; document.getElementById('rayonName').innerText = r; loadVins(); showPage('PAGE_LISTE'); }
+        function setStars(n) { 
+            noteEtoiles = n; 
+            document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); 
+        }
 
-        function loadVins() {
-            const container = document.getElementById('vin-container');
-            db.ref('users/'+userUID+'/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                container.innerHTML = "";
-                if(!s.exists()) { container.innerHTML = "<p style='color:gray;'>Aucun vin ici.</p>"; return; }
+        function openRayon(n) { 
+            rayonActuel = n; 
+            document.getElementById('rayonTitle').innerText = n; 
+            chargerVins(); 
+            showPage('PAGE_LISTE'); 
+        }
+
+        function chargerVins() {
+            const c = document.getElementById('container-vins');
+            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
+                c.innerHTML = "";
+                if(!s.exists()) { c.innerHTML = "<p style='color:gray; margin-top:20px;'>Ce rayon est vide.</p>"; return; }
                 s.forEach(child => {
-                    const v = child.val();
-                    container.innerHTML += `
-                        <div class="card-vin">
-                            <div class="vin-details"><b>${v.nom}</b><small>${v.note || ''}</small></div>
-                            <div style="font-weight:bold; font-size:1.2rem; margin-right:10px;">x${v.qte}</div>
-                            <button onclick="deleteVin('${child.key}')" style="background:none; border:none; color:red; font-weight:bold;">✕</button>
+                    const v = child.val(), id = child.key;
+                    let st = "★".repeat(v.noteEtoiles || 0) + "☆".repeat(5 - (v.noteEtoiles || 0));
+                    c.innerHTML += `
+                        <div class="card">
+                            <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin">
+                            <div class="vin-info" onclick="editVin('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">
+                                <b>${v.nom}</b>
+                                <span style="color:var(--gold);">${st}</span>
+                            </div>
+                            <div class="vin-qte">x${v.qte}</div>
+                            <button style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:15px;" onclick="supprimer('${id}')">✕</button>
                         </div>`;
                 });
             });
         }
 
-        function goToAdd() { document.getElementById('nomVin').value = ""; document.getElementById('noteVin').value = ""; showPage('PAGE_ADD'); }
-
-        function saveVin() {
-            const nom = document.getElementById('nomVin').value;
-            if(!nom) return;
-            const data = {
-                nom: nom, qte: document.getElementById('qteVin').value || 1,
-                note: document.getElementById('noteVin').value,
-                categorie: rayonActuel
+        function handleFile(input) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('imgData').value = e.target.result;
+                document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin-top:10px; border-radius:5px; border:1px solid var(--gold)">`;
             };
-            db.ref('users/'+userUID+'/cave').push(data).then(() => showPage('PAGE_LISTE'));
+            reader.readAsDataURL(input.files[0]);
         }
 
-        function deleteVin(id) { if(confirm("Supprimer ce vin ?")) db.ref('users/'+userUID+'/cave/'+id).remove(); }
+        function editVin(id, data) {
+            editID = id;
+            document.getElementById('addTitle').innerText = "Modifier";
+            document.getElementById('nomVin').value = data.nom;
+            document.getElementById('qteVin').value = data.qte;
+            document.getElementById('imgData').value = data.image || "";
+            document.getElementById('noteVin').value = data.note || "";
+            if(data.image) document.getElementById('previewContainer').innerHTML = `<img src="${data.image}" style="width:80px; margin-top:10px; border-radius:5px; border:1px solid var(--gold)">`;
+            setStars(data.noteEtoiles || 0);
+            showPage('PAGE_ADD');
+        }
+
+        function supprimer(id) { if(confirm("Supprimer ce vin ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        
+        function goToAdd() { 
+            editID = null; 
+            document.getElementById('addTitle').innerText = "Nouveau Vin"; 
+            document.getElementById('nomVin').value=""; 
+            document.getElementById('imgData').value=""; 
+            document.getElementById('noteVin').value=""; 
+            document.getElementById('previewContainer').innerHTML=""; 
+            setStars(0); 
+            showPage('PAGE_ADD'); 
+        }
+
+        function sauvegarderVin() {
+            const n = document.getElementById('nomVin').value;
+            if(!n) { alert("Donnez un nom au vin !"); return; }
+            const data = {
+                nom: n, qte: document.getElementById('qteVin').value || 1,
+                image: document.getElementById('imgData').value || "",
+                noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value,
+                categorie: rayonActuel
+            };
+            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
+            else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
+        }
     </script>
 </body>
 </html>
