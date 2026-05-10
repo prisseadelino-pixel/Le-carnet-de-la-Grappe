@@ -38,7 +38,7 @@
 </head>
 <body>
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border-radius:10px; border:2px solid var(--gold)"></div>
-    
+
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); margin-top:0; border-bottom:1px solid var(--brd); padding-bottom:10px;">Dégustation</h2>
@@ -110,18 +110,13 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, editID = null;
 
-        document.getElementById('googleLogin').onclick = () => {
+        document.getElementById('googleLogin').addEventListener('click', async () => {
             const p = new firebase.auth.GoogleAuthProvider();
-            p.setCustomParameters({ redirect_uri: 'https://prisseadelino-pixel.github.io/Le-carnet-de-la-Grappe/' });
-            auth.signInWithRedirect(p);
-        };
-
-        auth.getRedirectResult().then(result => {
-            if (result && result.user) {
-                console.log("Connecté :", result.user.displayName);
+            try {
+                await auth.signInWithPopup(p);
+            } catch(e) {
+                alert("Erreur : " + e.message);
             }
-        }).catch(error => {
-            console.error("Erreur :", error.message);
         });
 
         auth.onAuthStateChanged(u => {
