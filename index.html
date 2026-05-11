@@ -25,9 +25,32 @@
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
         
-        .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
+        /* STYLE DU DESCRIPTIF AMÉLIORÉ */
+        .intro-text { 
+            width: 90%; 
+            max-width: 450px; 
+            margin: 15px 0 25px 0; 
+            padding: 20px; 
+            border: 1px solid rgba(197,160,89,0.3); 
+            background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(197,160,89,0.05) 100%);
+            border-radius: 15px;
+            font-size: 1rem; 
+            line-height: 1.6; 
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .intro-text b { 
+            display: block;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        .intro-text span { color: #ccc; font-weight: 400; }
 
-        /* BOUTONS ACCUEIL : TEXTE À GAUCHE, BOUTEILLE À DROITE */
+        /* BOUTONS ACCUEIL */
         .btn-gold { 
             background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); 
             padding: 0 30px; width: 95%; max-width: 600px; margin: 10px 0; 
@@ -75,8 +98,8 @@
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
         <div class="intro-text">
-            <b>Votre cave, toujours dans votre poche.</b><br>
-            Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.
+            <b>Votre cave, toujours dans votre poche</b>
+            <span>Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.</span>
         </div>
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">CONNEXION GOOGLE</button>
     </div>
