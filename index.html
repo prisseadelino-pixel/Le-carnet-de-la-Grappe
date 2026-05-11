@@ -15,99 +15,80 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         
+        .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 2rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* BOUTONS HOME RÉPARÉS */
-        .btn-gold { 
-            background: rgba(197,160,89,0.05); 
-            border: 2px solid var(--gold); 
-            color: var(--gold); 
-            padding: 10px 20px; 
-            width: 95%; 
-            max-width: 500px; 
-            margin: 12px 0; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            font-weight: 700; 
-            font-size: 1.2rem; 
-            border-radius: 12px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: flex-start; 
-            box-sizing: border-box;
-            transition: 0.3s;
-        }
         
-        .btn-gold:active { background: rgba(197,160,89,0.15); }
+        .intro-text { width: 90%; max-width: 450px; margin: 20px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
+        .intro-text b { color: var(--gold); }
 
-        /* Style spécifique pour les bouteilles SVG */
-        .btn-gold svg { 
-            height: 70px; /* Plus grand */
-            width: 50px;  /* Plus large */
-            margin-right: 20px;
-            display: block;
-            background: transparent; /* Force la transparence */
+        /* BOUTONS HOME RÉPARÉS ET LARGES */
+        .btn-gold { 
+            background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); 
+            padding: 10px 20px; width: 95%; max-width: 500px; margin: 12px 0; 
+            text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.2rem; 
+            border-radius: 12px; display: flex; align-items: center; justify-content: flex-start; 
+            box-sizing: border-box; transition: 0.3s; 
         }
+        .btn-gold:active { background: rgba(197,160,89,0.15); }
+        .btn-gold svg { height: 70px; width: 55px; margin-right: 20px; background: transparent; }
 
-        /* Styles restants (Cards, inputs, etc.) */
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
-        .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); }
-        .vin-info { flex: 1; }
-        .vin-info b { font-size: 1.3rem; display: block; margin-bottom: 5px; color: var(--gold); }
-        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        /* LISTE ET CARTES */
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; position: relative; box-sizing: border-box; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); cursor: zoom-in; }
+        .vin-info { flex: 1; cursor: pointer; }
+        .vin-info b { font-size: 1.3rem; display: block; margin-bottom: 5px; color: var(--gold); line-height: 1.2; }
+        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; padding-right: 5px; }
+        
+        .btn-note { font-size: 1.8rem; background: none; border: none; cursor: pointer; margin-right: 10px; z-index: 10; padding: 10px; }
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 70px; height: 70px; border-radius: 50%; border: none; font-size: 40px; color: #000; box-shadow: 0 4px 20px rgba(197,160,89,0.5); z-index: 100; font-weight: bold; cursor: pointer; }
-        .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 8px; border-radius: 5px; margin-top: 15px; cursor: pointer; font-size: 0.8rem; }
+        
+        .stars { font-size: 40px; color: #333; margin: 20px 0; cursor: pointer; }
+        .stars .selected { color: var(--gold); }
+        
+        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-size: 1.1rem; box-sizing: border-box; font-family: 'Montserrat'; }
+        
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
+        .note-box { background: #111; border: 2px solid var(--gold); padding: 25px; width: 85%; max-width: 500px; border-radius: 15px; color: #fff; text-align: left; }
+        .btn-qr { background: none; border: 1px solid gray; color: gray; padding: 8px; border-radius: 5px; margin-top: 15px; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
-
+    <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border-radius:10px; border:2px solid var(--gold)"></div>
+    
     <div id="PAGE_AUTH" class="p active">
-        <h1 style="margin-top: 50px;">Le Carnet de la Grappe</h1>
-        <button class="btn-gold" id="googleLogin" style="justify-content: center; background: white; color: black; border: none;">CONNEXION GOOGLE</button>
+        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
+        <h1>Le Carnet de la Grappe</h1>
+        <div class="intro-text">
+            <b>Votre cave, toujours dans votre poche.</b><br>
+            Inventorier vos crus, suivez vos stocks et vos notes.
+        </div>
+        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center;">CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
         
         <button class="btn-gold" onclick="openRayon('ROUGES')">
-            <svg viewBox="0 0 40 90">
-                <path d="M20 5V15M17 15H23V5C23 3 22 2 20 2C18 2 17 3 17 5V15Z" fill="#331111"/>
-                <path d="M12 15C8 18 6 22 6 28V82C6 86 9 89 13 89H27C31 89 34 86 34 82V28C34 22 32 18 28 15H12Z" fill="#660000" stroke="#440000"/>
-                <rect x="10" y="40" width="20" height="22" fill="#220000" opacity="0.6"/>
-                <path d="M18 22V82C18 82 28 75 28 65V35C28 25 18 22 18 22Z" fill="white" opacity="0.1"/>
-            </svg>
+            <svg viewBox="0 0 100 100"><path d="M48 5V15M44 15H56V5C56 3 55 2 52 2C49 2 48 3 48 5V15Z" fill="#2A0000" stroke="#8B0000"/><path d="M35 15C25 18 20 24 20 32V85C20 90 25 94 32 94H68C75 94 80 90 80 85V32C80 24 75 18 65 15H35Z" fill="#5E0000" stroke="#8B0000" stroke-width="2"/><rect x="28" y="45" width="44" height="25" fill="#2A0000" opacity="0.8"/></svg>
             VINS ROUGES
         </button>
 
         <button class="btn-gold" onclick="openRayon('BLANCS')">
-            <svg viewBox="0 0 40 90">
-                <path d="M17 15H23V5C23 3 22 2 20 2C18 2 17 3 17 5V15Z" fill="#555"/>
-                <path d="M12 15C8 18 6 22 6 28V82C6 86 9 89 13 89H27C31 89 34 86 34 82V28C34 22 32 18 28 15H12Z" fill="#FFFBEB" stroke="#E6C96C"/>
-                <rect x="10" y="40" width="20" height="22" fill="#E6C96C" opacity="0.3"/>
-                <path d="M18 22V82C18 82 28 75 28 65V35C28 25 18 22 18 22Z" fill="white" opacity="0.5"/>
-            </svg>
+            <svg viewBox="0 0 100 100"><path d="M44 15H56V5C56 3 55 2 52 2C49 2 48 3 48 5V15Z" fill="#555" stroke="#444"/><path d="M35 15C25 18 20 24 20 32V85C20 90 25 94 32 94H68C75 94 80 90 80 85V32C80 24 75 18 65 15H35Z" fill="#FFFDEF" stroke="#E6C96C" stroke-width="2"/><rect x="28" y="45" width="44" height="25" fill="#E6C96C" opacity="0.3"/></svg>
             VINS BLANCS
         </button>
 
         <button class="btn-gold" onclick="openRayon('ROSES')">
-            <svg viewBox="0 0 40 90">
-                <path d="M17 15H23V5C23 3 22 2 20 2C18 2 17 3 17 5V15Z" fill="#555"/>
-                <path d="M12 15C8 18 6 22 6 28V82C6 86 9 89 13 89H27C31 89 34 86 34 82V28C34 22 32 18 28 15H12Z" fill="#FFE4E1" stroke="#FFA07A"/>
-                <rect x="10" y="40" width="20" height="22" fill="#FFA07A" opacity="0.3"/>
-            </svg>
+            <svg viewBox="0 0 100 100"><path d="M44 15H56V5C56 3 55 2 52 2C49 2 48 3 48 5V15Z" fill="#444" stroke="#333"/><path d="M35 15C25 18 20 24 20 32V85C20 90 25 94 32 94H68C75 94 80 90 80 85V32C80 24 75 18 65 15H35Z" fill="#FFEBEF" stroke="#FFA07A" stroke-width="2"/><rect x="28" y="45" width="44" height="25" fill="#FFA07A" opacity="0.3"/></svg>
             VINS ROSÉS
         </button>
 
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">
-            <svg viewBox="0 0 40 90">
-                <path d="M16 15H24V6C24 3 22 2 20 2C18 2 16 3 16 6V15Z" fill="#C5A059"/>
-                <path d="M12 15C8 18 7 23 7 29V82C7 86 10 89 14 89H26C30 89 33 86 33 82V29C33 23 32 18 28 15H12Z" fill="#1A1A1A" stroke="#C5A059"/>
-                <rect x="12" y="42" width="16" height="20" fill="#C5A059" opacity="0.8"/>
-            </svg>
+            <svg viewBox="0 0 100 100"><path d="M42 2V12H58V2C58 0.5 56.5 0 53 0H47C43.5 0 42 0.5 42 2V12Z" fill="#C5A059"/><path d="M35 15C25 18 20 24 20 32V85C20 90 25 94 32 94H68C75 94 80 90 80 85V32C80 24 75 18 65 15H35Z" fill="#0A0A0A" stroke="#C5A059" stroke-width="2"/><rect x="30" y="48" width="40" height="22" fill="#C5A059" opacity="0.8"/></svg>
             CHAMPAGNES
         </button>
 
-        <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
+        <button class="btn-qr" onclick="alert('QR Code à venir')">🔗 MON QR CODE</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
 
@@ -118,8 +99,23 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
+    <div id="PAGE_ADD" class="p">
+        <h1 id="addTitle">Nouveau Vin</h1>
+        <input type="text" id="nomVin" placeholder="Nom du vin">
+        <input type="number" id="qteVin" placeholder="Quantité" value="1">
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed; justify-content:center;">📷 PHOTO</button>
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+        <div id="previewContainer"></div>
+        <input type="hidden" id="imgData">
+        <div class="stars" id="starRating">
+            <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
+        </div>
+        <textarea id="noteVin" rows="6" placeholder="Notes..."></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER</button>
+        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
+    </div>
+
     <script>
-        // Configuration Firebase (Garde la tienne ici)
         const firebaseConfig = {
             apiKey: "AIzaSyABRweq9NpgFHy9tWpN8UhD0nBdTmZ-7dU",
             authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
@@ -129,14 +125,20 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "";
+        let userUID = null, rayonActuel = "", noteEtoiles = 0, editID = null;
+
+        document.getElementById('googleLogin').onclick = () => {
+            const p = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(p).catch(() => auth.signInWithRedirect(p));
+        };
 
         auth.onAuthStateChanged(u => {
             if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; showPage('PAGE_HOME'); } 
             else { showPage('PAGE_AUTH'); }
         });
 
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
 
         function chargerVins() {
@@ -145,15 +147,56 @@
                 c.innerHTML = "";
                 if(!s.exists()) { c.innerHTML = "<p>Rayon vide.</p>"; return; }
                 s.forEach(child => {
-                    const v = child.val();
+                    const v = child.val(), id = child.key;
                     c.innerHTML += `
                         <div class="card">
-                            <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin">
-                            <div class="vin-info"><b>${v.nom}</b></div>
+                            <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="zoom('${v.image}')">
+                            <div class="vin-info" onclick="editVin('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">
+                                <b>${v.nom}</b>
+                                <span style="color:var(--gold);">★ ${v.noteEtoiles || 0}</span>
+                            </div>
                             <div class="vin-qte">x${v.qte}</div>
+                            <button style="background:none; border:none; color:#ff4444; font-size:1.5rem;" onclick="supprimer('${id}')">✕</button>
                         </div>`;
                 });
             });
+        }
+
+        function handleFile(input) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('imgData').value = e.target.result;
+                document.getElementById('previewContainer').innerHTML = `<img src="${e.target.result}" style="width:80px; margin:10px; border:1px solid var(--gold)">`;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function editVin(id, data) {
+            editID = id;
+            document.getElementById('addTitle').innerText = "Modifier";
+            document.getElementById('nomVin').value = data.nom;
+            document.getElementById('qteVin').value = data.qte;
+            document.getElementById('imgData').value = data.image || "";
+            document.getElementById('noteVin').value = data.note || "";
+            setStars(data.noteEtoiles || 0);
+            showPage('PAGE_ADD');
+        }
+
+        function zoom(src) { if(!src) return; document.getElementById('zoomImg').src = src; document.getElementById('zoomOverlay').style.display = 'flex'; }
+        function supprimer(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value=""; document.getElementById('imgData').value=""; document.getElementById('noteVin').value=""; setStars(0); showPage('PAGE_ADD'); }
+
+        function sauvegarderVin() {
+            const n = document.getElementById('nomVin').value;
+            if(!n) return;
+            const data = {
+                nom: n, qte: document.getElementById('qteVin').value || 1,
+                image: document.getElementById('imgData').value || "",
+                noteEtoiles: noteEtoiles, note: document.getElementById('noteVin').value,
+                categorie: rayonActuel
+            };
+            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
+            else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
         }
     </script>
 </body>
