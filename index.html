@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="La Grappe">
+    <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
+    <link rel="icon" type="image/jpg" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
+
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -20,19 +27,17 @@
         
         .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
 
-        /* BOUTONS ALIGNÉS : TEXTE À GAUCHE, BOUTEILLE À DROITE */
+        /* BOUTONS ACCUEIL : TEXTE À GAUCHE, BOUTEILLE À DROITE */
         .btn-gold { 
             background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); 
             padding: 0 30px; width: 95%; max-width: 600px; margin: 10px 0; 
             text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
             border-radius: 12px; display: flex; align-items: center; 
-            justify-content: space-between; /* Aligne les éléments aux extrémités */
+            justify-content: space-between;
             box-sizing: border-box; min-height: 100px; transition: 0.2s;
         }
         .btn-gold:active { background: rgba(197,160,89,0.1); }
-        
-        /* Style des bouteilles (SVG) */
-        .btn-gold svg { height: 80px; width: auto; flex-shrink: 0; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
+        .btn-gold svg { height: 80px; width: auto; flex-shrink: 0; }
 
         /* MODAL QR CODE */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
@@ -41,7 +46,7 @@
         #qrImg { width: 100%; height: 100%; }
         .qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 55px; height: 55px; background: white; border-radius: 8px; padding: 3px; }
 
-        /* CARTES VINS */
+        /* CARTES LISTE */
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; }
         .vin-info { flex: 1; }
