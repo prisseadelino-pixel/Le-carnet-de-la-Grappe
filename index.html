@@ -20,32 +20,11 @@
         .intro-text b { color: var(--gold); }
 
         .btn-google { background: white; color: #000; border: none; padding: 20px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 20px; width: 95%; max-width: 500px; justify-content: center; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
         
-        /* STYLE DES BOUTEILLES */
-        .bottle-icon {
-            display: inline-block;
-            width: 12px;
-            height: 28px;
-            border-radius: 2px 2px 3px 3px;
-            margin-right: 15px;
-            position: relative;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .bottle-icon::before {
-            content: '';
-            position: absolute;
-            top: -7px;
-            left: 3px;
-            width: 4px;
-            height: 7px;
-            background: inherit;
-            border-radius: 1px;
-        }
-        .bg-rouge { background-color: #720000; box-shadow: 0 0 8px rgba(114, 0, 0, 0.6); }
-        .bg-blanc { background-color: #f7e7b4; box-shadow: 0 0 8px rgba(247, 231, 180, 0.5); }
-        .bg-rose  { background-color: #ffb7c5; box-shadow: 0 0 8px rgba(255, 183, 197, 0.5); }
-        .bg-champ { background-color: #d4af37; box-shadow: 0 0 8px rgba(212, 175, 55, 0.5); }
+        /* STYLE BOUTONS HOME AVEC SVG */
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 15px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 10px; display: flex; align-items: center; justify-content: start; box-sizing: border-box; transition: background 0.3s; }
+        .btn-gold:active { background: rgba(197,160,89,0.15); }
+        .btn-gold svg { height: 40px; width: auto; margin-right: 25px; margin-left: 10px; }
 
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; position: relative; box-sizing: border-box; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); cursor: zoom-in; }
@@ -93,17 +72,62 @@
         <h1>Le Carnet de la Grappe</h1>
         <div class="intro-text">
             <b>Votre cave, toujours dans votre poche.</b><br>
-            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b>.
+            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre vos <b>stocks</b> et de consigner vos <b>notes de dégustation</b>.
         </div>
         <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="bottle-icon bg-rouge"></span> ROUGES</button>
-        <button class="btn-gold" onclick="openRayon('BLANCS')"><span class="bottle-icon bg-blanc"></span> BLANCS</button>
-        <button class="btn-gold" onclick="openRayon('ROSES')"><span class="bottle-icon bg-rose"></span> ROSÉS</button>
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span class="bottle-icon bg-champ"></span> CHAMPAGNES</button>
+        
+        <!-- BOUTON ROUGES AVEC SVG -->
+        <button class="btn-gold" onclick="openRayon('ROUGES')">
+            <svg viewBox="0 0 30 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 2C13.5 2 12.5 3 12.5 4.5V15H17.5V4.5C17.5 3 16.5 2 15 2Z" fill="#2A0000"/>
+                <path d="M12.5 15C8 17 5 21 5 26V80C5 84.4 8.6 88 13 88H17C21.4 88 25 84.4 25 80V26C25 21 22 17 17.5 15H12.5Z" fill="#5E0000" stroke="#8B0000" stroke-width="1.5"/>
+                <path d="M9 35H21V55H9V35Z" fill="#2A0000" opacity="0.8"/>
+                <path d="M8 26C8 23.8 9.8 22 12 22H18C20.2 22 22 23.8 22 26V28H8V26Z" fill="#8B0000"/>
+                <path d="M16 18V78C16 78 22 75 22 65V35C22 25 16 18 16 18Z" fill="white" opacity="0.1"/>
+            </svg>
+            VINS ROUGES
+        </button>
+
+        <!-- BOUTON BLANCS AVEC SVG -->
+        <button class="btn-gold" onclick="openRayon('BLANCS')">
+            <svg viewBox="0 0 30 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 2C13.5 2 12.5 3 12.5 4.5V15H17.5V4.5C17.5 3 16.5 2 15 2Z" fill="#444"/>
+                <path d="M12.5 15C8 17 5 21 5 26V80C5 84.4 8.6 88 13 88H17C21.4 88 25 84.4 25 80V26C25 21 22 17 17.5 15H12.5Z" fill="#FFFBEB" stroke="#E6C96C" stroke-width="1.5"/>
+                <path d="M9 35H21V55H9V35Z" fill="#E6C96C" opacity="0.3"/>
+                <path d="M8 26C8 23.8 9.8 22 12 22H18C20.2 22 22 23.8 22 26V28H8V26Z" fill="#C5A059"/>
+                <path d="M16 18V78C16 78 22 75 22 65V35C22 25 16 18 16 18Z" fill="white" opacity="0.5"/>
+            </svg>
+            VINS BLANCS
+        </button>
+
+        <!-- BOUTON ROSÉS AVEC SVG -->
+        <button class="btn-gold" onclick="openRayon('ROSES')">
+            <svg viewBox="0 0 30 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 2C13.5 2 12.5 3 12.5 4.5V15H17.5V4.5C17.5 3 16.5 2 15 2Z" fill="#333"/>
+                <path d="M12.5 15C8 17 5 21 5 26V80C5 84.4 8.6 88 13 88H17C21.4 88 25 84.4 25 80V26C25 21 22 17 17.5 15H12.5Z" fill="#FFE4E1" stroke="#FFA07A" stroke-width="1.5"/>
+                <path d="M9 35H21V55H9V35Z" fill="#FFA07A" opacity="0.3"/>
+                <path d="M8 26C8 23.8 9.8 22 12 22H18C20.2 22 22 23.8 22 26V28H8V26Z" fill="#FA8072"/>
+                <path d="M16 18V78C16 78 22 75 22 65V35C22 25 16 18 16 18Z" fill="white" opacity="0.4"/>
+            </svg>
+            VINS ROSÉS
+        </button>
+
+        <!-- BOUTON CHAMPAGNES AVEC SVG -->
+        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">
+            <svg viewBox="0 0 30 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 2C13.5 2 12.5 3 12.5 6V15H17.5V6C17.5 3 16.5 2 15 2Z" fill="#C5A059" stroke="#8A6E3C"/>
+                <path d="M12.5 15C9 17 6 21 6 27V80C6 84.4 9.6 88 14 88H16C20.4 88 24 84.4 24 80V27C24 21 21 17 17.5 15H12.5Z" fill="#1A1A1A" stroke="#C5A059" stroke-width="1.5"/>
+                <path d="M9 38H21V58H9V38Z" fill="#C5A059" opacity="0.9"/>
+                <path d="M8 27C8 24.8 9.8 23 12 23H18C20.2 23 22 24.8 22 27V29H8V27Z" fill="#C5A059" opacity="0.5"/>
+                <path d="M15 15V88" stroke="#C5A059" stroke-width="0.5" opacity="0.2"/>
+            </svg>
+            CHAMPAGNES
+        </button>
+
         <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
@@ -119,7 +143,7 @@
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed;">📷 PHOTO / GALERIE</button>
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="border-style:dashed; justify-content:center;">📷 PHOTO / GALERIE</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <div id="previewContainer"></div>
         <input type="hidden" id="imgData">
@@ -127,7 +151,7 @@
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
         <textarea id="noteVin" rows="10" placeholder="Notes de dégustation..."></textarea>
-        <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
+        <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
     </div>
 
