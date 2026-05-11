@@ -20,8 +20,33 @@
         .intro-text b { color: var(--gold); }
 
         .btn-google { background: white; color: #000; border: none; padding: 20px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; gap: 15px; margin-top: 20px; width: 95%; max-width: 500px; justify-content: center; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 10px; }
+        .btn-gold { background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); padding: 20px; width: 95%; max-width: 500px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
         
+        /* STYLE DES BOUTEILLES */
+        .bottle-icon {
+            display: inline-block;
+            width: 12px;
+            height: 28px;
+            border-radius: 2px 2px 3px 3px;
+            margin-right: 15px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .bottle-icon::before {
+            content: '';
+            position: absolute;
+            top: -7px;
+            left: 3px;
+            width: 4px;
+            height: 7px;
+            background: inherit;
+            border-radius: 1px;
+        }
+        .bg-rouge { background-color: #720000; box-shadow: 0 0 8px rgba(114, 0, 0, 0.6); }
+        .bg-blanc { background-color: #f7e7b4; box-shadow: 0 0 8px rgba(247, 231, 180, 0.5); }
+        .bg-rose  { background-color: #ffb7c5; box-shadow: 0 0 8px rgba(255, 183, 197, 0.5); }
+        .bg-champ { background-color: #d4af37; box-shadow: 0 0 8px rgba(212, 175, 55, 0.5); }
+
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; position: relative; box-sizing: border-box; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); cursor: zoom-in; }
         .vin-info { flex: 1; cursor: pointer; }
@@ -47,7 +72,6 @@
 <body>
     <div id="zoomOverlay" class="overlay" onclick="this.style.display='none'"><img id="zoomImg" style="max-width:90%; border-radius:10px; border:2px solid var(--gold)"></div>
     
-    <!-- MODAL NOTES -->
     <div id="noteOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); margin-top:0; border-bottom:1px solid var(--brd); padding-bottom:10px;">Dégustation</h2>
@@ -56,7 +80,6 @@
         </div>
     </div>
 
-    <!-- MODAL QR CODE -->
     <div id="qrOverlay" class="overlay" onclick="this.style.display='none'">
         <div class="note-box" style="text-align:center;">
             <h2 style="color:var(--gold);">Partager le carnet</h2>
@@ -65,29 +88,26 @@
         </div>
     </div>
 
-    <!-- CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
         <div class="intro-text">
             <b>Votre cave, toujours dans votre poche.</b><br>
-            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b> accompagnées de photos. Simple, privé et élégant.
+            Cet assistant numérique vous permet d'<b>inventorier</b> vos précieux crus, de suivre l'état de vos <b>stocks</b> en temps réel et de consigner vos <b>notes de dégustation</b>.
         </div>
         <button class="btn-google" id="googleLogin"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="25"> CONNEXION GOOGLE</button>
     </div>
 
-    <!-- ACCUEIL -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">Ma Cave</h1>
-        <button class="btn-gold" onclick="openRayon('ROUGES')">🍷 ROUGES</button>
-        <button class="btn-gold" onclick="openRayon('BLANCS')">🥂 BLANCS</button>
-        <button class="btn-gold" onclick="openRayon('ROSES')">🌸 ROSÉS</button>
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">🍾 CHAMPAGNES</button>
+        <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="bottle-icon bg-rouge"></span> ROUGES</button>
+        <button class="btn-gold" onclick="openRayon('BLANCS')"><span class="bottle-icon bg-blanc"></span> BLANCS</button>
+        <button class="btn-gold" onclick="openRayon('ROSES')"><span class="bottle-icon bg-rose"></span> ROSÉS</button>
+        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span class="bottle-icon bg-champ"></span> CHAMPAGNES</button>
         <button class="btn-qr" onclick="showQR()">🔗 MON QR CODE</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- LISTE VINS -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -95,7 +115,6 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- AJOUT / MODIF -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Nouveau Vin</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -107,7 +126,7 @@
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" rows="10" placeholder="Notes de dégustation (10 lignes)..."></textarea>
+        <textarea id="noteVin" rows="10" placeholder="Notes de dégustation..."></textarea>
         <button id="btnSave" class="btn-gold" style="background:var(--gold); color:#000;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
     </div>
