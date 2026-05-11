@@ -15,24 +15,30 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         
+        /* LOGO ET TITRE */
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
         
+        /* DESCRIPTION RÉTABLIE */
+        .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
+        .intro-text b { color: var(--gold); }
+
+        /* BOUTONS ACCUEIL */
         .btn-gold { 
             background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); 
             padding: 5px 20px; width: 95%; max-width: 500px; margin: 12px 0; 
             text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
             border-radius: 12px; display: flex; align-items: center; justify-content: flex-start; 
-            box-sizing: border-box; transition: 0.3s; min-height: 90px;
+            box-sizing: border-box; min-height: 90px;
         }
         .btn-gold svg { height: 80px; width: 35px; margin-right: 25px; background: transparent; flex-shrink: 0; }
 
-        /* MODAL POUR LE QR CODE */
+        /* MODAL QR CODE RÉPARÉ */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 80%; max-width: 400px; }
-        #qrImg { background: white; padding: 10px; border-radius: 10px; margin: 20px 0; width: 200px; height: 200px; }
+        .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
+        #qrImg { background: white; padding: 10px; border-radius: 10px; margin: 20px auto; width: 200px; height: 200px; display: block; }
 
-        /* CARTES ET LISTE */
+        /* LISTE ET CARTES */
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); }
         .vin-info { flex: 1; }
@@ -40,7 +46,7 @@
         .vin-qte { font-size: 1.5rem; font-weight: 700; }
         
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; z-index: 100; cursor: pointer; }
-        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; }
+        input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; font-size: 1rem; }
         .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
     </style>
@@ -49,17 +55,19 @@
 
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); margin-top:0;">VOTRE CAVE</h2>
-            <p style="font-size:0.8rem; color:gray;">Scannez pour partager votre collection</p>
+            <h2 style="color:var(--gold); margin-top:0;">MA CAVE</h2>
             <img id="qrImg" src="" alt="QR Code">
-            <br>
-            <button class="btn-gold" style="min-height:50px; justify-content:center; margin:auto;" onclick="document.getElementById('qrModal').style.display='none'">FERMER</button>
+            <button class="btn-gold" style="min-height:50px; justify-content:center; margin:10px auto 0;" onclick="document.getElementById('qrModal').style.display='none'">FERMER</button>
         </div>
     </div>
 
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
+        <div class="intro-text">
+            <b>Votre cave, toujours dans votre poche.</b><br>
+            Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.
+        </div>
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">CONNEXION GOOGLE</button>
     </div>
 
@@ -102,29 +110,29 @@
             CHAMPAGNES
         </button>
 
-        <button onclick="genererQR()" style="background:none; border:1px solid gray; color:gray; padding:10px; border-radius:5px; margin-top:20px; font-size:0.8rem; cursor:pointer;">🔗 MON QR CODE</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline;">Déconnexion</button>
+        <button onclick="genererQR()" style="background:none; border:1px solid gray; color:gray; padding:10px; border-radius:5px; margin-top:25px; font-size:0.8rem; cursor:pointer; text-transform:uppercase; letter-spacing:1px;">🔗 Mon QR Code de partage</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Nouveau Vin</h1>
-        <input type="text" id="nomVin" placeholder="Nom du vin">
-        <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:50px;">📷 PHOTO</button>
+        <input type="text" id="nomVin" placeholder="Nom du cru (Château, Domaine...)">
+        <input type="number" id="qteVin" placeholder="Nombre de bouteilles" value="1">
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:50px;">📷 PRENDRE EN PHOTO</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <div id="preview"></div>
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" rows="4" placeholder="Notes..."></textarea>
-        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER</button>
+        <textarea id="noteVin" rows="4" placeholder="Vos impressions, millésime, garde..."></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER DANS LA CAVE</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
@@ -152,16 +160,15 @@
         function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
 
         function genererQR() {
-            // Lien vers ta cave (on utilise l'URL actuelle + l'ID utilisateur)
             const caveUrl = window.location.href.split('?')[0] + "?view=" + userUID;
-            const qrUrl = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encodeURIComponent(caveUrl)}&choe=UTF-8`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(caveUrl)}`;
             document.getElementById('qrImg').src = qrUrl;
             document.getElementById('qrModal').style.display = 'flex';
         }
 
         function handleFile(input) {
             const reader = new FileReader();
-            reader.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:10px; border-radius:5px;">`; };
+            reader.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px; border:1px solid var(--gold)">`; };
             reader.readAsDataURL(input.files[0]);
         }
 
@@ -169,6 +176,7 @@
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 c.innerHTML = "";
+                if(!s.exists()) { c.innerHTML = "<p style='color:gray; margin-top:20px;'>Aucun vin enregistré dans ce rayon.</p>"; return; }
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     c.innerHTML += `
@@ -179,19 +187,19 @@
                                 <span style="color:var(--gold)">★ ${v.noteEtoiles || 0}</span>
                             </div>
                             <div class="vin-qte">x${v.qte}</div>
-                            <button onclick="supprimer('${id}')" style="background:none; border:none; color:red; font-size:1.2rem; margin-left:10px;">✕</button>
+                            <button onclick="supprimer('${id}')" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:15px; cursor:pointer;">✕</button>
                         </div>`;
                 });
             });
         }
 
-        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; currentImg = ""; setStars(0); showPage('PAGE_ADD'); }
-        function prepareEdit(id, v) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; setStars(v.noteEtoiles || 0); showPage('PAGE_ADD'); }
-        function supprimer(id) { if(confirm("Supprimer ce vin ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; setStars(0); showPage('PAGE_ADD'); }
+        function prepareEdit(id, v) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:100px; border-radius:8px;">` : ""; setStars(v.noteEtoiles || 0); showPage('PAGE_ADD'); }
+        function supprimer(id) { if(confirm("Supprimer ce vin de votre cave ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
 
         function sauvegarderVin() {
             const nom = document.getElementById('nomVin').value;
-            if(!nom) return;
+            if(!nom) { alert("Veuillez saisir le nom du vin."); return; }
             const data = { nom, qte: document.getElementById('qteVin').value, note: document.getElementById('noteVin').value, noteEtoiles, image: currentImg, categorie: rayonActuel };
             if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
             else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
