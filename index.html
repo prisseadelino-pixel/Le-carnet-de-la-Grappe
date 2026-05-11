@@ -15,36 +15,42 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         
+        /* LOGO ET TITRE */
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
         
+        /* DESCRIPTION RÉTABLIE */
         .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 15px; border-left: 2px solid var(--gold); background: rgba(197,160,89,0.05); font-size: 0.95rem; color: #ddd; line-height: 1.5; text-align: left; }
         .intro-text b { color: var(--gold); }
 
+        /* BOUTONS ACCUEIL */
         .btn-gold { 
             background: rgba(197,160,89,0.05); border: 2px solid var(--gold); color: var(--gold); 
             padding: 5px 20px; width: 95%; max-width: 500px; margin: 12px 0; 
             text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
             border-radius: 12px; display: flex; align-items: center; justify-content: flex-start; 
-            box-sizing: border-box; min-height: 90px;
+            box-sizing: border-box; min-height: 90px; transition: 0.2s;
         }
+        .btn-gold:active { background: rgba(197,160,89,0.2); }
         .btn-gold svg { height: 80px; width: 35px; margin-right: 25px; background: transparent; flex-shrink: 0; }
 
         /* MODAL QR CODE AVEC LOGO CENTRAL */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
         
-        .qr-wrapper { position: relative; width: 220px; height: 220px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; }
+        .qr-wrapper { position: relative; width: 220px; height: 220px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
         #qrImg { width: 100%; height: 100%; }
-        .qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: white; border-radius: 5px; padding: 2px; }
+        .qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 55px; height: 55px; background: white; border-radius: 8px; padding: 3px; border: 1px solid #eee; }
 
+        /* LISTE ET CARTES */
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; background: #1a1a1a; margin-right: 15px; border-radius: 6px; border: 1.5px solid var(--gold); }
         .vin-info { flex: 1; }
         .vin-info b { font-size: 1.2rem; display: block; color: var(--gold); }
-        .vin-qte { font-size: 1.5rem; font-weight: 700; }
+        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; }
         
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; z-index: 100; cursor: pointer; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; z-index: 100; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        
         input, textarea { width: 95%; max-width: 500px; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; font-size: 1rem; }
         .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
@@ -54,7 +60,7 @@
 
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); margin-top:0;">PARTAGER MA CAVE</h2>
+            <h2 style="color:var(--gold); margin-top:0; font-family:'Bodoni Moda';">PARTAGER MA CAVE</h2>
             <div class="qr-wrapper">
                 <img id="qrImg" src="" alt="QR Code">
                 <img class="qr-logo" src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" alt="Logo Grappe">
@@ -80,7 +86,6 @@
             <svg viewBox="0 0 100 100">
                 <path d="M48 5V22M44 22H56V5C56 3 55 2 52 2C49 2 48 3 48 5V22Z" fill="#310a0a" stroke="#600d0d"/>
                 <path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d" stroke="#600d0d" stroke-width="1.5"/>
-                <rect x="36" y="52" width="28" height="20" fill="#310a0a" opacity="0.8"/>
             </svg>
             VINS ROUGES
         </button>
@@ -89,7 +94,6 @@
             <svg viewBox="0 0 100 100">
                 <path d="M48 5V22M44 22H56V5C56 3 55 2 52 2C49 2 48 3 48 5V22Z" fill="#444" stroke="#333"/>
                 <path d="M43 22C33 26 31 35 31 45V88C31 91 34 94 38 94H62C66 94 69 91 69 88V45C69 35 67 26 57 22H43Z" fill="#fff9e6" stroke="#d4b45d" stroke-width="1.5"/>
-                <rect x="36" y="55" width="28" height="18" fill="#d4b45d" opacity="0.3"/>
             </svg>
             VINS BLANCS
         </button>
@@ -98,7 +102,6 @@
             <svg viewBox="0 0 100 100">
                 <path d="M48 5V22M44 22H56V5C56 3 55 2 52 2C49 2 48 3 48 5V22Z" fill="#444" stroke="#222"/>
                 <path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#ffe3e3" stroke="#ffb3b3" stroke-width="1.5"/>
-                <rect x="36" y="52" width="28" height="20" fill="#ffb3b3" opacity="0.4"/>
             </svg>
             VINS ROSÉS
         </button>
@@ -107,34 +110,33 @@
             <svg viewBox="0 0 100 100">
                 <path d="M42 5V18H58V5C58 4 57 3 53 3H47C43 3 42 4 42 5V18Z" fill="#c5a059"/>
                 <path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059" stroke-width="2"/>
-                <rect x="35" y="55" width="30" height="18" fill="#c5a059" opacity="0.7"/>
             </svg>
             CHAMPAGNES
         </button>
 
-        <button onclick="genererQR()" style="background:none; border:1px solid gray; color:gray; padding:10px; border-radius:5px; margin-top:25px; font-size:0.8rem; cursor:pointer; text-transform:uppercase; letter-spacing:1px;">🔗 Mon QR Code de partage</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem;">Déconnexion</button>
+        <button onclick="genererQR()" style="background:none; border:1px solid gray; color:gray; padding:10px; border-radius:5px; margin-top:25px; font-size:0.8rem; cursor:pointer; text-transform:uppercase;">🔗 Mon QR Code de partage</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="color:gray; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem; cursor:pointer;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
-        <h1 id="addTitle">Nouveau Vin</h1>
-        <input type="text" id="nomVin" placeholder="Nom du cru (Château, Domaine...)">
-        <input type="number" id="qteVin" placeholder="Nombre de bouteilles" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:50px;">📷 PRENDRE EN PHOTO</button>
+        <h1 id="addTitle">Ajouter</h1>
+        <input type="text" id="nomVin" placeholder="Nom du vin">
+        <input type="number" id="qteVin" placeholder="Quantité" value="1">
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:50px;">📷 PHOTO</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <div id="preview"></div>
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
-        <textarea id="noteVin" rows="4" placeholder="Vos impressions, millésime, garde..."></textarea>
-        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER DANS LA CAVE</button>
+        <textarea id="noteVin" rows="4" placeholder="Notes..."></textarea>
+        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
     </div>
 
@@ -150,27 +152,45 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
 
-        document.getElementById('googleLogin').onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        // AUTHENTIFICATION
+        document.getElementById('googleLogin').onclick = () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).catch(e => alert("Erreur : " + e.message));
+        };
 
         auth.onAuthStateChanged(u => {
-            if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; showPage('PAGE_HOME'); } 
-            else { showPage('PAGE_AUTH'); }
+            if(u) { 
+                userUID = u.uid; 
+                document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; 
+                showPage('PAGE_HOME'); 
+            } else { 
+                showPage('PAGE_AUTH'); 
+            }
         });
 
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
-        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
-        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
+        // NAVIGATION
+        function showPage(id) { 
+            document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
+            window.scrollTo(0,0); 
+        }
 
+        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
+
+        // QR CODE
         function genererQR() {
-            const caveUrl = window.location.href.split('?')[0] + "?view=" + userUID;
+            const caveUrl = window.location.origin + window.location.pathname + "?view=" + userUID;
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(caveUrl)}`;
             document.getElementById('qrImg').src = qrUrl;
             document.getElementById('qrModal').style.display = 'flex';
         }
 
+        // GESTION VINS
+        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
+
         function handleFile(input) {
             const reader = new FileReader();
-            reader.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px; border:1px solid var(--gold)">`; };
+            reader.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">`; };
             reader.readAsDataURL(input.files[0]);
         }
 
@@ -178,7 +198,7 @@
             const c = document.getElementById('container-vins');
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 c.innerHTML = "";
-                if(!s.exists()) { c.innerHTML = "<p style='color:gray; margin-top:20px;'>Aucun vin enregistré.</p>"; return; }
+                if(!s.exists()) { c.innerHTML = "<p style='color:gray; margin-top:20px;'>Rayon vide.</p>"; return; }
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     c.innerHTML += `
@@ -189,18 +209,35 @@
                                 <span style="color:var(--gold)">★ ${v.noteEtoiles || 0}</span>
                             </div>
                             <div class="vin-qte">x${v.qte}</div>
-                            <button onclick="supprimer('${id}')" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:15px; cursor:pointer;">✕</button>
+                            <button onclick="supprimer('${id}')" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:10px; cursor:pointer;">✕</button>
                         </div>`;
                 });
             });
         }
 
-        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Nouveau Vin"; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; setStars(0); showPage('PAGE_ADD'); }
-        function prepareEdit(id, v) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:100px; border-radius:8px;">` : ""; setStars(v.noteEtoiles || 0); showPage('PAGE_ADD'); }
+        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Ajouter"; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; setStars(0); showPage('PAGE_ADD'); }
+        
+        function prepareEdit(id, v) { 
+            editID = id; 
+            document.getElementById('addTitle').innerText = "Modifier"; 
+            document.getElementById('nomVin').value = v.nom; 
+            document.getElementById('qteVin').value = v.qte; 
+            document.getElementById('noteVin').value = v.note || ""; 
+            currentImg = v.image || ""; 
+            document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:100px; border-radius:8px;">` : ""; 
+            setStars(v.noteEtoiles || 0); 
+            showPage('PAGE_ADD'); 
+        }
+
         function supprimer(id) { if(confirm("Supprimer ce vin ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
 
         function sauvegarderVin() {
             const nom = document.getElementById('nomVin').value;
-            if(!nom) return;
+            if(!nom) return alert("Nom manquant");
             const data = { nom, qte: document.getElementById('qteVin').value, note: document.getElementById('noteVin').value, noteEtoiles, image: currentImg, categorie: rayonActuel };
-            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('
+            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
+            else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
+        }
+    </script>
+</body>
+</html>
