@@ -39,7 +39,6 @@
             justify-content: space-between; box-sizing: border-box; min-height: 90px;
         }
         
-        /* Style des images bouteilles dans les boutons */
         .img-button { height: 75px; width: auto; object-fit: contain; }
 
         .qr-image { width: 150px; height: 150px; border: 3px solid var(--gold); border-radius: 12px; background: white; padding: 8px; }
@@ -62,7 +61,6 @@
 </head>
 <body>
 
-    <!-- MODAL NOTES -->
     <div id="modalNote" class="modal-note" onclick="this.style.display='none'">
         <div class="modal-note-content" onclick="event.stopPropagation()">
             <h2 id="noteTitle" style="font-family:'Bodoni Moda'; color:var(--gold); margin-top:0;">Dégustation</h2>
@@ -71,41 +69,38 @@
         </div>
     </div>
 
-    <!-- PAGE AUTHENTIFICATION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Carnet de la Grappe</h1>
         <div class="resume-concept">
             <b>Votre cave, toujours en poche.</b>
-            Gérez vos bouteilles de <b>vins</b> et <b>champagnes</b>. <br><br>
-            Notez vos coups de cœur et emportez vos précieux <b>carnets de dégustation</b> partout avec vous.
+            Gérez vos bouteilles de <b>vins</b> et <b>champagnes</b>.
         </div>
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
-    <!-- PAGE ACCUEIL -->
     <div id="PAGE_HOME" class="p">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="avatar" alt="Adelino">
         <h1 id="userName" style="font-family:'Bodoni Moda';">Ma Cave</h1>
         
         <button class="btn-gold" onclick="openRayon('ROUGES')">
             <span>ROUGES</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/rouge11.png" class="img-button">
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/rouge12.png" class="img-button">
         </button>
 
         <button class="btn-gold" onclick="openRayon('BLANCS')">
             <span>BLANCS</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/blanc11.png" class="img-button">
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/blanc12.png" class="img-button">
         </button>
 
         <button class="btn-gold" onclick="openRayon('ROSES')">
             <span>ROSÉS</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/rose11.png" class="img-button">
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/rose12.png" class="img-button">
         </button>
 
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">
             <span>BULLES</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/champ11.png" class="img-button">
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/champ12.png" class="img-button">
         </button>
 
         <div class="qr-section">
@@ -116,7 +111,6 @@
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -124,7 +118,6 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- PAGE AJOUT / MODIF -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
