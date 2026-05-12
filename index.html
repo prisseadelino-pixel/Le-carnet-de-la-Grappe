@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     
-    <!-- Générateur de QR Code -->
+    <!-- Générateur de QR Code (CDN fiable) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
@@ -52,8 +52,8 @@
 
         /* Section QR Code */
         .qr-section { margin-top: 25px; padding-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
-        #qrcode { background: white; padding: 10px; border-radius: 12px; border: 3px solid var(--gold); }
-        #qrcode img { width: 150px; height: 150px; }
+        #qrcode { background: white; padding: 10px; border-radius: 12px; border: 3px solid var(--gold); min-width: 150px; min-height: 150px; }
+        #qrcode img { margin: 0 auto; }
 
         .card { background: #0d0d0d; border: 1px solid var(--brd); width: 100%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; padding: 12px; display: flex; align-items: center; text-align: left; box-sizing: border-box; }
         .img-vin { width: 50px; height: 75px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gold); margin-right: 12px; }
@@ -72,6 +72,7 @@
 </head>
 <body>
 
+    <!-- MODAL NOTES -->
     <div id="modalNote" class="modal-note" onclick="this.style.display='none'">
         <div class="modal-note-content" onclick="event.stopPropagation()">
             <h2 id="noteTitle" style="font-family:'Playfair Display'; color:var(--gold); margin-top:0;">Dégustation</h2>
@@ -80,14 +81,14 @@
         </div>
     </div>
 
-    <!-- AUTH -->
+    <!-- PAGE AUTH -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Carnet de la Grappe</h1>
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
-    <!-- HOME -->
+    <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="avatar">
         <h1 id="userName">Ma Cave</h1>
@@ -119,7 +120,7 @@
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- LISTE -->
+    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -127,7 +128,7 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- AJOUT -->
+    <!-- PAGE AJOUT -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -155,15 +156,20 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
 
-        // Génération auto du QR Code basé sur l'URL actuelle
-        new QRCode(document.getElementById("qrcode"), {
-            text: window.location.href,
-            width: 150,
-            height: 150,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
+        // Fonction sécurisée pour générer le QR Code une fois la page chargée
+        window.onload = function() {
+            const qrContainer = document.getElementById("qrcode");
+            if (qrContainer) {
+                new QRCode(qrContainer, {
+                    text: window.location.href, // Ton URL actuelle
+                    width: 150,
+                    height: 150,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.M
+                });
+            }
+        };
 
         document.getElementById('googleLogin').onclick = () => {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
