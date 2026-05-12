@@ -23,20 +23,20 @@
         .logo { width: 100px; height: auto; margin-bottom: 10px; border: 1.5px solid var(--gold); padding: 5px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* RÉSUMÉ ACCUEIL */
-        .resume-site {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--brd);
+        /* RÉSUMÉ CONCEPT (PAGE CONNEXION) */
+        .resume-concept {
+            background: rgba(197,160,89,0.05);
+            border: 1px solid var(--gold);
             border-radius: 12px;
-            padding: 15px;
-            width: 95%;
-            max-width: 500px;
+            padding: 20px;
+            width: 90%;
+            max-width: 450px;
             margin: 20px 0;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: #bbb;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #eee;
         }
-        .resume-site b { color: var(--gold); }
+        .resume-concept b { color: var(--gold); display: block; font-size: 1.1rem; margin-bottom: 10px; }
 
         .btn-gold { 
             background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); 
@@ -49,7 +49,7 @@
 
         /* QR CODE */
         .qr-section { margin-top: 30px; padding-bottom: 20px; }
-        .qr-code { width: 120px; height: 120px; border: 2px solid var(--gold); border-radius: 10px; padding: 5px; background: white; }
+        .qr-code { width: 130px; height: 130px; border: 2px solid var(--gold); border-radius: 10px; padding: 5px; background: white; box-shadow: 0 0 15px rgba(197,160,89,0.3); }
 
         /* CARTES LISTE */
         .card { 
@@ -85,27 +85,31 @@
         </div>
     </div>
 
+    <!-- PAGE DE CONNEXION AVEC RÉSUMÉ -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Carnet de la Grappe</h1>
-        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">CONNEXION GOOGLE</button>
+        
+        <div class="resume-concept">
+            <b>Votre cave, toujours en poche.</b>
+            Une application élégante pour gérer vos bouteilles de <b>vins</b> et <b>champagnes</b>. <br><br>
+            Notez vos coups de cœur, suivez votre inventaire en temps réel et emportez vos précieux <b>carnets de dégustation</b> partout avec vous.
+        </div>
+
+        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; margin-top:10px;">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
+    <!-- PAGE D'ACCUEIL AVEC QR CODE -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName" style="font-family:'Bodoni Moda';">Ma Cave</h1>
         
-        <div class="resume-site">
-            <b>Bienvenue dans votre sommelier numérique.</b><br>
-            Gérez votre stock de bouteilles en temps réel et conservez vos <b>notes de dégustation</b> pour ne plus jamais oublier un coup de cœur.
-        </div>
-
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span>ROUGES</span><svg viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d"/></svg></button>
         <button class="btn-gold" onclick="openRayon('BLANCS')"><span>BLANCS</span><svg viewBox="0 0 100 100"><path d="M43 22C33 26 31 35 31 45V88C31 91 34 94 38 94H62C66 94 69 91 69 88V45C69 35 67 26 57 22H43Z" fill="#fff9e6"/></svg></button>
         <button class="btn-gold" onclick="openRayon('ROSES')"><span>ROSÉS</span><svg viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#ffe3e3"/></svg></button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span>BULLES</span><svg viewBox="0 0 100 100"><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059"/></svg></button>
 
         <div class="qr-section">
-            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:10px;">ACCÈS RAPIDE</p>
+            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:10px;">VOTRE ACCÈS DIRECT</p>
             <img src="https://i.servimg.com/u/f49/11/31/89/70/screen11.jpg" class="qr-code" alt="QR Code">
         </div>
 
