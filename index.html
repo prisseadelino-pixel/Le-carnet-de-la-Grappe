@@ -14,121 +14,156 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
-        :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
+        
+        :root { 
+            --gold: #c5a059; 
+            --bg: #000; 
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --brd: rgba(197, 160, 89, 0.3); 
+        }
         
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
+        
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         
-        .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
-        
+        /* LOGO & TITRES */
+        .logo-frame { width: 140px; height: 140px; border: 1px solid var(--gold); padding: 5px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; background: #0a0a0a; }
+        .logo-img { width: 90%; height: auto; }
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 3px; margin: 20px 0 10px 0; }
+
+        /* DESCRIPTION ÉLÉGANTE */
         .intro-text { 
-            width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 20px; 
+            width: 90%; max-width: 450px; margin: 10px 0 30px 0; padding: 20px; 
             border: 1px solid rgba(197,160,89,0.3); 
             background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(197,160,89,0.05) 100%);
             border-radius: 15px; font-size: 1rem; line-height: 1.6; text-align: center;
         }
+        .intro-text b { color: var(--gold); display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .btn-gold { 
-            background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); 
-            padding: 0 30px; width: 95%; max-width: 600px; margin: 10px 0; 
-            text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
-            border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
-            box-sizing: border-box; min-height: 100px;
+        /* BOUTONS RAYONS */
+        .btn-rayon { 
+            background: var(--card-bg); border: 1px solid var(--brd); color: var(--gold); 
+            padding: 0 25px; width: 95%; max-width: 500px; margin: 8px 0; 
+            text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1rem; 
+            border-radius: 15px; display: flex; align-items: center; justify-content: space-between;
+            min-height: 90px; transition: 0.3s;
         }
+        .btn-rayon:active { transform: scale(0.98); background: rgba(197, 160, 89, 0.1); }
+        .bottle-icon { height: 60px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
 
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; width: 98%; max-width: 600px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; box-sizing: border-box; }
-        .img-vin { width: 70px; height: 110px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; cursor: zoom-in; }
+        /* LISTE DES VINS */
+        .card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); padding: 15px; width: 98%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; box-sizing: border-box; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold); margin-right: 15px; cursor: zoom-in; }
         .vin-info { flex: 1; text-align: left; }
-        .vin-info b { font-size: 1.1rem; display: block; color: var(--gold); margin-bottom: 3px; cursor: pointer; }
-        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 10px; }
+        .vin-info b { font-size: 1.1rem; color: var(--gold); display: block; margin-bottom: 4px; cursor: pointer; }
+        .vin-qte { font-size: 1.4rem; font-weight: 700; margin-left: 10px; }
 
-        .btn-open-note { 
-            background: none; border: 1px solid var(--gold); color: var(--gold); 
-            padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; 
-            margin-top: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
-        }
-
+        /* MODALES */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; position: relative; }
+        .modal-content { background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
+        #imgZoomDisplay { max-width: 90%; max-height: 80vh; border: 1px solid var(--gold); border-radius: 10px; }
         
-        #imgZoomDisplay { max-width: 90%; max-height: 80vh; border: 2px solid var(--gold); border-radius: 10px; }
+        /* QR CODE */
+        .qr-container { position: relative; width: 200px; height: 200px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        #qrImg { width: 100%; }
+        .qr-overlay-logo { position: absolute; width: 45px; height: 45px; background: white; border-radius: 5px; padding: 2px; border: 1px solid #ddd; }
 
-        .qr-container { position: relative; width: 220px; height: 220px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
-        #qrImg { width: 100%; height: 100%; }
-        .qr-overlay-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: white; border-radius: 6px; padding: 3px; border: 1px solid #eee; }
-
-        .note-paper { background: #fdfdfd; color: #222; padding: 20px; border-radius: 5px; font-family: 'Bodoni Moda', serif; font-style: italic; line-height: 1.6; text-align: left; margin: 20px 0; max-height: 300px; overflow-y: auto; border-left: 5px solid #d4b45d; }
-
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; cursor: pointer; z-index:100; }
-        input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; box-sizing: border-box; font-family: 'Montserrat'; }
-        .stars { font-size: 30px; color: #333; margin: 10px 0; cursor: pointer; }
-        .stars .selected { color: var(--gold); }
+        /* INPUTS */
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; background: #111; color: #fff; border: 1px solid #333; border-radius: 10px; box-sizing: border-box; font-family: 'Montserrat'; }
+        .btn-action { background: var(--gold); color: #000; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 60px; height: 60px; border-radius: 50%; border: none; font-size: 30px; font-weight: bold; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
+    <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="imgZoomDisplay" src=""></div>
+
     <div id="noteModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); font-family:'Bodoni Moda'; margin-top:0;">Note de dégustation</h2>
-            <div id="noteVinDisplay" class="note-paper"></div>
-            <button class="btn-gold" style="min-height:50px; justify-content:center; margin:0 auto;" onclick="document.getElementById('noteModal').style.display='none'">FERMER</button>
+            <h2 style="color:var(--gold); font-family:'Bodoni Moda';">Note de dégustation</h2>
+            <div id="noteVinDisplay" style="background:white; color:#222; padding:20px; text-align:left; font-style:italic; margin:15px 0; border-radius:5px;"></div>
+            <button onclick="document.getElementById('noteModal').style.display='none'" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:10px 20px; border-radius:5px; cursor:pointer;">FERMER</button>
         </div>
-    </div>
-
-    <div id="imgModal" class="modal" onclick="this.style.display='none'">
-        <img id="imgZoomDisplay" src="">
     </div>
 
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); font-family:'Bodoni Moda';">PARTAGER MA CAVE</h2>
+            <h2 style="color:var(--gold); font-family:'Bodoni Moda';">MON QR CODE</h2>
             <div class="qr-container">
                 <img id="qrImg" src="">
                 <img class="qr-overlay-logo" src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
             </div>
-            <button class="btn-gold" style="min-height:50px; justify-content:center; margin:0 auto;" onclick="document.getElementById('qrModal').style.display='none'">FERMER</button>
+            <button onclick="document.getElementById('qrModal').style.display='none'" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:10px 20px; border-radius:5px; cursor:pointer;">FERMER</button>
         </div>
     </div>
 
     <div id="PAGE_AUTH" class="p active">
-        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
+        <div class="logo-frame">
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo-img">
+        </div>
         <h1>Le Carnet de la Grappe</h1>
-        <div class="intro-text"><b style="color:var(--gold)">Votre cave, toujours dans votre poche</b><br>Gérez vos crus en toute simplicité.</div>
-        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">CONNEXION GOOGLE</button>
+        <div class="intro-text">
+            <b>Votre cave, toujours dans votre poche</b>
+            <span>Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.</span>
+        </div>
+        <button id="googleLogin" style="background:white; color:black; border:none; padding:18px 40px; border-radius:10px; font-weight:700; width:90%; max-width:400px; cursor:pointer; font-size:1rem; letter-spacing:1px;">CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
-        <h1 id="userName" style="font-family:'Bodoni Moda'; margin-bottom:30px;">Ma Cave</h1>
-        <button class="btn-gold" onclick="openRayon('ROUGES')"><span>VINS ROUGES</span><svg height="80" viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d"/></svg></button>
-        <button class="btn-gold" onclick="openRayon('BLANCS')"><span>VINS BLANCS</span><svg height="80" viewBox="0 0 100 100"><path d="M43 22C33 26 31 35 31 45V88C31 91 34 94 38 94H62C66 94 69 91 69 88V45C69 35 67 26 57 22H43Z" fill="#fff9e6"/></svg></button>
-        <button class="btn-gold" onclick="openRayon('ROSES')"><span>VINS ROSÉS</span><svg height="80" viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#ffe3e3"/></svg></button>
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span>CHAMPAGNES</span><svg height="80" viewBox="0 0 100 100"><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#F4D03F" stroke="#B7950B" stroke-width="1.5"/></svg></button>
-        <button onclick="genererQR()" style="background:none; border:1px solid #444; color:#888; padding:10px 20px; border-radius:8px; margin-top:30px; cursor:pointer;">🔗 Mon QR Code</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
+        <h1 id="userName">MA CAVE</h1>
+        
+        <button class="btn-rayon" onclick="openRayon('ROUGES')">
+            <span>VINS ROUGES</span>
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/rouge10.png" class="bottle-icon">
+        </button>
+        
+        <button class="btn-rayon" onclick="openRayon('BLANCS')">
+            <span>VINS BLANCS</span>
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/blanc10.png" class="bottle-icon">
+        </button>
+        
+        <button class="btn-rayon" onclick="openRayon('ROSES')">
+            <span>VINS ROSÉS</span>
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/rose10.png" class="bottle-icon">
+        </button>
+        
+        <button class="btn-rayon" onclick="openRayon('CHAMPAGNES')">
+            <span>CHAMPAGNES</span>
+            <img src="https://i.servimg.com/u/f49/11/31/89/70/champ10.png" class="bottle-icon">
+        </button>
+
+        <button onclick="genererQR()" style="background:none; border:1px solid #444; color:#888; padding:12px; border-radius:8px; margin-top:30px; width:60%; cursor:pointer;">🔗 MON QR CODE</button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="background:none; border:none; color:#555; margin-top:20px; text-decoration:underline; font-size:0.8rem;">Déconnexion</button>
     </div>
 
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
-        <div id="container-vins" style="width:100%"></div>
+        <div id="container-vins" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
         <button class="btn-add" onclick="goToAdd()">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
+        <button onclick="showPage('PAGE_HOME')" style="background:none; border:none; color:var(--gold); font-weight:700; margin-top:30px; cursor:pointer;">← RETOUR</button>
     </div>
 
     <div id="PAGE_ADD" class="p">
-        <h1 id="addTitle">Ajouter</h1>
-        <input type="text" id="nomVin" placeholder="Nom du vin">
-        <input type="number" id="qteVin" placeholder="Quantité">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:60px;">📷 PHOTO</button>
-        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
-        <div id="preview"></div>
-        <div class="stars" id="starRating"><span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span></div>
-        <textarea id="noteVin" rows="6" placeholder="Notes..."></textarea>
-        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center;" onclick="sauvegarderVin()">ENREGISTRER</button>
-        <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;">Annuler</button>
+        <h1 id="addTitle">AJOUTER</h1>
+        <div style="width:95%; max-width:450px;">
+            <input type="text" id="nomVin" placeholder="Nom du vin / Domaine">
+            <input type="number" id="qteVin" placeholder="Quantité en stock">
+            <button class="btn-action" style="background:#222; color:var(--gold); border:1px dashed var(--gold); margin-bottom:10px;" onclick="document.getElementById('fileInput').click()">📷 AJOUTER UNE PHOTO</button>
+            <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+            <div id="preview"></div>
+            
+            <div style="font-size:25px; margin:15px 0;" id="starRating">
+                <span onclick="setStars(1)">☆</span><span onclick="setStars(2)">☆</span><span onclick="setStars(3)">☆</span><span onclick="setStars(4)">☆</span><span onclick="setStars(5)">☆</span>
+            </div>
+            
+            <textarea id="noteVin" rows="5" placeholder="Vos impressions, accords mets-vins..."></textarea>
+            <button class="btn-action" onclick="sauvegarderVin()">ENREGISTRER</button>
+            <button onclick="showPage('PAGE_LISTE')" style="background:none; border:none; color:gray; margin-top:15px;">Annuler</button>
+        </div>
     </div>
 
     <script>
@@ -144,27 +179,28 @@
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
 
         document.getElementById('googleLogin').onclick = () => {
-            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
+            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert("Erreur: " + e.message));
         };
 
         auth.onAuthStateChanged(u => {
-            if(u) { userUID = u.uid; document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0]; showPage('PAGE_HOME'); } 
+            if(u) { userUID = u.uid; document.getElementById('userName').innerText = "CAVE DE " + u.displayName.split(' ')[0].toUpperCase(); showPage('PAGE_HOME'); } 
             else { showPage('PAGE_AUTH'); }
         });
 
         function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
-        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
-        function setStars(n) { noteEtoiles = n; document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n)); }
+        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n === "CHAMPAGNES" ? n : "VINS " + n; chargerVins(); showPage('PAGE_LISTE'); }
 
-        function zoomImage(src) {
-            document.getElementById('imgZoomDisplay').src = src;
-            document.getElementById('imgModal').style.display = 'flex';
+        function setStars(n) {
+            noteEtoiles = n;
+            const stars = document.querySelectorAll('#starRating span');
+            stars.forEach((s, i) => {
+                s.innerText = i < n ? '★' : '☆';
+                s.style.color = i < n ? '#c5a059' : '#333';
+            });
         }
 
-        function lireNote(note) {
-            document.getElementById('noteVinDisplay').innerText = note;
-            document.getElementById('noteModal').style.display = 'flex';
-        }
+        function zoomImage(src) { document.getElementById('imgZoomDisplay').src = src; document.getElementById('imgModal').style.display = 'flex'; }
+        function lireNote(note) { document.getElementById('noteVinDisplay').innerText = note; document.getElementById('noteModal').style.display = 'flex'; }
 
         function chargerVins() {
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
@@ -172,7 +208,7 @@
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     const cleanNote = v.note ? v.note.replace(/'/g, "\\'").replace(/\n/g, " ") : "";
-                    const btnNote = v.note ? `<button class="btn-open-note" onclick="lireNote('${cleanNote}')">📒 Carnet de note</button>` : "";
+                    const btnNote = v.note ? `<button onclick="lireNote('${cleanNote}')" style="background:none; border:1px solid var(--gold); color:var(--gold); padding:5px 10px; border-radius:15px; font-size:0.7rem; margin-top:5px; cursor:pointer;">📒 NOTE</button>` : "";
                     
                     c.innerHTML += `
                         <div class="card">
@@ -183,7 +219,7 @@
                                 ${btnNote}
                             </div>
                             <div class="vin-qte">x${v.qte}</div>
-                            <button onclick="supprimer('${id}')" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:10px;">✕</button>
+                            <button onclick="supprimer('${id}')" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:10px; cursor:pointer;">✕</button>
                         </div>`;
                 });
             });
@@ -191,13 +227,13 @@
 
         function handleFile(input) {
             const reader = new FileReader();
-            reader.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">`; };
+            reader.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:10px; border-radius:5px; border:1px solid var(--gold);">`; };
             reader.readAsDataURL(input.files[0]);
         }
 
-        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "Ajouter"; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; setStars(0); showPage('PAGE_ADD'); }
-        function prepareEdit(id, v) { editID = id; document.getElementById('addTitle').innerText = "Modifier"; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:100px; border-radius:8px;">` : ""; setStars(v.noteEtoiles || 0); showPage('PAGE_ADD'); }
-        function supprimer(id) { if(confirm("Supprimer ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        function goToAdd() { editID = null; document.getElementById('addTitle').innerText = "AJOUTER"; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; setStars(0); showPage('PAGE_ADD'); }
+        function prepareEdit(id, v) { editID = id; document.getElementById('addTitle').innerText = "MODIFIER"; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:80px; border-radius:5px;">` : ""; setStars(v.noteEtoiles || 0); showPage('PAGE_ADD'); }
+        function supprimer(id) { if(confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
         
         function sauvegarderVin() {
             const nom = document.getElementById('nomVin').value; if(!nom) return;
@@ -208,7 +244,7 @@
 
         function genererQR() {
             const caveUrl = window.location.origin + window.location.pathname + "?view=" + userUID;
-            document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(caveUrl)}`;
+            document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(caveUrl)}`;
             document.getElementById('qrModal').style.display = 'flex';
         }
     </script>
