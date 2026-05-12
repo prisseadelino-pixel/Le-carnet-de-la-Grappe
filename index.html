@@ -24,15 +24,14 @@
         
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 3px; margin: 25px 0; }
 
+        /* BOUTONS AVEC ICÔNES SYSTÈME GRANDIES */
         .btn-rayon { 
-            background: rgba(255,255,255,0.03); border: 1px solid var(--brd); color: var(--gold); 
-            padding: 0 20px; width: 92%; max-width: 480px; margin: 10px 0; 
-            text-transform: uppercase; cursor: pointer; font-weight: 700; border-radius: 18px; 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--brd); color: var(--gold); 
+            padding: 0 25px; width: 92%; max-width: 480px; margin: 12px 0; 
+            text-transform: uppercase; cursor: pointer; font-weight: 700; border-radius: 20px; 
             display: flex; align-items: center; justify-content: space-between; min-height: 110px;
         }
-        
-        /* Bouteilles intégrées en SVG pour garantie d'affichage */
-        .bottle-icon { width: 100px; height: 80px; }
+        .icon-large { font-size: 3.5rem; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
 
         .logo-frame { width: 130px; height: 130px; border: 1px solid var(--gold); border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; background: #0a0a0a; overflow: hidden; }
         .intro-text { width: 90%; max-width: 450px; margin-bottom: 30px; padding: 25px; border: 1px solid var(--brd); border-radius: 15px; font-size: 0.95rem; background: rgba(197,160,89,0.05); line-height: 1.5; }
@@ -48,15 +47,13 @@
         
         .qr-wrapper { background: white; padding: 15px; border-radius: 10px; margin: 20px auto; display: inline-block; position: relative; }
         #qrImg { width: 180px; height: 180px; display: block; }
-        .qr-center-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 4px; background: white; padding: 2px; border: 1px solid #eee; }
+        .qr-center-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 45px; height: 45px; border-radius: 6px; background: white; padding: 2px; border: 1px solid #ddd; }
 
         .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
         input, textarea { width: 100%; padding: 16px; margin: 10px 0; background: #111; color: #fff; border: 1px solid #333; border-radius: 12px; box-sizing: border-box; }
     </style>
 </head>
 <body>
-
-    <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="imgZoomDisplay" style="max-width:90%; max-height:80vh; border:1px solid var(--gold); border-radius:10px;"></div>
 
     <div id="noteModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -92,22 +89,22 @@
         
         <button class="btn-rayon" onclick="openRayon('ROUGES')">
             <span>VINS ROUGES</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/rouge_11.png" class="bottle-icon" onerror="this.src='https://cdn-icons-png.flaticon.com/512/763/763039.png'">
+            <span class="icon-large">🍷</span>
         </button>
         
         <button class="btn-rayon" onclick="openRayon('BLANCS')">
             <span>VINS BLANCS</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/blanc_11.png" class="bottle-icon" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3122/3122438.png'">
+            <span class="icon-large">🥂</span>
         </button>
         
         <button class="btn-rayon" onclick="openRayon('ROSES')">
             <span>VINS ROSÉS</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/rose_h11.png" class="bottle-icon" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3122/3122450.png'">
+            <span class="icon-large">🍷</span>
         </button>
         
         <button class="btn-rayon" onclick="openRayon('CHAMPAGNES')">
             <span>CHAMPAGNES</span>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/champ_11.png" class="bottle-icon" onerror="this.src='https://cdn-icons-png.flaticon.com/512/931/931934.png'">
+            <span class="icon-large">🍾</span>
         </button>
 
         <button onclick="genererQR()" style="background:rgba(255,255,255,0.05); border:1px solid #333; color:#aaa; padding:12px 25px; border-radius:10px; margin-top:25px; cursor:pointer;">🔗 MON QR CODE</button>
@@ -158,7 +155,7 @@
                     const v = child.val(), id = child.key;
                     const cleanNote = v.note ? v.note.replace(/'/g, "\\'").replace(/\n/g, " ") : "";
                     c.innerHTML += `<div class="card">
-                        <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="document.getElementById('imgZoomDisplay').src=this.src; document.getElementById('imgModal').style.display='flex'">
+                        <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="window.open(this.src)">
                         <div class="vin-info">
                             <b onclick="prepareEdit('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">${v.nom}</b>
                             ${v.note ? `<button onclick="document.getElementById('noteVinDisplay').innerText='${cleanNote}'; document.getElementById('noteModal').style.display='flex'" style="background:none; border:1px solid var(--gold); color:var(--gold); border-radius:10px; font-size:0.65rem; padding:4px 10px; margin-top:5px; cursor:pointer;">📒 NOTE</button>` : ''}
@@ -170,7 +167,7 @@
             });
         }
 
-        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:15px; border-radius:8px; border:1px solid var(--gold);">`; }; r.readAsDataURL(i.files[0]); }
+        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:15px; border-radius:8px;">`; }; r.readAsDataURL(i.files[0]); }
         function goToAdd() { editID = null; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; showPage('PAGE_ADD'); }
         function prepareEdit(id, v) { editID = id; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:80px; border-radius:8px;">` : ""; showPage('PAGE_ADD'); }
         
