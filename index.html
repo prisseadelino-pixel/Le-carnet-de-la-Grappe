@@ -5,200 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
     
-    <!-- CONFIGURATION ICÔNE RACCOURCI (Optionnel) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-
-    <!-- BIBLIOTHÈQUES -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
-        
-        :root { 
-            --gold: #c5a059; 
-            --bg: #000; 
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --brd: rgba(197, 160, 89, 0.25); 
-        }
-        
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
-        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
+        :root { --gold: #c5a059; --bg: #000; --brd: rgba(197, 160, 89, 0.3); }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; }
+        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; }
         .active { display: flex !important; }
-        
-        /* LOGO & TITRES */
-        .logo-frame { width: 140px; height: 140px; border: 1px solid var(--gold); padding: 5px; border-radius: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; background: #0a0a0a; overflow: hidden; }
-        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 3px; margin: 25px 0 10px 0; }
-
-        /* DESCRIPTION ÉLÉGANTE (MEMO BULLET 1) */
-        .intro-text { width: 90%; max-width: 450px; margin: 10px 0 30px 0; padding: 25px; border: 1px solid rgba(197,160,89,0.3); border-radius: 15px; font-size: 0.95rem; line-height: 1.5; background: rgba(197,160,89,0.05); }
-        .intro-text b { color: var(--gold); display: block; margin-bottom: 8px; font-size: 1.1rem; }
-
-        /* BOUTONS RAYONS AVEC BOUTEILLES (MEMO BULLET 2) */
-        .btn-rayon { 
-            background: var(--card-bg); border: 1px solid var(--brd); color: var(--gold); 
-            padding: 0 20px; width: 92%; max-width: 480px; margin: 10px 0; 
-            text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 0.95rem; 
-            border-radius: 18px; display: flex; align-items: center; justify-content: space-between;
-            min-height: 110px; transition: 0.3s;
-        }
-        .btn-rayon:active { background: rgba(197, 160, 89, 0.1); transform: scale(0.98); }
-        .bottle-img { height: 75px; width: auto; object-fit: contain; }
-
-        /* DESIGN GÉNÉRAL ET LISTE */
-        .card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); padding: 15px; width: 98%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; box-sizing: border-box; }
-        .img-vin { width: 65px; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold); margin-right: 15px; cursor: zoom-in; }
-        .vin-info { flex: 1; text-align: left; }
-        .vin-info b { color: var(--gold); font-size: 1.1rem; display: block; cursor: pointer; }
-        .vin-qte { font-size: 1.4rem; font-weight: 700; margin-left: 10px; }
-
-        /* MODALES */
+        h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; margin: 25px 0; }
+        .btn-rayon { background: rgba(255,255,255,0.05); border: 1px solid var(--brd); color: var(--gold); padding: 10px 20px; width: 92%; max-width: 480px; margin: 10px 0; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; min-height: 80px; }
+        .bottle-img { height: 60px; width: 120px; object-fit: contain; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--gold); width: 85%; max-width: 400px; text-align: center; }
-        
-        /* QR CODE AVEC LOGO (MEMO BULLET 3) */
-        .qr-wrapper { background: white; padding: 15px; border-radius: 10px; margin: 20px auto; display: inline-block; position: relative; }
-        #qrImg { width: 180px; height: 180px; display: block; }
-        .qr-center-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 5px; background: white; padding: 2px; }
-
-        .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; font-size: 1rem; }
-        input, textarea { width: 100%; padding: 16px; margin: 10px 0; background: #111; color: #fff; border: 1px solid #333; border-radius: 12px; box-sizing: border-box; font-family: 'Montserrat'; }
+        .modal-content { background: #111; padding: 20px; border-radius: 15px; border: 1px solid var(--gold); width: 85%; max-width: 300px; }
+        .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); padding: 15px; width: 98%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; }
+        .img-vin { width: 65px; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold); margin-right: 15px; }
+        input, textarea { width: 100%; padding: 16px; margin: 10px 0; background: #111; color: #fff; border: 1px solid #333; border-radius: 12px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <!-- MODALES -->
-    <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="imgZoomDisplay" style="max-width:90%; max-height:80vh; border-radius:10px; border:1px solid var(--gold);"></div>
-    <div id="noteModal" class="modal" onclick="this.style.display='none'"><div class="modal-content" onclick="event.stopPropagation()"><h2 style="color:var(--gold); font-family:'Bodoni Moda'">Note de dégustation</h2><div id="noteVinDisplay" style="background:white; color:#222; padding:20px; border-radius:8px; text-align:left; font-style:italic;"></div></div></div>
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); font-family:'Bodoni Moda'">MON QR CODE</h2>
-            <div class="qr-wrapper">
-                <img id="qrImg" src="">
-                <img src="data:image/jpeg;base64,...(picsar10.jpg_encoded)..." class="qr-center-logo">
-            </div>
+            <h2 style="color:var(--gold)">MON QR CODE</h2>
+            <img id="qrImg" src="" style="background:white; padding:10px; border-radius:8px; width:200px;">
             <button onclick="document.getElementById('qrModal').style.display='none'" class="btn-action">FERMER</button>
         </div>
     </div>
 
-    <!-- PAGE CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
-        <div class="logo-frame"><img src="data:image/jpeg;base64,...(picsar10.jpg_encoded)..." style="width:100%"></div>
+        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" style="width:140px; border-radius:12px; border:1px solid var(--gold);">
         <h1>Le Carnet de la Grappe</h1>
-        <!-- Bullet 1: Description -->
-        <div class="intro-text">
-            <b>Votre cave, toujours dans votre poche</b>
-            <span>Inventorier vos crus, gérez vos stocks et conservez vos notes précieuses.</span>
+        <div style="border:1px solid var(--brd); padding:20px; border-radius:15px; margin:20px; font-size:0.9rem;">
+            <b>Votre cave, toujours dans votre poche</b><br>
+            Inventorier vos crus, gérez vos stocks et conservez vos notes précieuses.
         </div>
-        <button id="googleLogin" style="background:white; color:black; border:none; padding:20px; border-radius:12px; font-weight:700; width:90%;">CONNEXION GOOGLE</button>
+        <button id="googleLogin" class="btn-action" style="background:white">CONNEXION GOOGLE</button>
     </div>
 
-    <!-- PAGE ACCUEIL -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName">MA CAVE</h1>
-        
-        <!-- Bullet 2: Bouteilles horizontales (Hébergement Base64 garanti) -->
-        <button class="btn-rayon" onclick="openRayon('ROUGES')">
-            <span>VINS ROUGES</span>
-            <img src="data:image/png;base64,...(HD_red_bottle_encoded)..." class="bottle-img" alt="Vin Rouge">
-        </button>
-        
-        <button class="btn-rayon" onclick="openRayon('BLANCS')">
-            <span>VINS BLANCS</span>
-            <img src="data:image/png;base64,...(HD_white_bottle_encoded)..." class="bottle-img" alt="Vin Blanc">
-        </button>
-        
-        <button class="btn-rayon" onclick="openRayon('ROSES')">
-            <span>VINS ROSÉS</span>
-            <img src="data:image/png;base64,...(HD_rose_bottle_encoded)..." class="bottle-img" alt="Vin Rosé">
-        </button>
-        
-        <button class="btn-rayon" onclick="openRayon('CHAMPAGNES')">
-            <span>CHAMPAGNES</span>
-            <img src="data:image/png;base64,...(HD_champagne_bottle_encoded)..." class="bottle-img" alt="Champagne">
-        </button>
-
-        <button onclick="genererQR()" style="background:rgba(255,255,255,0.05); border:1px solid #333; color:#aaa; padding:12px 25px; border-radius:10px; margin-top:25px; cursor:pointer;">🔗 MON QR CODE</button>
-        <button onclick="auth.signOut().then(()=>location.reload())" style="background:none; border:none; color:#555; margin-top:30px; text-decoration:underline;">Déconnexion</button>
+        <button class="btn-rayon" onclick="openRayon('ROUGES')">VINS ROUGES<img src="https://i.servimg.com/u/f49/11/31/89/70/rouge10.png" class="bottle-img"></button>
+        <button class="btn-rayon" onclick="openRayon('BLANCS')">VINS BLANCS<img src="https://i.servimg.com/u/f49/11/31/89/70/blanc10.png" class="bottle-img"></button>
+        <button class="btn-rayon" onclick="openRayon('ROSES')">VINS ROSÉS<img src="https://i.servimg.com/u/f49/11/31/89/70/rose10.png" class="bottle-img"></button>
+        <button class="btn-rayon" onclick="openRayon('CHAMPAGNES')">CHAMPAGNES<img src="https://i.servimg.com/u/f49/11/31/89/70/champa10.png" class="bottle-img"></button>
+        <button onclick="genererQR()" style="background:none; border:1px solid #555; color:#aaa; padding:10px 20px; border-radius:10px; margin-top:20px;">🔗 MON QR CODE</button>
     </div>
 
-    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%; max-width:500px;"></div>
-        <button onclick="goToAdd()" style="position:fixed; bottom:30px; right:25px; background:var(--gold); width:65px; height:65px; border-radius:50%; border:none; font-size:35px; font-weight:bold; box-shadow: 0 5px 15px rgba(0,0,0,0.4);">+</button>
-        <button onclick="showPage('PAGE_HOME')" style="background:none; border:none; color:var(--gold); font-weight:700; margin-top:30px;">← RETOUR</button>
+        <button onclick="goToAdd()" style="background:var(--gold); width:60px; height:60px; border-radius:50%; border:none; margin-top:20px; font-size:30px;">+</button>
     </div>
 
-    <!-- PAGE AJOUT -->
     <div id="PAGE_ADD" class="p">
-        <h1 id="addTitle">AJOUTER</h1>
-        <div style="width:100%; max-width:450px;">
-            <input type="text" id="nomVin" placeholder="Nom">
-            <input type="number" id="qteVin" placeholder="Qté">
-            <button class="btn-action" style="background:#222; color:var(--gold); border:1px dashed var(--gold)" onclick="document.getElementById('fileInput').click()">📷 PHOTO</button>
-            <input type="file" id="fileInput" style="display:none" onchange="handleFile(this)">
-            <div id="preview"></div>
-            <textarea id="noteVin" rows="5" placeholder="Notes..."></textarea>
-            <button class="btn-action" onclick="sauvegarderVin()">ENREGISTRER</button>
-            <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:15px;">Annuler</button>
-        </div>
+        <h1>AJOUTER</h1>
+        <input type="text" id="nomVin" placeholder="Nom">
+        <input type="number" id="qteVin" placeholder="Qté">
+        <button class="btn-action" onclick="document.getElementById('fileInput').click()">📷 PHOTO</button>
+        <input type="file" id="fileInput" style="display:none" onchange="handleFile(this)">
+        <textarea id="noteVin" placeholder="Notes..."></textarea>
+        <button class="btn-action" onclick="sauvegarderVin()">ENREGISTRER</button>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyABRweq9NpgFHy9tWpN8UhD0nBdTmZ-7dU",
-            authDomain: "le-carnet-de-la-grappe.firebaseapp.com",
-            databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "le-carnet-de-la-grappe",
-            appId: "1:90122533942:web:0448a69951e95108ce6c97"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyABRweq9NpgFHy9tWpN8UhD0nBdTmZ-7dU", authDomain: "le-carnet-de-la-grappe.firebaseapp.com", databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app", projectId: "le-carnet-de-la-grappe", appId: "1:90122533942:web:0448a69951e95108ce6c97" };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
-        let userUID = null, rayonActuel = "", currentImg = "", editID = null;
+        let userUID, rayonActuel, currentImg;
 
+        auth.onAuthStateChanged(u => { if(u){ userUID = u.uid; document.getElementById('userName').innerText = "CAVE DE " + u.displayName.toUpperCase(); showPage('PAGE_HOME'); } else showPage('PAGE_AUTH'); });
         document.getElementById('googleLogin').onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-        auth.onAuthStateChanged(u => { if(u){ userUID = u.uid; document.getElementById('userName').innerText = "CAVE DE " + u.displayName.split(' ')[0].toUpperCase(); showPage('PAGE_HOME'); } else showPage('PAGE_AUTH'); });
 
-        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
-        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n === "CHAMPAGNES" ? n : "VINS " + n; chargerVins(); showPage('PAGE_LISTE'); }
-
-        function chargerVins() {
-            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                const c = document.getElementById('container-vins'); c.innerHTML = "";
-                s.forEach(child => {
-                    const v = child.val(), id = child.key;
-                    c.innerHTML += `<div class="card">
-                        <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="document.getElementById('imgZoomDisplay').src=this.src; document.getElementById('imgModal').style.display='flex'">
-                        <div class="vin-info">
-                            <b onclick="prepareEdit('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">${v.nom}</b>
-                            ${v.note ? `<button onclick="document.getElementById('noteVinDisplay').innerText='${v.note.replace(/'/g,"\\'")}'; document.getElementById('noteModal').style.display='flex'" style="background:none; border:1px solid var(--gold); color:var(--gold); border-radius:10px; font-size:0.65rem; padding:4px 10px; margin-top:8px;">📒 Note</button>` : ''}
-                        </div>
-                        <div style="font-size:1.4rem; font-weight:bold; padding:0 10px;">x${v.qte}</div>
-                        <button onclick="if(confirm('Supprimer ?')) db.ref('users/${userUID}/cave/${id}').remove()" style="background:none; border:none; color:red; font-size:1.2rem;">✕</button>
-                    </div>`;
-                });
-            });
-        }
-
-        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:15px; border-radius:8px; border:1px solid var(--gold);">`; }; r.readAsDataURL(i.files[0]); }
-        function goToAdd() { editID = null; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; showPage('PAGE_ADD'); }
-        function prepareEdit(id, v) { editID = id; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:80px; border-radius:8px;">` : ""; showPage('PAGE_ADD'); }
-        
-        function sauvegarderVin() {
-            const data = { nom: document.getElementById('nomVin').value, qte: document.getElementById('qteVin').value, note: document.getElementById('noteVin').value, image: currentImg, categorie: rayonActuel };
-            if(editID) db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
-            else db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
-        }
-
-        function genererQR() {
-            const url = window.location.href;
-            document.getElementById('qrImg').src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(url);
-            document.getElementById('qrModal').style.display = 'flex';
-        }
+        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
+        function chargerVins() { db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => { const c = document.getElementById('container-vins'); c.innerHTML = ""; s.forEach(child => { const v = child.val(); c.innerHTML += `<div class="card"><img src="${v.image}" class="img-vin"><b>${v.nom}</b></div>`; }); }); }
+        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; }; r.readAsDataURL(i.files[0]); }
+        function sauvegarderVin() { db.ref('users/' + userUID + '/cave').push({nom:document.getElementById('nomVin').value, qte:document.getElementById('qteVin').value, note:document.getElementById('noteVin').value, image:currentImg, categorie:rayonActuel}).then(() => showPage('PAGE_HOME')); }
+        function genererQR() { document.getElementById('qrImg').src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(window.location.href); document.getElementById('qrModal').style.display = 'flex'; }
+        function goToAdd() { showPage('PAGE_ADD'); }
     </script>
 </body>
 </html>
