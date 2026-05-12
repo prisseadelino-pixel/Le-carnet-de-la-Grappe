@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
-    
-    <!-- Bibliothèques -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -18,44 +16,83 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; }
         .active { display: flex !important; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; margin: 25px 0; }
-        .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 90%; max-width: 300px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-rayon { background: rgba(255,255,255,0.05); border: 1px solid var(--brd); color: var(--gold); padding: 0 25px; width: 92%; max-width: 480px; margin: 12px 0; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; min-height: 110px; cursor: pointer; }
+        .icon-large { font-size: 3.5rem; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #111; padding: 20px; border-radius: 15px; border: 1px solid var(--gold); }
+        .modal-content { background: #111; padding: 20px; border-radius: 15px; border: 1px solid var(--gold); width: 85%; max-width: 300px; }
+        .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); padding: 15px; width: 98%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; }
+        .img-vin { width: 65px; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold); margin-right: 15px; cursor: pointer; }
+        input, textarea { width: 100%; padding: 16px; margin: 10px 0; background: #111; color: #fff; border: 1px solid #333; border-radius: 12px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div id="qrModal" class="modal" onclick="this.style.display='none'">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); font-family:'Bodoni Moda'">SCANNER LE QR</h2>
-            <div id="qrcode" style="background:white; padding:10px; border-radius:8px; margin: 0 auto;"></div>
-            <button onclick="document.getElementById('qrModal').style.display='none'" class="btn-action">FERMER</button>
-        </div>
+    <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="imgZoomDisplay" style="max-width:90%; max-height:80vh; border:1px solid var(--gold); border-radius:10px;"></div>
+    <div id="noteModal" class="modal" onclick="this.style.display='none'"><div class="modal-content"><h2 style="color:var(--gold)">NOTES</h2><div id="noteVinDisplay" style="background:white; color:#222; padding:15px; border-radius:8px;"></div><button onclick="document.getElementById('noteModal').style.display='none'" class="btn-action">FERMER</button></div></div>
+    <div id="qrModal" class="modal" onclick="this.style.display='none'"><div class="modal-content"><h2 style="color:var(--gold)">QR CODE</h2><div id="qrcode" style="background:white; padding:10px; border-radius:8px; display:inline-block;"></div><button onclick="document.getElementById('qrModal').style.display='none'" class="btn-action">FERMER</button></div></div>
+
+    <div id="PAGE_AUTH" class="p active">
+        <h1>Le Carnet de la Grappe</h1>
+        <button id="googleLogin" class="btn-action" style="background:white">CONNEXION GOOGLE</button>
     </div>
 
-    <div id="PAGE_HOME" class="p active">
-        <h1>MA CAVE</h1>
-        <button class="btn-action" onclick="genererQR()">🔗 MON QR CODE</button>
+    <div id="PAGE_HOME" class="p">
+        <h1 id="userName">MA CAVE</h1>
+        <button class="btn-rayon" onclick="openRayon('ROUGES')"><span>VINS ROUGES</span><span class="icon-large">🍷</span></button>
+        <button class="btn-rayon" onclick="openRayon('BLANCS')"><span>VINS BLANCS</span><span class="icon-large">🥂</span></button>
+        <button class="btn-rayon" onclick="genererQR()"><span>🔗 MON QR CODE</span></button>
+        <button onclick="auth.signOut().then(()=>location.reload())" style="background:none; border:none; color:#555; margin-top:20px;">Déconnexion</button>
+    </div>
+
+    <div id="PAGE_LISTE" class="p">
+        <h1 id="rayonTitle"></h1>
+        <div id="container-vins" style="width:100%; max-width:500px;"></div>
+        <button onclick="goToAdd()" style="position:fixed; bottom:30px; right:25px; background:var(--gold); width:65px; height:65px; border-radius:50%; border:none; font-size:30px;">+</button>
+    </div>
+
+    <div id="PAGE_ADD" class="p">
+        <h1>AJOUTER</h1>
+        <input type="text" id="nomVin" placeholder="Nom">
+        <input type="number" id="qteVin" placeholder="Qté">
+        <input type="file" id="fileInput" style="display:none" onchange="handleFile(this)">
+        <button class="btn-action" style="background:#222; border:1px dashed var(--gold)" onclick="document.getElementById('fileInput').click()">📷 PHOTO</button>
+        <textarea id="noteVin" placeholder="Notes..."></textarea>
+        <button class="btn-action" onclick="sauvegarderVin()">ENREGISTRER</button>
     </div>
 
     <script>
-        function genererQR() {
-            const modal = document.getElementById('qrModal');
-            const container = document.getElementById('qrcode');
-            container.innerHTML = ""; // Réinitialise
-            
-            modal.style.display = 'flex';
-            
-            // Délai court pour laisser le modal s'afficher avant de dessiner
-            setTimeout(() => {
-                new QRCode(container, {
-                    text: window.location.href,
-                    width: 200,
-                    height: 200,
-                    correctLevel: QRCode.CorrectLevel.H
+        const firebaseConfig = { apiKey: "AIzaSyABRweq9NpgFHy9tWpN8UhD0nBdTmZ-7dU", authDomain: "le-carnet-de-la-grappe.firebaseapp.com", databaseURL: "https://le-carnet-de-la-grappe-default-rtdb.europe-west1.firebasedatabase.app", projectId: "le-carnet-de-la-grappe", appId: "1:90122533942:web:0448a69951e95108ce6c97" };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth(), db = firebase.database();
+        let userUID, rayonActuel, currentImg;
+
+        auth.onAuthStateChanged(u => { if(u){ userUID = u.uid; showPage('PAGE_HOME'); } else showPage('PAGE_AUTH'); });
+        document.getElementById('googleLogin').onclick = () => auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        
+        function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n; chargerVins(); showPage('PAGE_LISTE'); }
+        function zoomPhoto(url) { document.getElementById('imgZoomDisplay').src = url; document.getElementById('imgModal').style.display = 'flex'; }
+        
+        function chargerVins() {
+            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
+                const c = document.getElementById('container-vins'); c.innerHTML = "";
+                s.forEach(child => {
+                    const v = child.val();
+                    c.innerHTML += `<div class="card"><img src="${v.image}" class="img-vin" onclick="zoomPhoto('${v.image}')"><div class="vin-info"><b>${v.nom}</b><button onclick="document.getElementById('noteVinDisplay').innerText='${v.note}'; document.getElementById('noteModal').style.display='flex'">📒</button></div><div>x${v.qte}</div></div>`;
                 });
-            }, 100);
+            });
         }
+        
+        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; }; r.readAsDataURL(i.files[0]); }
+        function sauvegarderVin() { db.ref('users/' + userUID + '/cave').push({nom:document.getElementById('nomVin').value, qte:document.getElementById('qteVin').value, note:document.getElementById('noteVin').value, image:currentImg, categorie:rayonActuel}).then(() => showPage('PAGE_HOME')); }
+        
+        function genererQR() {
+            document.getElementById('qrModal').style.display = 'flex';
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById('qrcode'), window.location.href);
+        }
+        function goToAdd() { showPage('PAGE_ADD'); }
     </script>
 </body>
 </html>
