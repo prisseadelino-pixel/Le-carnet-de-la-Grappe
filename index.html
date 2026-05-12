@@ -12,7 +12,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    <!-- Script pour générer un QR Code propre -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
@@ -24,13 +23,13 @@
         .active { display: flex !important; }
         
         .logo { width: 100px; height: auto; margin-bottom: 10px; border: 1.5px solid var(--gold); padding: 5px; border-radius: 8px; }
-        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--gold); margin: 10px 0; object-fit: cover; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--gold); margin: 10px 0; object-fit: cover; }
         
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; letter-spacing: 2px; }
 
         .resume-concept {
             background: rgba(197,160,89,0.05); border: 1px solid var(--gold); border-radius: 12px;
-            padding: 20px; width: 90%; max-width: 450px; margin: 20px 0; font-size: 0.95rem; line-height: 1.6; color: #eee;
+            padding: 20px; width: 90%; max-width: 450px; margin: 15px 0; font-size: 0.95rem; line-height: 1.6; color: #eee;
         }
 
         .btn-gold { 
@@ -40,11 +39,10 @@
             border-radius: 12px; display: flex; align-items: center; 
             justify-content: space-between; box-sizing: border-box; min-height: 80px;
         }
-        .btn-gold svg { height: 50px; width: auto; }
+        .btn-gold svg { height: 45px; width: auto; }
 
-        /* QR CODE GENERÉ */
-        #qrcode { background: white; padding: 10px; border-radius: 10px; border: 3px solid var(--gold); margin: 0 auto; display: inline-block; }
-        .qr-section { margin-top: 25px; }
+        #qrcode { background: white; padding: 10px; border-radius: 10px; border: 3px solid var(--gold); display: inline-block; }
+        .qr-section { margin-top: 25px; padding-bottom: 20px; }
 
         .card { background: #0d0d0d; border: 1px solid var(--brd); width: 100%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; padding: 12px; display: flex; align-items: center; text-align: left; box-sizing: border-box; }
         .img-vin { width: 50px; height: 75px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gold); margin-right: 12px; }
@@ -71,25 +69,21 @@
         </div>
     </div>
 
-    <!-- PAGE DE CONNEXION -->
+    <!-- CONNEXION AVEC RÉSUMÉ -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Carnet de la Grappe</h1>
-        
         <div class="resume-concept">
             <b>Votre cave, toujours en poche.</b>
-            Une application élégante pour gérer vos bouteilles de <b>vins</b> et <b>champagnes</b>. <br><br>
-            Notez vos coups de cœur, suivez votre inventaire et emportez vos précieux <b>carnets de dégustation</b> partout.
+            Gérez vos bouteilles de <b>vins</b> et <b>champagnes</b>. <br><br>
+            Notez vos coups de cœur, suivez votre inventaire et emportez vos précieux <b>carnets de dégustation</b> partout avec vous.
         </div>
-
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
-    <!-- PAGE D'ACCUEIL -->
+    <!-- ACCUEIL -->
     <div id="PAGE_HOME" class="p">
-        <!-- Mon Incarnation Humaine -->
-        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="avatar" alt="Gemini">
-        
+        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="avatar" alt="Adelino">
         <h1 id="userName" style="font-family:'Bodoni Moda';">Ma Cave</h1>
         
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span>ROUGES</span><svg viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d"/></svg></button>
@@ -98,14 +92,14 @@
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span>BULLES</span><svg viewBox="0 0 100 100"><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059"/></svg></button>
 
         <div class="qr-section">
-            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:12px;">PARTAGER MA CAVE</p>
+            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:12px;">SCANNEZ POUR ACCÉDER</p>
             <div id="qrcode"></div>
         </div>
 
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- PAGE LISTE -->
+    <!-- LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -113,7 +107,7 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- PAGE AJOUT -->
+    <!-- AJOUT -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -141,9 +135,9 @@
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
 
-        // Génération du QR Code avec l'URL actuelle du site
+        // Génération du QR Code avec ton lien spécifique
         new QRCode(document.getElementById("qrcode"), {
-            text: window.location.href,
+            text: "https://qr.codes/vQpenR",
             width: 120,
             height: 120,
             colorDark : "#000000",
