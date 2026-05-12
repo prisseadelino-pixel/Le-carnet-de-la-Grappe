@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
     
+    <!-- Bibliothèques -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    <!-- Bibliothèque locale pour un QR code infaillible -->
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
@@ -18,48 +18,43 @@
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; }
         .active { display: flex !important; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; margin: 25px 0; }
-        .btn-rayon { background: rgba(255,255,255,0.05); border: 1px solid var(--brd); color: var(--gold); padding: 0 25px; width: 92%; max-width: 480px; margin: 12px 0; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; min-height: 110px; }
-        .icon-large { font-size: 3.5rem; }
+        .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 90%; max-width: 300px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #111; padding: 25px; border-radius: 15px; border: 1px solid var(--gold); width: 85%; max-width: 300px; display: flex; flex-direction: column; align-items: center; }
-        .btn-action { background: var(--gold); color: #000; border: none; padding: 16px; width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        .modal-content { background: #111; padding: 20px; border-radius: 15px; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
 
-    <!-- MODALE QR CODE -->
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2 style="color:var(--gold); font-family:'Bodoni Moda'">MON QR CODE</h2>
-            <div id="qrcode" style="background:white; padding:10px; border-radius:8px;"></div>
+            <h2 style="color:var(--gold); font-family:'Bodoni Moda'">SCANNER LE QR</h2>
+            <div id="qrcode" style="background:white; padding:10px; border-radius:8px; margin: 0 auto;"></div>
             <button onclick="document.getElementById('qrModal').style.display='none'" class="btn-action">FERMER</button>
         </div>
     </div>
 
     <div id="PAGE_HOME" class="p active">
         <h1>MA CAVE</h1>
-        <button class="btn-rayon" onclick="genererQR()"><span>🔗 MON QR CODE</span></button>
-        <!-- Reste de ton interface... -->
+        <button class="btn-action" onclick="genererQR()">🔗 MON QR CODE</button>
     </div>
 
     <script>
-        // ... (ton code firebase reste inchangé) ...
-
         function genererQR() {
             const modal = document.getElementById('qrModal');
             const container = document.getElementById('qrcode');
-            container.innerHTML = ""; // Nettoyer
-            
-            new QRCode(container, {
-                text: window.location.href,
-                width: 180,
-                height: 180,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            container.innerHTML = ""; // Réinitialise
             
             modal.style.display = 'flex';
+            
+            // Délai court pour laisser le modal s'afficher avant de dessiner
+            setTimeout(() => {
+                new QRCode(container, {
+                    text: window.location.href,
+                    width: 200,
+                    height: 200,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }, 100);
         }
     </script>
 </body>
