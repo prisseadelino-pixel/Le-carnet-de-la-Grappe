@@ -44,74 +44,55 @@
             background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); 
             padding: 0 30px; width: 95%; max-width: 600px; margin: 10px 0; 
             text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; 
-            border-radius: 12px; display: flex; align-items: center; 
-            justify-content: space-between;
+            border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
             box-sizing: border-box; min-height: 100px; transition: 0.2s;
         }
         .btn-gold:active { background: rgba(197,160,89,0.1); }
         .btn-gold svg { height: 80px; width: auto; flex-shrink: 0; }
 
+        /* MODAL QR */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
         .qr-wrapper { position: relative; width: 220px; height: 220px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
         #qrImg { width: 100%; height: 100%; }
         .qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 55px; height: 55px; background: white; border-radius: 8px; padding: 3px; }
 
+        /* MODAL IMAGE GRANDE */
+        .modal-img { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 4000; justify-content: center; align-items: center; flex-direction: column; }
+        .modal-img img { max-width: 90%; max-height: 75vh; border-radius: 12px; border: 2px solid var(--gold); }
+        .modal-img h3 { color: var(--gold); font-family: 'Bodoni Moda', serif; margin: 20px 0 5px; font-size: 1.4rem; }
+        .modal-img .stars-big { font-size: 1.6rem; color: var(--gold); margin-bottom: 10px; }
+
+        /* MODAL COMMENTAIRE */
+        .modal-note { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 4000; justify-content: center; align-items: center; }
+        .modal-note-content {
+            background: #0d0d0d; border: 1.5px solid var(--gold); border-radius: 15px;
+            width: 88%; max-width: 420px; padding: 25px; text-align: left;
+        }
+        .modal-note-content h3 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 0 0 15px; font-size: 1.1rem; }
+        .note-texte {
+            color: #ddd; font-size: 1rem; line-height: 1.7; font-style: italic;
+            border-left: 2px solid var(--gold); padding-left: 15px; min-height: 60px;
+        }
+        .note-texte.empty { color: #555; font-style: normal; border-left-color: #333; }
+        .btn-fermer-note {
+            margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px;
+            background: none; border: 1px solid #333; color: #888;
+            font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700;
+            text-transform: uppercase; cursor: pointer;
+        }
+
+        /* CARTES */
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
-        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
         .vin-info { flex: 1; min-width: 0; }
         .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
 
         .btn-carnet {
             background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold);
-            border-radius: 8px; padding: 5px 10px; font-size: 1.1rem; cursor: pointer;
-            margin-left: 8px; flex-shrink: 0; transition: 0.2s;
-        }
-        .btn-carnet:active { background: rgba(197,160,89,0.1); }
-
-        .carnet-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); z-index: 3000; justify-content: flex-end; align-items: stretch;
-        }
-        .carnet-overlay.open { display: flex; }
-        .carnet-panel {
-            background: #0a0a0a; width: 100%; max-width: 480px; height: 100%;
-            display: flex; flex-direction: column; border-left: 2px solid var(--gold);
-            overflow-y: auto; box-sizing: border-box;
-        }
-        .carnet-header {
-            background: #111; padding: 20px 20px 15px; border-bottom: 1px solid rgba(197,160,89,0.25);
-            display: flex; align-items: center; gap: 15px; flex-shrink: 0;
-        }
-        .carnet-header img { width: 55px; height: 80px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); }
-        .carnet-header-info { flex: 1; text-align: left; }
-        .carnet-header-info h3 { margin: 0 0 5px; font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.1rem; }
-        .carnet-header-info .cat-badge { font-size: 0.7rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
-        .carnet-body { padding: 20px; flex: 1; text-align: left; }
-        .carnet-section { margin-bottom: 22px; }
-        .carnet-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 8px; }
-        .carnet-stars { font-size: 1.8rem; color: #333; }
-        .carnet-stars .lit { color: var(--gold); }
-        .carnet-note {
-            background: #111; border: 1px solid rgba(197,160,89,0.2); border-radius: 10px;
-            padding: 15px; font-size: 0.95rem; line-height: 1.7; color: #ddd;
-            min-height: 80px; white-space: pre-wrap; font-style: italic;
-        }
-        .carnet-note.empty { color: #555; font-style: normal; }
-        .carnet-qte-big { font-size: 3rem; font-weight: 700; color: #fff; line-height: 1; }
-        .carnet-qte-label { font-size: 0.85rem; color: #888; margin-top: 4px; }
-        .carnet-close-btn {
-            margin: 10px 20px 25px; padding: 14px; border-radius: 10px;
-            background: none; border: 1px solid #333; color: #888;
-            font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700;
-            text-transform: uppercase; cursor: pointer; letter-spacing: 1px;
-        }
-        .carnet-edit-btn {
-            margin: 0 20px 10px; padding: 14px; border-radius: 10px;
-            background: rgba(197,160,89,0.08); border: 1.5px solid var(--gold); color: var(--gold);
-            font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700;
-            text-transform: uppercase; cursor: pointer; letter-spacing: 1px;
+            border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer;
+            margin-left: 8px; flex-shrink: 0;
         }
 
         .readonly-badge {
@@ -141,33 +122,19 @@
         </div>
     </div>
 
-    <!-- PANEL CARNET -->
-    <div id="carnetOverlay" class="carnet-overlay" onclick="fermerCarnet()">
-        <div class="carnet-panel" onclick="event.stopPropagation()">
-            <div class="carnet-header">
-                <img id="carnetImg" src="" alt="">
-                <div class="carnet-header-info">
-                    <h3 id="carnetNom"></h3>
-                    <div class="cat-badge" id="carnetCat"></div>
-                </div>
-            </div>
-            <div class="carnet-body">
-                <div class="carnet-section">
-                    <div class="carnet-label">Quantité en cave</div>
-                    <div class="carnet-qte-big" id="carnetQte"></div>
-                    <div class="carnet-qte-label">bouteilles</div>
-                </div>
-                <div class="carnet-section">
-                    <div class="carnet-label">Note</div>
-                    <div class="carnet-stars" id="carnetStars"></div>
-                </div>
-                <div class="carnet-section">
-                    <div class="carnet-label">Commentaire de dégustation</div>
-                    <div class="carnet-note" id="carnetNote"></div>
-                </div>
-            </div>
-            <button id="carnetEditBtn" class="carnet-edit-btn" onclick="modifierDepuisCarnet()">✏️ MODIFIER</button>
-            <button class="carnet-close-btn" onclick="fermerCarnet()">← FERMER LE CARNET</button>
+    <!-- MODAL IMAGE GRANDE -->
+    <div id="modalImg" class="modal-img" onclick="this.style.display='none'">
+        <img id="modalImgSrc" src="" alt="">
+        <h3 id="modalImgNom"></h3>
+        <div class="stars-big" id="modalImgStars"></div>
+    </div>
+
+    <!-- MODAL COMMENTAIRE -->
+    <div id="modalNote" class="modal-note" onclick="this.style.display='none'">
+        <div class="modal-note-content" onclick="event.stopPropagation()">
+            <h3 id="modalNoteNom"></h3>
+            <div class="note-texte" id="modalNoteTexte"></div>
+            <button class="btn-fermer-note" onclick="document.getElementById('modalNote').style.display='none'">FERMER</button>
         </div>
     </div>
 
@@ -185,7 +152,6 @@
     <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName" style="font-family:'Bodoni Moda'; margin-bottom:30px;">Ma Cave</h1>
-        
         <button class="btn-gold" onclick="openRayon('ROUGES')">
             <span>VINS ROUGES</span>
             <svg viewBox="0 0 100 100"><path d="M48 5V22M44 22H56V5C56 3 55 2 52 2C49 2 48 3 48 5V22Z" fill="#310a0a" stroke="#600d0d"/><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d" stroke="#600d0d" stroke-width="1.5"/></svg>
@@ -202,7 +168,6 @@
             <span>CHAMPAGNES</span>
             <svg viewBox="0 0 100 100"><path d="M42 5V18H58V5C58 4 57 3 53 3H47C43 3 42 4 42 5V18Z" fill="#c5a059"/><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059" stroke-width="2"/></svg>
         </button>
-
         <button onclick="genererQR()" style="background:none; border:1.5px solid #444; color:#888; padding:12px 25px; border-radius:8px; margin-top:35px; cursor:pointer; text-transform:uppercase; font-size:0.85rem; display:flex; align-items:center; gap:10px; margin-left:auto; margin-right:auto;">🔗 Mon QR Code</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem; cursor:pointer;">Déconnexion</button>
     </div>
@@ -213,7 +178,7 @@
         <div id="readonly-badge-container"></div>
         <div id="container-vins" style="width:100%"></div>
         <button id="btn-add-vin" class="btn-add" onclick="goToAdd()">+</button>
-        <button id="btn-retour-liste" onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
+        <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
     </div>
 
     <!-- PAGE ADD -->
@@ -244,7 +209,6 @@
         const auth = firebase.auth(), db = firebase.database();
 
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
-        let carnetCurrentVin = null, carnetCurrentID = null;
         let isReadOnly = false;
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -254,7 +218,6 @@
             isReadOnly = true;
             userUID = viewUID;
             document.getElementById('btn-add-vin').style.display = 'none';
-            document.getElementById('carnetEditBtn').style.display = 'none';
             showPage('PAGE_HOME');
             document.getElementById('userName').innerText = "Cave partagée";
             document.querySelector('[onclick*="signOut"]').style.display = 'none';
@@ -282,8 +245,7 @@
         function openRayon(n) {
             rayonActuel = n;
             document.getElementById('rayonTitle').innerText = n;
-            const badge = document.getElementById('readonly-badge-container');
-            badge.innerHTML = isReadOnly ? '<div class="readonly-badge">👁 Mode consultation</div>' : '';
+            document.getElementById('readonly-badge-container').innerHTML = isReadOnly ? '<div class="readonly-badge">👁 Mode consultation</div>' : '';
             if (!isReadOnly) document.getElementById('btn-add-vin').style.display = 'block';
             chargerVins();
             showPage('PAGE_LISTE');
@@ -310,6 +272,26 @@
             reader.readAsDataURL(input.files[0]);
         }
 
+        function ouvrirImage(img, nom, etoiles) {
+            document.getElementById('modalImgSrc').src = img;
+            document.getElementById('modalImgNom').innerText = nom;
+            document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
+            document.getElementById('modalImg').style.display = 'flex';
+        }
+
+        function ouvrirNote(nom, note) {
+            document.getElementById('modalNoteNom').innerText = nom;
+            const el = document.getElementById('modalNoteTexte');
+            if (note && note.trim()) {
+                el.innerText = note;
+                el.classList.remove('empty');
+            } else {
+                el.innerText = 'Aucune note de dégustation.';
+                el.classList.add('empty');
+            }
+            document.getElementById('modalNote').style.display = 'flex';
+        }
+
         function chargerVins() {
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 const c = document.getElementById('container-vins');
@@ -318,66 +300,28 @@
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     count++;
-                    const stars = '★'.repeat(v.noteEtoiles || 0) + '☆'.repeat(5 - (v.noteEtoiles || 0));
-                    const notePreview = v.note ? (v.note.length > 40 ? v.note.substring(0, 40) + '…' : v.note) : '';
-
+                    const etoiles = v.noteEtoiles || 0;
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
-                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin">
+                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" title="Voir en grand">
                         <div class="vin-info">
                             <b>${v.nom}</b>
-                            <span style="color:var(--gold); font-size:0.85rem;">${stars}</span>
-                            ${notePreview ? `<span style="display:block; font-size:0.78rem; color:#888; margin-top:4px; font-style:italic;">"${notePreview}"</span>` : ''}
+                            <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
-                        <button class="btn-carnet" title="Ouvrir le carnet">📖</button>
-                        ${!isReadOnly ? `<button onclick="supprimer('${id}')" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:4px;">✕</button>` : ''}
+                        <button class="btn-carnet" title="Commentaire">📖</button>
+                        ${!isReadOnly ? `<button class="btn-suppr" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:4px; cursor:pointer;">✕</button>` : ''}
                     `;
-                    const btnCarnet = card.querySelector('.btn-carnet');
-                    btnCarnet._vinData = { id, v };
-                    btnCarnet.onclick = () => ouvrirCarnet(id, btnCarnet);
+                    card.querySelector('.img-vin').onclick = () => ouvrirImage(v.image || 'https://via.placeholder.com/300x450', v.nom, etoiles);
+                    card.querySelector('.btn-carnet').onclick = () => ouvrirNote(v.nom, v.note);
+                    if (!isReadOnly) card.querySelector('.btn-suppr').onclick = () => supprimer(id);
                     c.appendChild(card);
                 });
                 if (count === 0) {
                     c.innerHTML = `<p style="color:#555; margin-top:40px;">${isReadOnly ? 'Aucun vin dans cette catégorie.' : 'Aucun vin. Ajoutez-en un !'}</p>`;
                 }
             });
-        }
-
-        function ouvrirCarnet(id, btn) {
-            const { v } = btn._vinData;
-            carnetCurrentID = id;
-            carnetCurrentVin = v;
-
-            document.getElementById('carnetImg').src = v.image || 'https://via.placeholder.com/55x80';
-            document.getElementById('carnetNom').innerText = v.nom;
-            document.getElementById('carnetCat').innerText = rayonActuel;
-            document.getElementById('carnetQte').innerText = v.qte;
-
-            const n = v.noteEtoiles || 0;
-            document.getElementById('carnetStars').innerHTML =
-                '<span class="lit">★</span>'.repeat(n) + '<span>★</span>'.repeat(5 - n);
-
-            const noteEl = document.getElementById('carnetNote');
-            if (v.note && v.note.trim()) {
-                noteEl.innerText = v.note;
-                noteEl.classList.remove('empty');
-            } else {
-                noteEl.innerText = 'Aucune note de dégustation.';
-                noteEl.classList.add('empty');
-            }
-
-            document.getElementById('carnetOverlay').classList.add('open');
-        }
-
-        function fermerCarnet() {
-            document.getElementById('carnetOverlay').classList.remove('open');
-        }
-
-        function modifierDepuisCarnet() {
-            fermerCarnet();
-            prepareEdit(carnetCurrentID, carnetCurrentVin);
         }
 
         function goToAdd() {
