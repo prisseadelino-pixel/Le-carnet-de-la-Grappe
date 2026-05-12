@@ -53,9 +53,8 @@
         /* MODAL QR */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
-        .qr-wrapper { position: relative; width: 220px; height: 220px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
-        #qrImg { width: 100%; height: 100%; }
-        .qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 55px; height: 55px; background: white; border-radius: 8px; padding: 3px; }
+        .qr-wrapper { width: 260px; height: 260px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        .qr-wrapper img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
 
         /* MODAL IMAGE GRANDE */
         .modal-img { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 4000; justify-content: center; align-items: center; flex-direction: column; }
@@ -88,18 +87,9 @@
         .vin-info { flex: 1; min-width: 0; }
         .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
+        .btn-carnet { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
 
-        .btn-carnet {
-            background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold);
-            border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer;
-            margin-left: 8px; flex-shrink: 0;
-        }
-
-        .readonly-badge {
-            background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4);
-            color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px;
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;
-        }
+        .readonly-badge { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
@@ -113,10 +103,9 @@
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); font-family:'Bodoni Moda';">PARTAGER MA CAVE</h2>
-            <p style="color:#999; font-size:0.85rem; margin-top:-5px;">Scannez pour voir votre cave</p>
+            <p style="color:#999; font-size:0.85rem; margin-top:-5px;">Scannez pour accéder à ma cave</p>
             <div class="qr-wrapper">
-                <img id="qrImg" src="" alt="QR Code">
-                <img class="qr-logo" src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" alt="Logo">
+                <img src="https://i49.servimg.com/u/f49/11/31/89/70/mon" alt="QR Code">
             </div>
             <button class="btn-gold" style="min-height:50px; justify-content:center; margin:10px auto 0;" onclick="document.getElementById('qrModal').style.display='none'">FERMER</button>
         </div>
@@ -168,7 +157,7 @@
             <span>CHAMPAGNES</span>
             <svg viewBox="0 0 100 100"><path d="M42 5V18H58V5C58 4 57 3 53 3H47C43 3 42 4 42 5V18Z" fill="#c5a059"/><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059" stroke-width="2"/></svg>
         </button>
-        <button onclick="genererQR()" style="background:none; border:1.5px solid #444; color:#888; padding:12px 25px; border-radius:8px; margin-top:35px; cursor:pointer; text-transform:uppercase; font-size:0.85rem; display:flex; align-items:center; gap:10px; margin-left:auto; margin-right:auto;">🔗 Mon QR Code</button>
+        <button onclick="document.getElementById('qrModal').style.display='flex'" style="background:none; border:1.5px solid #444; color:#888; padding:12px 25px; border-radius:8px; margin-top:35px; cursor:pointer; text-transform:uppercase; font-size:0.85rem; display:flex; align-items:center; gap:10px; margin-left:auto; margin-right:auto;">🔗 Mon QR Code</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem; cursor:pointer;">Déconnexion</button>
     </div>
 
@@ -221,7 +210,7 @@
             showPage('PAGE_HOME');
             document.getElementById('userName').innerText = "Cave partagée";
             document.querySelector('[onclick*="signOut"]').style.display = 'none';
-            document.querySelector('[onclick*="genererQR"]').style.display = 'none';
+            document.querySelector('[onclick*="qrModal"]').style.display = 'none';
         } else {
             document.getElementById('googleLogin').onclick = () => {
                 auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
@@ -254,13 +243,6 @@
         function setStars(n) {
             noteEtoiles = n;
             document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n));
-        }
-
-        function genererQR() {
-            const caveUrl = window.location.origin + window.location.pathname + '?view=' + userUID;
-            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(caveUrl);
-            document.getElementById('qrImg').src = qrUrl;
-            document.getElementById('qrModal').style.display = 'flex';
         }
 
         function handleFile(input) {
@@ -333,18 +315,6 @@
             document.getElementById('preview').innerHTML = "";
             currentImg = "";
             setStars(0);
-            showPage('PAGE_ADD');
-        }
-
-        function prepareEdit(id, v) {
-            editID = id;
-            document.getElementById('addTitle').innerText = "Modifier";
-            document.getElementById('nomVin').value = v.nom;
-            document.getElementById('qteVin').value = v.qte;
-            document.getElementById('noteVin').value = v.note || "";
-            currentImg = v.image || "";
-            document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:100px; border-radius:8px;">` : "";
-            setStars(v.noteEtoiles || 0);
             showPage('PAGE_ADD');
         }
 
