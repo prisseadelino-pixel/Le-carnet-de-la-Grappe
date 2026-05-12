@@ -24,7 +24,6 @@
         
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; text-transform: uppercase; letter-spacing: 3px; margin: 25px 0; }
 
-        /* BOUTONS AVEC ICÔNES SYSTÈME GRANDIES */
         .btn-rayon { 
             background: rgba(255,255,255,0.05); border: 1px solid var(--brd); color: var(--gold); 
             padding: 0 25px; width: 92%; max-width: 480px; margin: 12px 0; 
@@ -38,7 +37,7 @@
         .intro-text b { color: var(--gold); display: block; margin-bottom: 8px; font-size: 1.1rem; }
         
         .card { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); padding: 15px; width: 98%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; }
-        .img-vin { width: 65px; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold); margin-right: 15px; }
+        .img-vin { width: 65px; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold); margin-right: 15px; cursor: pointer; }
         .vin-info { flex: 1; text-align: left; }
         .vin-info b { color: var(--gold); font-size: 1.1rem; display: block; }
         
@@ -55,10 +54,14 @@
 </head>
 <body>
 
+    <div id="imgModal" class="modal" onclick="this.style.display='none'">
+        <img id="imgZoomDisplay" style="max-width:90%; max-height:80vh; border:1px solid var(--gold); border-radius:10px;">
+    </div>
+
     <div id="noteModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); font-family:'Bodoni Moda'">CARNET DE NOTES</h2>
-            <div id="noteVinDisplay" style="background:white; color:#222; padding:20px; border-radius:8px; text-align:left; font-style:italic; line-height:1.6; margin-bottom:15px;"></div>
+            <div id="noteVinDisplay" style="background:white; color:#222; padding:20px; border-radius:8px; text-align:left; font-style:italic; line-height:1.6; margin-bottom:15px; white-space: pre-wrap;"></div>
             <button onclick="document.getElementById('noteModal').style.display='none'" class="btn-action">FERMER</button>
         </div>
     </div>
@@ -114,7 +117,7 @@
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%; max-width:500px;"></div>
-        <button onclick="goToAdd()" style="position:fixed; bottom:30px; right:25px; background:var(--gold); width:65px; height:65px; border-radius:50%; border:none; font-size:35px; font-weight:bold;">+</button>
+        <button onclick="goToAdd()" style="position:fixed; bottom:30px; right:25px; background:var(--gold); width:65px; height:65px; border-radius:50%; border:none; font-size:35px; font-weight:bold; box-shadow: 0 5px 15px rgba(0,0,0,0.4);">+</button>
         <button onclick="showPage('PAGE_HOME')" style="background:none; border:none; color:var(--gold); font-weight:700; margin-top:30px;">← RETOUR</button>
     </div>
 
@@ -148,14 +151,22 @@
         function showPage(id) { document.querySelectorAll('.p').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
         function openRayon(n) { rayonActuel = n; document.getElementById('rayonTitle').innerText = n === "CHAMPAGNES" ? n : "VINS " + n; chargerVins(); showPage('PAGE_LISTE'); }
 
+        function zoomPhoto(url) {
+            const modal = document.getElementById('imgModal');
+            document.getElementById('imgZoomDisplay').src = url;
+            modal.style.display = 'flex';
+        }
+
         function chargerVins() {
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 const c = document.getElementById('container-vins'); c.innerHTML = "";
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     const cleanNote = v.note ? v.note.replace(/'/g, "\\'").replace(/\n/g, " ") : "";
+                    const imgUrl = v.image || 'https://via.placeholder.com/150';
+                    
                     c.innerHTML += `<div class="card">
-                        <img src="${v.image || 'https://via.placeholder.com/150'}" class="img-vin" onclick="window.open(this.src)">
+                        <img src="${imgUrl}" class="img-vin" onclick="zoomPhoto('${imgUrl}')">
                         <div class="vin-info">
                             <b onclick="prepareEdit('${id}', ${JSON.stringify(v).replace(/"/g, '&quot;')})">${v.nom}</b>
                             ${v.note ? `<button onclick="document.getElementById('noteVinDisplay').innerText='${cleanNote}'; document.getElementById('noteModal').style.display='flex'" style="background:none; border:1px solid var(--gold); color:var(--gold); border-radius:10px; font-size:0.65rem; padding:4px 10px; margin-top:5px; cursor:pointer;">📒 NOTE</button>` : ''}
@@ -167,7 +178,7 @@
             });
         }
 
-        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:15px; border-radius:8px;">`; }; r.readAsDataURL(i.files[0]); }
+        function handleFile(i) { const r = new FileReader(); r.onload = (e) => { currentImg = e.target.result; document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:80px; margin-top:15px; border-radius:8px; border:1px solid var(--gold);">`; }; r.readAsDataURL(i.files[0]); }
         function goToAdd() { editID = null; document.getElementById('nomVin').value = ""; document.getElementById('qteVin').value = 1; document.getElementById('noteVin').value = ""; document.getElementById('preview').innerHTML = ""; currentImg = ""; showPage('PAGE_ADD'); }
         function prepareEdit(id, v) { editID = id; document.getElementById('nomVin').value = v.nom; document.getElementById('qteVin').value = v.qte; document.getElementById('noteVin').value = v.note || ""; currentImg = v.image || ""; document.getElementById('preview').innerHTML = v.image ? `<img src="${v.image}" style="width:80px; border-radius:8px;">` : ""; showPage('PAGE_ADD'); }
         
