@@ -12,7 +12,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
@@ -41,7 +40,8 @@
         }
         .btn-gold svg { height: 45px; width: auto; }
 
-        #qrcode { background: white; padding: 10px; border-radius: 10px; border: 3px solid var(--gold); display: inline-block; }
+        /* Style pour ton QR Code GitHub */
+        .qr-image { width: 150px; height: 150px; border: 3px solid var(--gold); border-radius: 12px; background: white; padding: 8px; box-shadow: 0 0 15px rgba(197,160,89,0.2); }
         .qr-section { margin-top: 25px; padding-bottom: 20px; }
 
         .card { background: #0d0d0d; border: 1px solid var(--brd); width: 100%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; padding: 12px; display: flex; align-items: center; text-align: left; box-sizing: border-box; }
@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <!-- CONNEXION AVEC RÉSUMÉ -->
+    <!-- PAGE DE CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Carnet de la Grappe</h1>
@@ -81,9 +81,11 @@
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
-    <!-- ACCUEIL -->
+    <!-- PAGE D'ACCUEIL -->
     <div id="PAGE_HOME" class="p">
+        <!-- Ton incarnation humaine -->
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="avatar" alt="Adelino">
+        
         <h1 id="userName" style="font-family:'Bodoni Moda';">Ma Cave</h1>
         
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span>ROUGES</span><svg viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d"/></svg></button>
@@ -92,14 +94,15 @@
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span>BULLES</span><svg viewBox="0 0 100 100"><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059"/></svg></button>
 
         <div class="qr-section">
-            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:12px;">SCANNEZ POUR ACCÉDER</p>
-            <div id="qrcode"></div>
+            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:12px;">PARTAGER MA CAVE</p>
+            <!-- Ton nouveau QR Code GitHub personnalisé -->
+            <img src="mon-qrcode.png" class="qr-image" alt="QR Code Cave">
         </div>
 
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
     </div>
 
-    <!-- LISTE -->
+    <!-- ... (Reste du code identique : LISTE et AJOUT) ... -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -107,7 +110,6 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
-    <!-- AJOUT -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -134,16 +136,6 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
-
-        // Génération du QR Code avec ton lien spécifique
-        new QRCode(document.getElementById("qrcode"), {
-            text: "https://qr.codes/vQpenR",
-            width: 120,
-            height: 120,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
 
         document.getElementById('googleLogin').onclick = () => {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
