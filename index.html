@@ -12,6 +12,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <!-- Script pour générer un QR Code propre -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
@@ -21,22 +24,14 @@
         .active { display: flex !important; }
         
         .logo { width: 100px; height: auto; margin-bottom: 10px; border: 1.5px solid var(--gold); padding: 5px; border-radius: 8px; }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--gold); margin: 10px 0; object-fit: cover; }
+        
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.6rem; margin: 10px 0; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* RÉSUMÉ CONCEPT (PAGE CONNEXION) */
         .resume-concept {
-            background: rgba(197,160,89,0.05);
-            border: 1px solid var(--gold);
-            border-radius: 12px;
-            padding: 20px;
-            width: 90%;
-            max-width: 450px;
-            margin: 20px 0;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #eee;
+            background: rgba(197,160,89,0.05); border: 1px solid var(--gold); border-radius: 12px;
+            padding: 20px; width: 90%; max-width: 450px; margin: 20px 0; font-size: 0.95rem; line-height: 1.6; color: #eee;
         }
-        .resume-concept b { color: var(--gold); display: block; font-size: 1.1rem; margin-bottom: 10px; }
 
         .btn-gold { 
             background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); 
@@ -45,27 +40,18 @@
             border-radius: 12px; display: flex; align-items: center; 
             justify-content: space-between; box-sizing: border-box; min-height: 80px;
         }
-        .btn-gold svg { height: 50px; width: auto; flex-shrink: 0; }
+        .btn-gold svg { height: 50px; width: auto; }
 
-        /* QR CODE */
-        .qr-section { margin-top: 30px; padding-bottom: 20px; }
-        .qr-code { width: 130px; height: 130px; border: 2px solid var(--gold); border-radius: 10px; padding: 5px; background: white; box-shadow: 0 0 15px rgba(197,160,89,0.3); }
+        /* QR CODE GENERÉ */
+        #qrcode { background: white; padding: 10px; border-radius: 10px; border: 3px solid var(--gold); margin: 0 auto; display: inline-block; }
+        .qr-section { margin-top: 25px; }
 
-        /* CARTES LISTE */
-        .card { 
-            background: #0d0d0d; border: 1px solid var(--brd); width: 100%; max-width: 500px; 
-            margin-bottom: 12px; border-radius: 12px; padding: 12px; display: flex; align-items: center; text-align: left; box-sizing: border-box;
-        }
+        .card { background: #0d0d0d; border: 1px solid var(--brd); width: 100%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; padding: 12px; display: flex; align-items: center; text-align: left; box-sizing: border-box; }
         .img-vin { width: 50px; height: 75px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gold); margin-right: 12px; }
         .vin-info { flex: 1; }
-        .btn-note { 
-            background: none; border: 1px solid var(--gold); color: var(--gold); 
-            border-radius: 50%; width: 35px; height: 35px; display: flex; 
-            align-items: center; justify-content: center; cursor: pointer; margin-right: 8px;
-        }
+        .btn-note { background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-right: 8px; }
         .btn-note svg { width: 18px; height: 18px; fill: var(--gold); }
 
-        /* MODAL */
         .modal-note { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center; }
         .modal-note-content { background: #111; padding: 25px; border-radius: 15px; border: 2px solid var(--gold); width: 85%; max-width: 400px; text-align: center; }
 
@@ -85,7 +71,7 @@
         </div>
     </div>
 
-    <!-- PAGE DE CONNEXION AVEC RÉSUMÉ -->
+    <!-- PAGE DE CONNEXION -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Carnet de la Grappe</h1>
@@ -93,14 +79,17 @@
         <div class="resume-concept">
             <b>Votre cave, toujours en poche.</b>
             Une application élégante pour gérer vos bouteilles de <b>vins</b> et <b>champagnes</b>. <br><br>
-            Notez vos coups de cœur, suivez votre inventaire en temps réel et emportez vos précieux <b>carnets de dégustation</b> partout avec vous.
+            Notez vos coups de cœur, suivez votre inventaire et emportez vos précieux <b>carnets de dégustation</b> partout.
         </div>
 
-        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; margin-top:10px;">SE CONNECTER AVEC GOOGLE</button>
+        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px;">SE CONNECTER AVEC GOOGLE</button>
     </div>
 
-    <!-- PAGE D'ACCUEIL AVEC QR CODE -->
+    <!-- PAGE D'ACCUEIL -->
     <div id="PAGE_HOME" class="p">
+        <!-- Mon Incarnation Humaine -->
+        <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="avatar" alt="Gemini">
+        
         <h1 id="userName" style="font-family:'Bodoni Moda';">Ma Cave</h1>
         
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span>ROUGES</span><svg viewBox="0 0 100 100"><path d="M43 22C35 25 32 32 32 40V88C32 91 35 94 38 94H62C65 94 68 91 68 88V40C68 32 65 25 57 22H43Z" fill="#7a0d0d"/></svg></button>
@@ -109,13 +98,14 @@
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span>BULLES</span><svg viewBox="0 0 100 100"><path d="M42 20C32 25 29 35 29 45V88C29 91 32 94 36 94H64C68 94 71 91 71 88V45C71 35 68 25 58 20H42Z" fill="#151515" stroke="#c5a059"/></svg></button>
 
         <div class="qr-section">
-            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:10px;">VOTRE ACCÈS DIRECT</p>
-            <img src="https://i.servimg.com/u/f49/11/31/89/70/screen11.jpg" class="qr-code" alt="QR Code">
+            <p style="font-size:0.7rem; color:var(--gold); letter-spacing:1px; margin-bottom:12px;">PARTAGER MA CAVE</p>
+            <div id="qrcode"></div>
         </div>
 
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
     </div>
 
+    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="container-vins" style="width:100%"></div>
@@ -123,6 +113,7 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700;">← RETOUR</button>
     </div>
 
+    <!-- PAGE AJOUT -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -149,6 +140,16 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
+
+        // Génération du QR Code avec l'URL actuelle du site
+        new QRCode(document.getElementById("qrcode"), {
+            text: window.location.href,
+            width: 120,
+            height: 120,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
 
         document.getElementById('googleLogin').onclick = () => {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
