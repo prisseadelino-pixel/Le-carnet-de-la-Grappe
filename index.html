@@ -9,9 +9,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="icon" type="image/jpg" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
 
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    
+    <!-- Générateur de QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;700&display=swap');
@@ -35,7 +39,6 @@
             justify-content: space-between; box-sizing: border-box; min-height: 100px;
         }
 
-        /* Animation des bouteilles */
         .img-button { 
             height: 85px; width: auto; object-fit: contain; 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
@@ -47,8 +50,10 @@
             z-index: 10;
         }
 
-        .qr-image { width: 150px; height: 150px; border: 3px solid var(--gold); border-radius: 12px; background: white; padding: 8px; }
-        .qr-section { margin-top: 25px; padding-bottom: 20px; }
+        /* Section QR Code */
+        .qr-section { margin-top: 25px; padding-bottom: 20px; display: flex; flex-direction: column; align-items: center; }
+        #qrcode { background: white; padding: 10px; border-radius: 12px; border: 3px solid var(--gold); }
+        #qrcode img { width: 150px; height: 150px; }
 
         .card { background: #0d0d0d; border: 1px solid var(--brd); width: 100%; max-width: 500px; margin-bottom: 12px; border-radius: 12px; padding: 12px; display: flex; align-items: center; text-align: left; box-sizing: border-box; }
         .img-vin { width: 50px; height: 75px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gold); margin-right: 12px; }
@@ -109,7 +114,7 @@
 
         <div class="qr-section">
             <p style="font-size:0.7rem; color:var(--gold); letter-spacing:2px; margin-bottom:12px;">PARTAGER MA CAVE</p>
-            <img src="mon-qrcode.png" class="qr-image">
+            <div id="qrcode"></div>
         </div>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:20px; text-decoration:underline;">Déconnexion</button>
     </div>
@@ -149,6 +154,16 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(), db = firebase.database();
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
+
+        // Génération auto du QR Code basé sur l'URL actuelle
+        new QRCode(document.getElementById("qrcode"), {
+            text: window.location.href,
+            width: 150,
+            height: 150,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
 
         document.getElementById('googleLogin').onclick = () => {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
