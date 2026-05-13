@@ -87,7 +87,7 @@
         .vin-info { flex: 1; min-width: 0; }
         .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
-        .btn-carnet { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
+        .btn-carnet, .btn-edit { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
 
         .readonly-badge { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
@@ -170,7 +170,7 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
     </div>
 
-    <!-- PAGE ADD -->
+    <!-- PAGE ADD (Servira aussi à l'édition) -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -293,11 +293,17 @@
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
                         <button class="btn-carnet" title="Commentaire">📖</button>
-                        ${!isReadOnly ? `<button class="btn-suppr" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:4px; cursor:pointer;">✕</button>` : ''}
+                        ${!isReadOnly ? `
+                            <button class="btn-edit" title="Modifier">✎</button>
+                            <button class="btn-suppr" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:4px; cursor:pointer;">✕</button>
+                        ` : ''}
                     `;
                     card.querySelector('.img-vin').onclick = () => ouvrirImage(v.image || 'https://via.placeholder.com/300x450', v.nom, etoiles);
                     card.querySelector('.btn-carnet').onclick = () => ouvrirNote(v.nom, v.note);
-                    if (!isReadOnly) card.querySelector('.btn-suppr').onclick = () => supprimer(id);
+                    if (!isReadOnly) {
+                        card.querySelector('.btn-suppr').onclick = () => supprimer(id);
+                        card.querySelector('.btn-edit').onclick = () => preparerEdition(id, v);
+                    }
                     c.appendChild(card);
                 });
                 if (count === 0) {
@@ -318,25 +324,56 @@
             showPage('PAGE_ADD');
         }
 
+        function preparerEdition(id, v) {
+            editID = id;
+            document.getElementById('addTitle').innerText = "Modifier";
+            document.getElementById('nomVin').value = v.nom;
+            document.getElementById('qteVin').value = v.qte;
+            document.getElementById('noteVin').value = v.note || "";
+            currentImg = v.image || "";
+            if(currentImg) {
+                document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">`;
+            } else {
+                document.getElementById('preview').innerHTML = "";
+            }
+            setStars(v.noteEtoiles || 0);
+            showPage('PAGE_ADD');
+        }
+
         function supprimer(id) {
             if (confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove();
         }
 
         function sauvegarderVin() {
-            const nom = document.getElementById('nomVin').value.trim();
-            if (!nom) return alert("Veuillez entrer un nom.");
+            const nom = document.getElementById('nomVin').value;
+            const qte = document.getElementById('qteVin').value;
+            const note = document.getElementById('noteVin').value;
+
+            if(!nom) { alert("Veuillez donner un nom au vin."); return; }
+
             const data = {
-                nom,
-                qte: parseInt(document.getElementById('qteVin').value) || 1,
-                note: document.getElementById('noteVin').value,
-                noteEtoiles,
+                nom: nom,
+                qte: qte,
+                note: note,
+                noteEtoiles: noteEtoiles,
                 image: currentImg,
                 categorie: rayonActuel
             };
-            if (editID) {
-                db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
+
+            if(editID) {
+                // MISE À JOUR
+                db.ref('users/' + userUID + '/cave/' + editID).update(data)
+                .then(() => {
+                    alert("Vin mis à jour !");
+                    showPage('PAGE_LISTE');
+                });
             } else {
-                db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
+                // CRÉATION
+                db.ref('users/' + userUID + '/cave').push(data)
+                .then(() => {
+                    alert("Vin ajouté !");
+                    showPage('PAGE_LISTE');
+                });
             }
         }
     </script>
