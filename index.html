@@ -38,7 +38,6 @@
         }
         .intro-text span { color: #ccc; font-weight: 400; }
 
-        /* BOUTONS ACCUEIL STYLE BOUTEILLE */
         .btn-gold {
             background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold);
             padding: 0; width: 95%; max-width: 600px; margin: 10px 0;
@@ -49,32 +48,20 @@
         }
         .btn-gold:active { background: rgba(197,160,89,0.12); transform: scale(0.98); }
 
-        .btn-label {
-            flex: 1; text-align: left; padding-left: 25px; font-size: 1.05rem; letter-spacing: 2px;
-        }
+        .btn-label { flex: 1; text-align: left; padding-left: 25px; font-size: 1.05rem; letter-spacing: 2px; }
+        .btn-bottle-wrap { width: 130px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .btn-bottle-wrap svg { height: 105px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); }
 
-        .btn-bottle-wrap {
-            width: 130px; height: 110px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
-        .btn-bottle-wrap svg {
-            height: 105px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
-        }
-
-        /* MODAL QR */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
         .qr-wrapper { width: 260px; height: 260px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
         .qr-wrapper img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
 
-        /* MODAL IMAGE GRANDE */
         .modal-img { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 4000; justify-content: center; align-items: center; flex-direction: column; }
         .modal-img img { max-width: 90%; max-height: 75vh; border-radius: 12px; border: 2px solid var(--gold); }
         .modal-img h3 { color: var(--gold); font-family: 'Bodoni Moda', serif; margin: 20px 0 5px; font-size: 1.4rem; }
         .modal-img .stars-big { font-size: 1.6rem; color: var(--gold); margin-bottom: 10px; }
 
-        /* MODAL COMMENTAIRE */
         .modal-note { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 4000; justify-content: center; align-items: center; }
         .modal-note-content { background: #0d0d0d; border: 1.5px solid var(--gold); border-radius: 15px; width: 88%; max-width: 420px; padding: 25px; text-align: left; }
         .modal-note-content h3 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 0 0 15px; font-size: 1.1rem; }
@@ -82,16 +69,17 @@
         .note-texte.empty { color: #555; font-style: normal; border-left-color: #333; }
         .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #333; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
 
-        /* CARTES */
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
         .vin-info { flex: 1; min-width: 0; }
         .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
-        .btn-carnet { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
+        .btn-carnet, .btn-edit-vin { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
+        .btn-suppr { background: none; border: none; color: #ff4444; font-size: 1.5rem; margin-left: 4px; cursor: pointer; flex-shrink: 0; }
+        
         .readonly-badge { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 100; }
         input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
         .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
@@ -141,144 +129,10 @@
     <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName" style="font-family:'Bodoni Moda'; margin-bottom:20px;">Ma Cave</h1>
-
-        <!-- ROUGE -->
-        <button class="btn-gold" onclick="openRayon('ROUGES')">
-            <span class="btn-label">VINS ROUGES</span>
-            <div class="btn-bottle-wrap">
-                <svg viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="redG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#5a0a0a"/>
-                            <stop offset="40%" style="stop-color:#9b1a1a"/>
-                            <stop offset="70%" style="stop-color:#c0282a"/>
-                            <stop offset="100%" style="stop-color:#6b0e0e"/>
-                        </linearGradient>
-                        <linearGradient id="redCapG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#3a0606"/>
-                            <stop offset="50%" style="stop-color:#7a1010"/>
-                            <stop offset="100%" style="stop-color:#3a0606"/>
-                        </linearGradient>
-                    </defs>
-                    <!-- Corps large -->
-                    <rect x="8" y="75" width="44" height="72" rx="6" fill="url(#redG)"/>
-                    <!-- Épaules -->
-                    <path d="M8 75 Q8 58 18 52 L18 42 L42 42 L42 52 Q52 58 52 75Z" fill="url(#redG)"/>
-                    <!-- Col -->
-                    <rect x="22" y="18" width="16" height="26" rx="3" fill="url(#redCapG)"/>
-                    <!-- Capsule -->
-                    <rect x="20" y="12" width="20" height="10" rx="3" fill="#2a0404"/>
-                    <!-- Haut capsule -->
-                    <rect x="23" y="8" width="14" height="6" rx="2" fill="#3a0606"/>
-                    <!-- Étiquette -->
-                    <rect x="13" y="82" width="34" height="40" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,200,150,0.3)" stroke-width="0.8"/>
-                    <!-- Reflet -->
-                    <rect x="10" y="58" width="5" height="55" rx="2" fill="rgba(255,255,255,0.08)"/>
-                    <!-- Base -->
-                    <rect x="8" y="144" width="44" height="3" rx="2" fill="#3a0606"/>
-                </svg>
-            </div>
-        </button>
-
-        <!-- BLANC -->
-        <button class="btn-gold" onclick="openRayon('BLANCS')">
-            <span class="btn-label">VINS BLANCS</span>
-            <div class="btn-bottle-wrap">
-                <svg viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="whiteG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#c8b870"/>
-                            <stop offset="30%" style="stop-color:#f0e8c0"/>
-                            <stop offset="60%" style="stop-color:#fdf6d8"/>
-                            <stop offset="100%" style="stop-color:#c8b870"/>
-                        </linearGradient>
-                        <linearGradient id="whiteCapG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#2a2a2a"/>
-                            <stop offset="50%" style="stop-color:#4a4a4a"/>
-                            <stop offset="100%" style="stop-color:#2a2a2a"/>
-                        </linearGradient>
-                    </defs>
-                    <rect x="8" y="75" width="44" height="72" rx="6" fill="url(#whiteG)"/>
-                    <path d="M8 75 Q8 58 18 52 L18 42 L42 42 L42 52 Q52 58 52 75Z" fill="url(#whiteG)"/>
-                    <rect x="22" y="18" width="16" height="26" rx="3" fill="url(#whiteCapG)"/>
-                    <rect x="20" y="12" width="20" height="10" rx="3" fill="#1a1a1a"/>
-                    <rect x="23" y="8" width="14" height="6" rx="2" fill="#2a2a2a"/>
-                    <rect x="13" y="82" width="34" height="40" rx="4" fill="rgba(180,140,60,0.15)" stroke="rgba(197,160,89,0.4)" stroke-width="0.8"/>
-                    <rect x="10" y="58" width="5" height="55" rx="2" fill="rgba(255,255,255,0.25)"/>
-                    <rect x="8" y="144" width="44" height="3" rx="2" fill="#b8a860"/>
-                </svg>
-            </div>
-        </button>
-
-        <!-- ROSÉ -->
-        <button class="btn-gold" onclick="openRayon('ROSES')">
-            <span class="btn-label">VINS ROSÉS</span>
-            <div class="btn-bottle-wrap">
-                <svg viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="roseG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#d4748a"/>
-                            <stop offset="35%" style="stop-color:#f0aab8"/>
-                            <stop offset="65%" style="stop-color:#fac8d0"/>
-                            <stop offset="100%" style="stop-color:#d4748a"/>
-                        </linearGradient>
-                        <linearGradient id="roseCapG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#2a2a2a"/>
-                            <stop offset="50%" style="stop-color:#4a4a4a"/>
-                            <stop offset="100%" style="stop-color:#2a2a2a"/>
-                        </linearGradient>
-                    </defs>
-                    <rect x="8" y="75" width="44" height="72" rx="6" fill="url(#roseG)"/>
-                    <path d="M8 75 Q8 58 18 52 L18 42 L42 42 L42 52 Q52 58 52 75Z" fill="url(#roseG)"/>
-                    <rect x="22" y="18" width="16" height="26" rx="3" fill="url(#roseCapG)"/>
-                    <rect x="20" y="12" width="20" height="10" rx="3" fill="#1a1a1a"/>
-                    <rect x="23" y="8" width="14" height="6" rx="2" fill="#2a2a2a"/>
-                    <rect x="13" y="82" width="34" height="40" rx="4" fill="rgba(255,255,255,0.1)" stroke="rgba(255,180,190,0.4)" stroke-width="0.8"/>
-                    <rect x="10" y="58" width="5" height="55" rx="2" fill="rgba(255,255,255,0.2)"/>
-                    <rect x="8" y="144" width="44" height="3" rx="2" fill="#c06070"/>
-                </svg>
-            </div>
-        </button>
-
-        <!-- CHAMPAGNE -->
-        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')">
-            <span class="btn-label">CHAMPAGNES</span>
-            <div class="btn-bottle-wrap">
-                <svg viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="champG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#8a7020"/>
-                            <stop offset="35%" style="stop-color:#c5a040"/>
-                            <stop offset="65%" style="stop-color:#e8c060"/>
-                            <stop offset="100%" style="stop-color:#8a7020"/>
-                        </linearGradient>
-                        <linearGradient id="champNeckG" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#6a5518"/>
-                            <stop offset="50%" style="stop-color:#a88530"/>
-                            <stop offset="100%" style="stop-color:#6a5518"/>
-                        </linearGradient>
-                    </defs>
-                    <!-- Corps champagne plus large en bas -->
-                    <path d="M6 147 Q6 140 8 130 L8 90 Q8 80 14 74 L20 55 L20 38 L40 38 L40 55 L46 74 Q52 80 52 90 L52 130 Q54 140 54 147Z" fill="url(#champG)"/>
-                    <!-- Col long et élégant -->
-                    <rect x="22" y="14" width="16" height="26" rx="3" fill="url(#champNeckG)"/>
-                    <!-- Muselet (cage métallique) -->
-                    <rect x="19" y="8" width="22" height="9" rx="2" fill="#2a1e08"/>
-                    <!-- Bouchon -->
-                    <ellipse cx="30" cy="8" rx="8" ry="5" fill="#3a2a0a"/>
-                    <ellipse cx="30" cy="6" rx="6" ry="3" fill="#c5a040"/>
-                    <!-- Étiquette -->
-                    <rect x="11" y="88" width="38" height="44" rx="4" fill="rgba(0,0,0,0.3)" stroke="rgba(197,160,89,0.5)" stroke-width="1"/>
-                    <!-- Petit noeud déco -->
-                    <path d="M24 110 Q30 105 36 110 Q30 115 24 110Z" fill="rgba(0,0,0,0.5)" stroke="rgba(197,160,89,0.6)" stroke-width="0.8"/>
-                    <!-- Reflet -->
-                    <rect x="9" y="74" width="4" height="60" rx="2" fill="rgba(255,255,255,0.12)"/>
-                    <!-- Base -->
-                    <ellipse cx="30" cy="147" rx="24" ry="4" fill="#6a5010"/>
-                </svg>
-            </div>
-        </button>
-
+        <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="btn-label">VINS ROUGES</span><div class="btn-bottle-wrap"><svg viewBox="0 0 60 160"><rect x="8" y="75" width="44" height="72" rx="6" fill="#7a1010"/><path d="M8 75 Q8 58 18 52 L18 42 L42 42 L42 52 Q52 58 52 75Z" fill="#7a1010"/><rect x="22" y="18" width="16" height="26" rx="3" fill="#3a0606"/></svg></div></button>
+        <button class="btn-gold" onclick="openRayon('BLANCS')"><span class="btn-label">VINS BLANCS</span><div class="btn-bottle-wrap"><svg viewBox="0 0 60 160"><rect x="8" y="75" width="44" height="72" rx="6" fill="#f0e8c0"/><path d="M8 75 Q8 58 18 52 L18 42 L42 42 L42 52 Q52 58 52 75Z" fill="#f0e8c0"/><rect x="22" y="18" width="16" height="26" rx="3" fill="#2a2a2a"/></svg></div></button>
+        <button class="btn-gold" onclick="openRayon('ROSES')"><span class="btn-label">VINS ROSÉS</span><div class="btn-bottle-wrap"><svg viewBox="0 0 60 160"><rect x="8" y="75" width="44" height="72" rx="6" fill="#f0aab8"/><path d="M8 75 Q8 58 18 52 L18 42 L42 42 L42 52 Q52 58 52 75Z" fill="#f0aab8"/><rect x="22" y="18" width="16" height="26" rx="3" fill="#2a2a2a"/></svg></div></button>
+        <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span class="btn-label">CHAMPAGNES</span><div class="btn-bottle-wrap"><svg viewBox="0 0 60 160"><path d="M6 147 Q6 140 8 130 L8 90 Q8 80 14 74 L20 55 L20 38 L40 38 L40 55 L46 74 Q52 80 52 90 L52 130 Q54 140 54 147Z" fill="#c5a040"/><rect x="22" y="14" width="16" height="26" rx="3" fill="#6a5518"/></svg></div></button>
         <button onclick="document.getElementById('qrModal').style.display='flex'" style="background:none; border:1.5px solid #444; color:#888; padding:12px 25px; border-radius:8px; margin-top:35px; cursor:pointer; text-transform:uppercase; font-size:0.85rem; display:flex; align-items:center; gap:10px; margin-left:auto; margin-right:auto;">🔗 Mon QR Code</button>
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem; cursor:pointer;">Déconnexion</button>
     </div>
@@ -292,7 +146,7 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
     </div>
 
-    <!-- PAGE ADD -->
+    <!-- PAGE ADD / EDIT -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
@@ -376,26 +230,6 @@
             reader.readAsDataURL(input.files[0]);
         }
 
-        function ouvrirImage(img, nom, etoiles) {
-            document.getElementById('modalImgSrc').src = img;
-            document.getElementById('modalImgNom').innerText = nom;
-            document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
-            document.getElementById('modalImg').style.display = 'flex';
-        }
-
-        function ouvrirNote(nom, note) {
-            document.getElementById('modalNoteNom').innerText = nom;
-            const el = document.getElementById('modalNoteTexte');
-            if (note && note.trim()) {
-                el.innerText = note;
-                el.classList.remove('empty');
-            } else {
-                el.innerText = 'Aucune note de dégustation.';
-                el.classList.add('empty');
-            }
-            document.getElementById('modalNote').style.display = 'flex';
-        }
-
         function chargerVins() {
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 const c = document.getElementById('container-vins');
@@ -408,23 +242,21 @@
                     const card = document.createElement('div');
                     card.className = 'card';
                     card.innerHTML = `
-                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" title="Voir en grand">
+                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${v.image || 'https://via.placeholder.com/300x450'}', '${v.nom.replace(/'/g, "\\'")}', ${etoiles})">
                         <div class="vin-info">
                             <b>${v.nom}</b>
                             <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
-                        <button class="btn-carnet" title="Commentaire">📖</button>
-                        ${!isReadOnly ? `<button class="btn-suppr" style="background:none; border:none; color:#ff4444; font-size:1.5rem; margin-left:4px; cursor:pointer;">✕</button>` : ''}
+                        <button class="btn-carnet" onclick="ouvrirNote('${v.nom.replace(/'/g, "\\'")}', '${(v.note || "").replace(/'/g, "\\'")}')">📖</button>
+                        ${!isReadOnly ? `
+                            <button class="btn-edit-vin" onclick="preparerModif('${id}')">✏️</button>
+                            <button class="btn-suppr" onclick="supprimer('${id}')">✕</button>
+                        ` : ''}
                     `;
-                    card.querySelector('.img-vin').onclick = () => ouvrirImage(v.image || 'https://via.placeholder.com/300x450', v.nom, etoiles);
-                    card.querySelector('.btn-carnet').onclick = () => ouvrirNote(v.nom, v.note);
-                    if (!isReadOnly) card.querySelector('.btn-suppr').onclick = () => supprimer(id);
                     c.appendChild(card);
                 });
-                if (count === 0) {
-                    c.innerHTML = `<p style="color:#555; margin-top:40px;">${isReadOnly ? 'Aucun vin dans cette catégorie.' : 'Aucun vin. Ajoutez-en un !'}</p>`;
-                }
+                if (count === 0) c.innerHTML = `<p style="color:#555; margin-top:40px;">${isReadOnly ? 'Aucun vin.' : 'Aucun vin. Ajoutez-en un !'}</p>`;
             });
         }
 
@@ -440,8 +272,19 @@
             showPage('PAGE_ADD');
         }
 
-        function supprimer(id) {
-            if (confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove();
+        function preparerModif(id) {
+            db.ref('users/' + userUID + '/cave/' + id).once('value', s => {
+                const v = s.val();
+                editID = id;
+                document.getElementById('addTitle').innerText = "Modifier";
+                document.getElementById('nomVin').value = v.nom;
+                document.getElementById('qteVin').value = v.qte;
+                document.getElementById('noteVin').value = v.note || "";
+                currentImg = v.image || "";
+                document.getElementById('preview').innerHTML = currentImg ? `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">` : "";
+                setStars(v.noteEtoiles || 0);
+                showPage('PAGE_ADD');
+            });
         }
 
         function sauvegarderVin() {
@@ -455,11 +298,22 @@
                 image: currentImg,
                 categorie: rayonActuel
             };
-            if (editID) {
-                db.ref('users/' + userUID + '/cave/' + editID).update(data).then(() => showPage('PAGE_LISTE'));
-            } else {
-                db.ref('users/' + userUID + '/cave').push(data).then(() => showPage('PAGE_LISTE'));
-            }
+            const ref = editID ? db.ref('users/' + userUID + '/cave/' + editID) : db.ref('users/' + userUID + '/cave').push();
+            ref.set(data).then(() => showPage('PAGE_LISTE'));
+        }
+
+        function supprimer(id) { if (confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        function ouvrirImage(img, nom, etoiles) {
+            document.getElementById('modalImgSrc').src = img;
+            document.getElementById('modalImgNom').innerText = nom;
+            document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
+            document.getElementById('modalImg').style.display = 'flex';
+        }
+        function ouvrirNote(nom, note) {
+            document.getElementById('modalNoteNom').innerText = nom;
+            const el = document.getElementById('modalNoteTexte');
+            el.innerText = note.trim() ? note : 'Aucune note.';
+            document.getElementById('modalNote').style.display = 'flex';
         }
     </script>
 </body>
