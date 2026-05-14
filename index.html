@@ -69,7 +69,7 @@
         .note-texte.empty { color: #555; font-style: normal; border-left-color: #333; }
         .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #333; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
 
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; }
+        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; transition: opacity 0.3s; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
         .vin-info { flex: 1; min-width: 0; }
         .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
@@ -241,6 +241,8 @@
                     const etoiles = v.noteEtoiles || 0;
                     const card = document.createElement('div');
                     card.className = 'card';
+                    if (v.qte === 0) card.style.opacity = "0.5";
+                    
                     card.innerHTML = `
                         <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${v.image || 'https://via.placeholder.com/300x450'}', '${v.nom.replace(/'/g, "\\'")}', ${etoiles})">
                         <div class="vin-info">
@@ -289,10 +291,15 @@
 
         function sauvegarderVin() {
             const nom = document.getElementById('nomVin').value.trim();
+            const inputQte = document.getElementById('qteVin').value;
             if (!nom) return alert("Veuillez entrer un nom.");
+            
+            // Correction pour accepter la quantité 0
+            const qteVal = (inputQte !== "" && !isNaN(inputQte)) ? parseInt(inputQte) : 1;
+
             const data = {
                 nom,
-                qte: parseInt(document.getElementById('qteVin').value) || 1,
+                qte: qteVal,
                 note: document.getElementById('noteVin').value,
                 noteEtoiles,
                 image: currentImg,
@@ -303,12 +310,14 @@
         }
 
         function supprimer(id) { if (confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
+        
         function ouvrirImage(img, nom, etoiles) {
             document.getElementById('modalImgSrc').src = img;
             document.getElementById('modalImgNom').innerText = nom;
             document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
             document.getElementById('modalImg').style.display = 'flex';
         }
+        
         function ouvrirNote(nom, note) {
             document.getElementById('modalNoteNom').innerText = nom;
             const el = document.getElementById('modalNoteTexte');
