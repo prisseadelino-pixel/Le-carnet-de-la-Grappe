@@ -7,14 +7,13 @@
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="manifest.json">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="La Grappe">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="icon" type="image/jpg" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-
-    <link rel="manifest" href='data:application/json,{"name":"Le Carnet de la Grappe","short_name":"La Grappe","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg","sizes":"192x192","type":"image/jpeg"}]}'>
 
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
@@ -252,7 +251,7 @@
                         <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${id}')">
                         <div class="vin-info">
                             <b>${v.nom}</b>
-                            <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
+                            <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'::content::nbsp;'.repeat(5-etoiles)}</span>
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
                         <button class="btn-carnet" onclick="ouvrirNote('${id}')">📖</button>
