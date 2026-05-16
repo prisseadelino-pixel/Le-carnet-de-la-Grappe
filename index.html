@@ -89,6 +89,10 @@
         input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
         .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
+
+        /* Conteneur pour aligner les deux choix de photos */
+        .photo-actions-container { display: flex; gap: 10px; width: 95%; max-width: 600px; margin: 8px 0; }
+        .btn-half { flex: 1; margin: 0 !important; min-height: 60px !important; font-size: 0.95rem !important; }
     </style>
 </head>
 <body>
@@ -150,8 +154,17 @@
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:60px; padding:0 20px;">📷 PHOTO</button>
-        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+        
+        <!-- Section séparée en deux choix : Appareil photo ou Galerie -->
+        <div class="photo-actions-container">
+            <button class="btn-gold btn-half" onclick="document.getElementById('cameraInput').click()" style="justify-content:center; border-style:dashed; padding:0 10px;">📷 APPAREIL</button>
+            <button class="btn-gold btn-half" onclick="document.getElementById('galleryInput').click()" style="justify-content:center; border-style:dashed; padding:0 10px;">🖼️ GALERIE</button>
+        </div>
+        
+        <!-- Inputs cachés distincts -->
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleFile(this)">
+        <input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+        
         <div id="preview"></div>
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
@@ -222,6 +235,7 @@
         }
 
         function handleFile(input) {
+            if (!input.files || !input.files[0]) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 currentImg = e.target.result;
