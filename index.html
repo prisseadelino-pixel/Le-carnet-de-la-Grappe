@@ -7,7 +7,7 @@
     
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
-    <link rel="manifest" href="manifest.json">
+    <link class="manifest-link" rel="manifest" href="manifest.json">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -150,7 +150,7 @@
         <h1 id="addTitle">Ajouter</h1>
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:60px; padding:0 20px;">📷 PHOTO</button>
+        <button class="btn-gold" onclick="document.getElementById('fileInput').click()" style="justify-content:center; border-style:dashed; min-height:60px; padding:0 20px;">📷 PHOTO / GALERIE</button>
         <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
         <div id="preview"></div>
         <div class="stars" id="starRating">
@@ -222,6 +222,7 @@
         }
 
         function handleFile(input) {
+            if (!input.files || !input.files[0]) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 currentImg = e.target.result;
