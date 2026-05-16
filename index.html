@@ -251,7 +251,7 @@
                         <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${id}')">
                         <div class="vin-info">
                             <b>${v.nom}</b>
-                            <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'::content::nbsp;'.repeat(5-etoiles)}</span>
+                            <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
                         <button class="btn-carnet" onclick="ouvrirNote('${id}')">📖</button>
