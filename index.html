@@ -65,7 +65,7 @@
         .modal-note { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 4000; justify-content: center; align-items: center; }
         .modal-note-content { background: #0d0d0d; border: 1.5px solid var(--gold); border-radius: 15px; width: 88%; max-width: 420px; padding: 25px; text-align: left; }
         .modal-note-content h3 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 0 0 15px; font-size: 1.1rem; }
-        .note-texte { color: #ddd; font-size: 1rem; line-height: 1.7; font-style: italic; border-left: 2px solid var(--gold); padding-left: 15px; min-height: 60px; }
+        .note-texte { color: #ddd; font-size: 1rem; line-height: 1.7; font-style: italic; border-left: 2px solid var(--gold); padding-left: 15px; min-height: 60px; white-space: pre-wrap; }
         .note-texte.empty { color: #555; font-style: normal; border-left-color: #333; }
         .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #333; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
 
@@ -169,6 +169,9 @@
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
         let isReadOnly = false;
 
+        // Stockage local temporaire pour éviter les bugs de transmission d'objets dans le HTML
+        let vinsCharges = {};
+
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
 
@@ -228,22 +231,26 @@
                 const c = document.getElementById('container-vins');
                 c.innerHTML = "";
                 let count = 0;
+                vinsCharges = {}; // Reset du stockage
+                
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     count++;
+                    vinsCharges[id] = v; // On garde l'original au propre
+                    
                     const etoiles = v.noteEtoiles || 0;
                     const card = document.createElement('div');
                     card.className = 'card';
                     if (v.qte === 0) card.style.opacity = "0.5";
                     
                     card.innerHTML = `
-                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${v.image || 'https://via.placeholder.com/300x450'}', '${v.nom.replace(/'/g, "\\'")}', ${etoiles})">
+                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${id}')">
                         <div class="vin-info">
                             <b>${v.nom}</b>
                             <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
-                        <button class="btn-carnet" onclick="ouvrirNote('${v.nom.replace(/'/g, "\\'")}', '${(v.note || "").replace(/'/g, "\\'")}')">📖</button>
+                        <button class="btn-carnet" onclick="ouvrirNote('${id}')">📖</button>
                         ${!isReadOnly ? `
                             <button class="btn-edit-vin" onclick="preparerModif('${id}')">✏️</button>
                             <button class="btn-suppr" onclick="supprimer('${id}')">✕</button>
@@ -268,18 +275,17 @@
         }
 
         function preparerModif(id) {
-            db.ref('users/' + userUID + '/cave/' + id).once('value', s => {
-                const v = s.val();
-                editID = id;
-                document.getElementById('addTitle').innerText = "Modifier";
-                document.getElementById('nomVin').value = v.nom;
-                document.getElementById('qteVin').value = v.qte;
-                document.getElementById('noteVin').value = v.note || "";
-                currentImg = v.image || "";
-                document.getElementById('preview').innerHTML = currentImg ? `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">` : "";
-                setStars(v.noteEtoiles || 0);
-                showPage('PAGE_ADD');
-            });
+            const v = vinsCharges[id];
+            if(!v) return;
+            editID = id;
+            document.getElementById('addTitle').innerText = "Modifier";
+            document.getElementById('nomVin').value = v.nom;
+            document.getElementById('qteVin').value = v.qte;
+            document.getElementById('noteVin').value = v.note || "";
+            currentImg = v.image || "";
+            document.getElementById('preview').innerHTML = currentImg ? `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">` : "";
+            setStars(v.noteEtoiles || 0);
+            showPage('PAGE_ADD');
         }
 
         function sauvegarderVin() {
@@ -287,7 +293,6 @@
             const inputQte = document.getElementById('qteVin').value;
             if (!nom) return alert("Veuillez entrer un nom.");
             
-            // Correction pour accepter la quantité 0
             const qteVal = (inputQte !== "" && !isNaN(inputQte)) ? parseInt(inputQte) : 1;
 
             const data = {
@@ -304,17 +309,29 @@
 
         function supprimer(id) { if (confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
         
-        function ouvrirImage(img, nom, etoiles) {
-            document.getElementById('modalImgSrc').src = img;
-            document.getElementById('modalImgNom').innerText = nom;
+        function ouvrirImage(id) {
+            const v = vinsCharges[id];
+            if(!v) return;
+            const etoiles = v.noteEtoiles || 0;
+            document.getElementById('modalImgSrc').src = v.image || 'https://via.placeholder.com/300x450';
+            document.getElementById('modalImgNom').innerText = v.nom;
             document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
             document.getElementById('modalImg').style.display = 'flex';
         }
         
-        function ouvrirNote(nom, note) {
-            document.getElementById('modalNoteNom').innerText = nom;
+        function ouvrirNote(id) {
+            const v = vinsCharges[id];
+            if(!v) return;
+            document.getElementById('modalNoteNom').innerText = v.nom;
             const el = document.getElementById('modalNoteTexte');
-            el.innerText = note.trim() ? note : 'Aucune note.';
+            
+            if (v.note && v.note.trim()) {
+                el.innerText = v.note;
+                el.classList.remove('empty');
+            } else {
+                el.innerText = 'Aucune note.';
+                el.classList.add('empty');
+            }
             document.getElementById('modalNote').style.display = 'flex';
         }
     </script>
