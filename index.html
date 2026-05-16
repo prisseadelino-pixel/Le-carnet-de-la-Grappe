@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="La Grappe">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="icon" type="image/jpg" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
-
-    <link rel="manifest" href='data:application/json,{"name":"Le Carnet de la Grappe","short_name":"La Grappe","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#000000","icons":[{"src":"https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg","sizes":"512x512","type":"image/jpg"}]}'>
-
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
@@ -172,6 +168,8 @@
 
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
         let isReadOnly = false;
+
+        // Stockage local temporaire pour éviter les bugs de transmission d'objets dans le HTML
         let vinsCharges = {};
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -233,12 +231,12 @@
                 const c = document.getElementById('container-vins');
                 c.innerHTML = "";
                 let count = 0;
-                vinsCharges = {};
+                vinsCharges = {}; // Reset du stockage
                 
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
                     count++;
-                    vinsCharges[id] = v;
+                    vinsCharges[id] = v; // On garde l'original au propre
                     
                     const etoiles = v.noteEtoiles || 0;
                     const card = document.createElement('div');
