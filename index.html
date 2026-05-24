@@ -18,6 +18,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    <!-- Bibliothèque de scan code-barres -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
@@ -50,12 +53,10 @@
             text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem;
             border-radius: 18px; display: flex; align-items: center; justify-content: space-between;
             box-sizing: border-box; min-height: 110px; transition: 0.2s; overflow: hidden;
-            position: relative;
         }
         .btn-gold:active { background: rgba(197,160,89,0.12); transform: scale(0.98); }
-
         .btn-label { flex: 1; text-align: left; padding-left: 25px; font-size: 1.05rem; letter-spacing: 2px; }
-        .btn-bottle-wrap { width: 130px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .btn-bottle-wrap { width: 130px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .btn-bottle-wrap img { height: 95px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); object-fit: contain; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
@@ -82,18 +83,16 @@
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
         .btn-carnet, .btn-edit-vin { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
         .btn-suppr { background: none; border: none; color: #ff4444; font-size: 1.5rem; margin-left: 4px; cursor: pointer; flex-shrink: 0; }
-        
         .readonly-badge { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
 
         .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 100; }
         input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
         .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
-
         .photo-actions-container { display: flex; gap: 10px; width: 95%; max-width: 600px; margin: 8px 0; }
         .btn-half { flex: 1; margin: 0 !important; min-height: 60px !important; font-size: 0.95rem !important; }
 
-        /* SCANNER */
+        /* SCANNER CODE-BARRES */
         .btn-scanner {
             width: 95%; max-width: 600px; margin: 8px 0; padding: 18px;
             background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.08));
@@ -102,35 +101,37 @@
             font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .scanner-loader {
-            display: none; width: 95%; max-width: 600px;
-            background: #0d0d0d; border: 1px solid rgba(197,160,89,0.2);
-            border-radius: 12px; padding: 20px; margin: 8px 0;
-            align-items: center; justify-content: center; gap: 14px; flex-direction: column;
-        }
-        .scanner-loader.active { display: flex; }
-        .spinner { width: 32px; height: 32px; border: 3px solid rgba(197,160,89,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* MODAL SCANNER */
+        .modal-scanner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; }
+        .modal-scanner.active { display: flex; }
+        .scanner-title { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; }
+        .scanner-hint { color: #888; font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 1px; }
+        #reader { width: 300px; border-radius: 12px; overflow: hidden; border: 2px solid var(--gold); }
+        .btn-stop-scan { margin-top: 25px; padding: 14px 40px; border-radius: 10px; background: none; border: 1px solid #444; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; }
+
+        /* RÉSULTAT SCAN */
         .scan-result {
             display: none; width: 95%; max-width: 600px;
             background: #0d0d0d; border: 1.5px solid rgba(197,160,89,0.4);
             border-radius: 12px; padding: 18px; margin: 8px 0; text-align: left;
         }
         .scan-result.active { display: block; }
-        .scan-result-title { color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .scan-result-title { color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
         .scan-field { margin-bottom: 8px; font-size: 0.85rem; color: #ccc; }
         .scan-field b { color: #fff; }
-        .btn-use-scan {
-            width: 100%; margin-top: 14px; padding: 13px; border-radius: 10px;
-            background: var(--gold); border: none; color: #000;
-            font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem;
-            text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
-        }
+        .btn-use-scan { width: 100%; margin-top: 14px; padding: 13px; border-radius: 10px; background: var(--gold); border: none; color: #000; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+
+        /* LOADER */
+        .scan-loader { display: none; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; }
+        .scan-loader.active { display: flex; }
+        .spinner { width: 28px; height: 28px; border: 3px solid rgba(197,160,89,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+    <!-- MODAL QR -->
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); font-family:'Bodoni Moda';">PARTAGER MA CAVE</h2>
@@ -142,12 +143,14 @@
         </div>
     </div>
 
+    <!-- MODAL IMAGE -->
     <div id="modalImg" class="modal-img" onclick="this.style.display='none'">
         <img id="modalImgSrc" src="" alt="">
         <h3 id="modalImgNom"></h3>
         <div class="stars-big" id="modalImgStars"></div>
     </div>
 
+    <!-- MODAL NOTE -->
     <div id="modalNote" class="modal-note" onclick="this.style.display='none'">
         <div class="modal-note-content" onclick="event.stopPropagation()">
             <h3 id="modalNoteNom"></h3>
@@ -156,6 +159,15 @@
         </div>
     </div>
 
+    <!-- MODAL SCANNER CODE-BARRES -->
+    <div id="modalScanner" class="modal-scanner">
+        <div class="scanner-title">SCANNER LE CODE-BARRES</div>
+        <div class="scanner-hint">Pointez la caméra vers le code-barres de la bouteille</div>
+        <div id="reader"></div>
+        <button class="btn-stop-scan" onclick="arreterScan()">✕ ANNULER</button>
+    </div>
+
+    <!-- PAGE AUTH -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
@@ -166,6 +178,7 @@
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; padding:0 20px;">CONNEXION GOOGLE</button>
     </div>
 
+    <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName" style="font-family:'Bodoni Moda'; margin-bottom:20px;">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="btn-label">VINS ROUGES</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/8b15ea10.png" alt="Vin Rouge"></div></button>
@@ -176,6 +189,7 @@
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem; cursor:pointer;">Déconnexion</button>
     </div>
 
+    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="readonly-badge-container"></div>
@@ -184,43 +198,42 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
     </div>
 
+    <!-- PAGE ADD -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
 
-        <!-- BOUTON SCANNER IA -->
-        <button class="btn-scanner" onclick="document.getElementById('scanInput').click()">
-            🔍 SCANNER UNE ÉTIQUETTE
+        <!-- BOUTON SCANNER -->
+        <button class="btn-scanner" onclick="demarrerScan()">
+            📷 SCANNER LE CODE-BARRES
         </button>
-        <input type="file" id="scanInput" accept="image/*" style="display:none" onchange="scannerEtiquette(this)">
 
-        <!-- LOADER SCAN -->
-        <div class="scanner-loader" id="scanLoader">
+        <!-- LOADER RECHERCHE -->
+        <div class="scan-loader" id="scanLoader">
             <div class="spinner"></div>
-            <div style="color:#888; font-size:0.85rem; letter-spacing:1px;">Analyse de l'étiquette en cours...</div>
+            <span style="color:#888; font-size:0.85rem;">Recherche du vin...</span>
         </div>
 
         <!-- RÉSULTAT SCAN -->
         <div class="scan-result" id="scanResult">
-            <div class="scan-result-title">✅ Étiquette reconnue</div>
+            <div class="scan-result-title">✅ Vin trouvé</div>
             <div class="scan-field">Nom : <b id="scanNom">—</b></div>
             <div class="scan-field">Millésime : <b id="scanMillesime">—</b></div>
-            <div class="scan-field">Appellation : <b id="scanAppellation">—</b></div>
             <div class="scan-field">Producteur : <b id="scanProducteur">—</b></div>
-            <div class="scan-field">Type : <b id="scanType">—</b></div>
+            <div class="scan-field">Région : <b id="scanRegion">—</b></div>
             <button class="btn-use-scan" onclick="utiliserScan()">✨ UTILISER CES INFORMATIONS</button>
         </div>
 
         <input type="text" id="nomVin" placeholder="Nom du vin">
         <input type="number" id="qteVin" placeholder="Quantité" value="1">
-        
+
         <div class="photo-actions-container">
             <button class="btn-gold btn-half" onclick="document.getElementById('cameraInput').click()" style="justify-content:center; border-style:dashed; padding:0 10px;">📷 APPAREIL</button>
             <button class="btn-gold btn-half" onclick="document.getElementById('galleryInput').click()" style="justify-content:center; border-style:dashed; padding:0 10px;">🖼️ GALERIE</button>
         </div>
-        
+
         <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleFile(this)">
         <input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="handleFile(this)">
-        
+
         <div id="preview"></div>
         <div class="stars" id="starRating">
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
@@ -242,9 +255,8 @@
         const auth = firebase.auth(), db = firebase.database();
 
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
-        let isReadOnly = false;
-        let vinsCharges = {};
-        let scanData = null;
+        let isReadOnly = false, vinsCharges = {}, scanData = null;
+        let html5QrCode = null;
 
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
@@ -266,9 +278,7 @@
                     userUID = u.uid;
                     document.getElementById('userName').innerText = "Cave de " + u.displayName.split(' ')[0];
                     showPage('PAGE_HOME');
-                } else {
-                    showPage('PAGE_AUTH');
-                }
+                } else { showPage('PAGE_AUTH'); }
             });
         }
 
@@ -301,87 +311,81 @@
             reader.readAsDataURL(input.files[0]);
         }
 
-        // ---- SCANNER IA ----
-        async function scannerEtiquette(input) {
-            if (!input.files || !input.files[0]) return;
-            
-            // Afficher le loader
+        // ---- SCANNER CODE-BARRES ----
+        function demarrerScan() {
+            document.getElementById('modalScanner').classList.add('active');
+            html5QrCode = new Html5Qrcode("reader");
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 150 } },
+                (decodedText) => {
+                    arreterScan();
+                    rechercherVin(decodedText);
+                },
+                () => {}
+            ).catch(() => {
+                arreterScan();
+                alert("Impossible d'accéder à la caméra. Vérifiez les permissions.");
+            });
+        }
+
+        function arreterScan() {
+            document.getElementById('modalScanner').classList.remove('active');
+            if (html5QrCode) {
+                html5QrCode.stop().catch(() => {});
+                html5QrCode = null;
+            }
+        }
+
+        async function rechercherVin(barcode) {
             document.getElementById('scanLoader').classList.add('active');
             document.getElementById('scanResult').classList.remove('active');
 
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const dataUrl = e.target.result;
-                const base64 = dataUrl.split(',')[1];
-                const mediaType = dataUrl.split(';')[0].split(':')[1];
+            try {
+                // On essaie d'abord Open Food Facts
+                const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
+                const res = await fetch(url);
+                const data = await res.json();
 
-                // Utiliser aussi l'image pour la photo de la bouteille
-                currentImg = dataUrl;
-                document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">`;
+                if (data.status === 1 && data.product) {
+                    const p = data.product;
+                    const nom = p.product_name_fr || p.product_name || p.brands || '';
+                    const millesime = extraireMillesime(nom + ' ' + (p.labels || ''));
+                    const producteur = p.brands || '';
+                    const region = p.origins_tags?.[0]?.replace('en:', '') || p.manufacturing_places || '';
 
-                try {
-                    const response = await fetch("https://api.anthropic.com/v1/messages", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            model: "claude-sonnet-4-20250514",
-                            max_tokens: 1000,
-                            messages: [{
-                                role: "user",
-                                content: [
-                                    { type: "image", source: { type: "base64", media_type: mediaType, data: base64 } },
-                                    { type: "text", text: `Tu es un expert en vins. Analyse cette étiquette et réponds UNIQUEMENT en JSON valide sans markdown ni texte autour :
-{
-  "nom": "nom complet du vin tel qu'il apparaît",
-  "millesime": "année ou Non millésimé",
-  "appellation": "appellation ou région",
-  "producteur": "domaine ou château",
-  "type": "Rouge, Blanc, Rosé, Champagne ou Mousseux",
-  "note": "description en 2-3 phrases : caractère, arômes typiques, accord mets"
-}
-Si ce n'est pas une étiquette de vin : {"erreur": "Image non reconnue"}` }
-                                ]
-                            }]
-                        })
-                    });
+                    if (!nom) throw new Error("Vin non trouvé dans la base de données.");
 
-                    const data = await response.json();
-                    if (!response.ok) throw new Error(data.error?.message || 'Erreur API');
-                    
-                    const text = data.content.map(i => i.text || '').join('');
-                    const result = JSON.parse(text.replace(/```json|```/g, '').trim());
-                    
-                    if (result.erreur) throw new Error(result.erreur);
-
-                    scanData = result;
-                    document.getElementById('scanNom').innerText = result.nom || '—';
-                    document.getElementById('scanMillesime').innerText = result.millesime || '—';
-                    document.getElementById('scanAppellation').innerText = result.appellation || '—';
-                    document.getElementById('scanProducteur').innerText = result.producteur || '—';
-                    document.getElementById('scanType').innerText = result.type || '—';
+                    scanData = { nom, millesime, producteur, region };
+                    document.getElementById('scanNom').innerText = nom || '—';
+                    document.getElementById('scanMillesime').innerText = millesime || 'Non détecté';
+                    document.getElementById('scanProducteur').innerText = producteur || '—';
+                    document.getElementById('scanRegion').innerText = region || '—';
                     document.getElementById('scanResult').classList.add('active');
-
-                } catch(err) {
-                    alert("⚠️ " + err.message);
-                } finally {
-                    document.getElementById('scanLoader').classList.remove('active');
+                } else {
+                    throw new Error("Vin non trouvé pour ce code-barres.");
                 }
-            };
-            reader.readAsDataURL(input.files[0]);
+            } catch(err) {
+                alert("⚠️ " + err.message + "\nVous pouvez saisir le nom manuellement.");
+            } finally {
+                document.getElementById('scanLoader').classList.remove('active');
+            }
+        }
+
+        function extraireMillesime(texte) {
+            const match = texte.match(/\b(19|20)\d{2}\b/);
+            return match ? match[0] : null;
         }
 
         function utiliserScan() {
             if (!scanData) return;
-            // Remplir le nom avec millésime si disponible
-            const nomComplet = scanData.millesime && scanData.millesime !== 'Non millésimé'
+            const nomComplet = scanData.millesime
                 ? `${scanData.nom} ${scanData.millesime}`
-                : scanData.nom || '';
+                : scanData.nom;
             document.getElementById('nomVin').value = nomComplet;
-            // Remplir les notes avec appellation + producteur + description
             let note = '';
-            if (scanData.appellation) note += `${scanData.appellation}\n`;
             if (scanData.producteur) note += `${scanData.producteur}\n`;
-            if (scanData.note) note += `\n${scanData.note}`;
+            if (scanData.region) note += `${scanData.region}`;
             document.getElementById('noteVin').value = note.trim();
             document.getElementById('scanResult').classList.remove('active');
             scanData = null;
@@ -390,20 +394,14 @@ Si ce n'est pas une étiquette de vin : {"erreur": "Image non reconnue"}` }
         function chargerVins() {
             db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
                 const c = document.getElementById('container-vins');
-                c.innerHTML = "";
-                let count = 0;
-                vinsCharges = {};
-                
+                c.innerHTML = ""; let count = 0; vinsCharges = {};
                 s.forEach(child => {
                     const v = child.val(), id = child.key;
-                    count++;
-                    vinsCharges[id] = v;
-                    
+                    count++; vinsCharges[id] = v;
                     const etoiles = v.noteEtoiles || 0;
                     const card = document.createElement('div');
                     card.className = 'card';
                     if (v.qte === 0) card.style.opacity = "0.5";
-                    
                     card.innerHTML = `
                         <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${id}')">
                         <div class="vin-info">
@@ -424,8 +422,7 @@ Si ce n'est pas une étiquette de vin : {"erreur": "Image non reconnue"}` }
         }
 
         function goToAdd() {
-            editID = null;
-            scanData = null;
+            editID = null; scanData = null;
             document.getElementById('addTitle').innerText = "Ajouter";
             document.getElementById('nomVin').value = "";
             document.getElementById('qteVin').value = 1;
@@ -433,16 +430,13 @@ Si ce n'est pas une étiquette de vin : {"erreur": "Image non reconnue"}` }
             document.getElementById('preview').innerHTML = "";
             document.getElementById('scanResult').classList.remove('active');
             document.getElementById('scanLoader').classList.remove('active');
-            currentImg = "";
-            setStars(0);
+            currentImg = ""; setStars(0);
             showPage('PAGE_ADD');
         }
 
         function preparerModif(id) {
-            const v = vinsCharges[id];
-            if(!v) return;
-            editID = id;
-            scanData = null;
+            const v = vinsCharges[id]; if(!v) return;
+            editID = id; scanData = null;
             document.getElementById('addTitle').innerText = "Modifier";
             document.getElementById('nomVin').value = v.nom;
             document.getElementById('qteVin').value = v.qte;
@@ -459,39 +453,28 @@ Si ce n'est pas une étiquette de vin : {"erreur": "Image non reconnue"}` }
             const inputQte = document.getElementById('qteVin').value;
             if (!nom) return alert("Veuillez entrer un nom.");
             const qteVal = (inputQte !== "" && !isNaN(inputQte)) ? parseInt(inputQte) : 1;
-            const data = {
-                nom, qte: qteVal,
-                note: document.getElementById('noteVin').value,
-                noteEtoiles, image: currentImg, categorie: rayonActuel
-            };
+            const data = { nom, qte: qteVal, note: document.getElementById('noteVin').value, noteEtoiles, image: currentImg, categorie: rayonActuel };
             const ref = editID ? db.ref('users/' + userUID + '/cave/' + editID) : db.ref('users/' + userUID + '/cave').push();
             ref.set(data).then(() => showPage('PAGE_LISTE'));
         }
 
         function supprimer(id) { if (confirm("Supprimer cette bouteille ?")) db.ref('users/' + userUID + '/cave/' + id).remove(); }
-        
+
         function ouvrirImage(id) {
-            const v = vinsCharges[id];
-            if(!v) return;
+            const v = vinsCharges[id]; if(!v) return;
             const etoiles = v.noteEtoiles || 0;
             document.getElementById('modalImgSrc').src = v.image || 'https://via.placeholder.com/300x450';
             document.getElementById('modalImgNom').innerText = v.nom;
             document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
             document.getElementById('modalImg').style.display = 'flex';
         }
-        
+
         function ouvrirNote(id) {
-            const v = vinsCharges[id];
-            if(!v) return;
+            const v = vinsCharges[id]; if(!v) return;
             document.getElementById('modalNoteNom').innerText = v.nom;
             const el = document.getElementById('modalNoteTexte');
-            if (v.note && v.note.trim()) {
-                el.innerText = v.note;
-                el.classList.remove('empty');
-            } else {
-                el.innerText = 'Aucune note.';
-                el.classList.add('empty');
-            }
+            if (v.note && v.note.trim()) { el.innerText = v.note; el.classList.remove('empty'); }
+            else { el.innerText = 'Aucune note.'; el.classList.add('empty'); }
             document.getElementById('modalNote').style.display = 'flex';
         }
     </script>
