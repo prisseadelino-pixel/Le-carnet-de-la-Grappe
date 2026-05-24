@@ -18,7 +18,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-    <!-- Bibliothèque de scan code-barres -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <style>
@@ -92,7 +91,6 @@
         .photo-actions-container { display: flex; gap: 10px; width: 95%; max-width: 600px; margin: 8px 0; }
         .btn-half { flex: 1; margin: 0 !important; min-height: 60px !important; font-size: 0.95rem !important; }
 
-        /* SCANNER CODE-BARRES */
         .btn-scanner {
             width: 95%; max-width: 600px; margin: 8px 0; padding: 18px;
             background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.08));
@@ -102,7 +100,6 @@
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
-        /* MODAL SCANNER */
         .modal-scanner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; }
         .modal-scanner.active { display: flex; }
         .scanner-title { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; }
@@ -110,19 +107,13 @@
         #reader { width: 300px; border-radius: 12px; overflow: hidden; border: 2px solid var(--gold); }
         .btn-stop-scan { margin-top: 25px; padding: 14px 40px; border-radius: 10px; background: none; border: 1px solid #444; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; }
 
-        /* RÉSULTAT SCAN */
-        .scan-result {
-            display: none; width: 95%; max-width: 600px;
-            background: #0d0d0d; border: 1.5px solid rgba(197,160,89,0.4);
-            border-radius: 12px; padding: 18px; margin: 8px 0; text-align: left;
-        }
+        .scan-result { display: none; width: 95%; max-width: 600px; background: #0d0d0d; border: 1.5px solid rgba(197,160,89,0.4); border-radius: 12px; padding: 18px; margin: 8px 0; text-align: left; }
         .scan-result.active { display: block; }
         .scan-result-title { color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
         .scan-field { margin-bottom: 8px; font-size: 0.85rem; color: #ccc; }
         .scan-field b { color: #fff; }
         .btn-use-scan { width: 100%; margin-top: 14px; padding: 13px; border-radius: 10px; background: var(--gold); border: none; color: #000; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
 
-        /* LOADER */
         .scan-loader { display: none; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; }
         .scan-loader.active { display: flex; }
         .spinner { width: 28px; height: 28px; border: 3px solid rgba(197,160,89,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -131,7 +122,6 @@
 </head>
 <body>
 
-    <!-- MODAL QR -->
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); font-family:'Bodoni Moda';">PARTAGER MA CAVE</h2>
@@ -143,14 +133,12 @@
         </div>
     </div>
 
-    <!-- MODAL IMAGE -->
     <div id="modalImg" class="modal-img" onclick="this.style.display='none'">
         <img id="modalImgSrc" src="" alt="">
         <h3 id="modalImgNom"></h3>
         <div class="stars-big" id="modalImgStars"></div>
     </div>
 
-    <!-- MODAL NOTE -->
     <div id="modalNote" class="modal-note" onclick="this.style.display='none'">
         <div class="modal-note-content" onclick="event.stopPropagation()">
             <h3 id="modalNoteNom"></h3>
@@ -159,7 +147,6 @@
         </div>
     </div>
 
-    <!-- MODAL SCANNER CODE-BARRES -->
     <div id="modalScanner" class="modal-scanner">
         <div class="scanner-title">SCANNER LE CODE-BARRES</div>
         <div class="scanner-hint">Pointez la caméra vers le code-barres de la bouteille</div>
@@ -167,7 +154,6 @@
         <button class="btn-stop-scan" onclick="arreterScan()">✕ ANNULER</button>
     </div>
 
-    <!-- PAGE AUTH -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1>Le Carnet de la Grappe</h1>
@@ -178,7 +164,6 @@
         <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; padding:0 20px;">CONNEXION GOOGLE</button>
     </div>
 
-    <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
         <h1 id="userName" style="font-family:'Bodoni Moda'; margin-bottom:20px;">Ma Cave</h1>
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="btn-label">VINS ROUGES</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/8b15ea10.png" alt="Vin Rouge"></div></button>
@@ -189,7 +174,6 @@
         <button onclick="auth.signOut().then(()=>location.reload())" style="color:#666; background:none; border:none; margin-top:30px; text-decoration:underline; font-size:0.9rem; cursor:pointer;">Déconnexion</button>
     </div>
 
-    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="readonly-badge-container"></div>
@@ -198,22 +182,16 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;">← RETOUR ACCUEIL</button>
     </div>
 
-    <!-- PAGE ADD -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
 
-        <!-- BOUTON SCANNER -->
-        <button class="btn-scanner" onclick="demarrerScan()">
-            📷 SCANNER LE CODE-BARRES
-        </button>
+        <button class="btn-scanner" onclick="demarrerScan()">📷 SCANNER LE CODE-BARRES</button>
 
-        <!-- LOADER RECHERCHE -->
         <div class="scan-loader" id="scanLoader">
             <div class="spinner"></div>
             <span style="color:#888; font-size:0.85rem;">Recherche du vin...</span>
         </div>
 
-        <!-- RÉSULTAT SCAN -->
         <div class="scan-result" id="scanResult">
             <div class="scan-result-title">✅ Vin trouvé</div>
             <div class="scan-field">Nom : <b id="scanNom">—</b></div>
@@ -311,77 +289,103 @@
             reader.readAsDataURL(input.files[0]);
         }
 
-        // ---- SCANNER CODE-BARRES ----
+        // ---- SCANNER ----
         function demarrerScan() {
             document.getElementById('modalScanner').classList.add('active');
             html5QrCode = new Html5Qrcode("reader");
             html5QrCode.start(
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 150 } },
-                (decodedText) => {
-                    arreterScan();
-                    rechercherVin(decodedText);
-                },
+                (decodedText) => { arreterScan(); rechercherVin(decodedText); },
                 () => {}
-            ).catch(() => {
-                arreterScan();
-                alert("Impossible d'accéder à la caméra. Vérifiez les permissions.");
-            });
+            ).catch(() => { arreterScan(); alert("Impossible d'accéder à la caméra."); });
         }
 
         function arreterScan() {
             document.getElementById('modalScanner').classList.remove('active');
-            if (html5QrCode) {
-                html5QrCode.stop().catch(() => {});
-                html5QrCode = null;
-            }
+            if (html5QrCode) { html5QrCode.stop().catch(() => {}); html5QrCode = null; }
         }
 
         async function rechercherVin(barcode) {
             document.getElementById('scanLoader').classList.add('active');
             document.getElementById('scanResult').classList.remove('active');
 
+            let nom = '', millesime = '', producteur = '', region = '';
+
             try {
-                // On essaie d'abord Open Food Facts
-                const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
-                const res = await fetch(url);
-                const data = await res.json();
+                // Base 1 : Open Food Facts
+                try {
+                    const res1 = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
+                    const data1 = await res1.json();
+                    if (data1.status === 1 && data1.product) {
+                        const p = data1.product;
+                        nom = p.product_name_fr || p.product_name || '';
+                        producteur = p.brands || '';
+                        region = p.origins_tags?.[0]?.replace('en:', '') || p.manufacturing_places || '';
+                        millesime = extraireMillesime(nom + ' ' + (p.labels || ''));
+                    }
+                } catch(e) {}
 
-                if (data.status === 1 && data.product) {
-                    const p = data.product;
-                    const nom = p.product_name_fr || p.product_name || p.brands || '';
-                    const millesime = extraireMillesime(nom + ' ' + (p.labels || ''));
-                    const producteur = p.brands || '';
-                    const region = p.origins_tags?.[0]?.replace('en:', '') || p.manufacturing_places || '';
-
-                    if (!nom) throw new Error("Vin non trouvé dans la base de données.");
-
-                    scanData = { nom, millesime, producteur, region };
-                    document.getElementById('scanNom').innerText = nom || '—';
-                    document.getElementById('scanMillesime').innerText = millesime || 'Non détecté';
-                    document.getElementById('scanProducteur').innerText = producteur || '—';
-                    document.getElementById('scanRegion').innerText = region || '—';
-                    document.getElementById('scanResult').classList.add('active');
-                } else {
-                    throw new Error("Vin non trouvé pour ce code-barres.");
+                // Base 2 : UPC Item DB
+                if (!nom) {
+                    try {
+                        const res2 = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${barcode}`);
+                        const data2 = await res2.json();
+                        if (data2.items && data2.items.length > 0) {
+                            const item = data2.items[0];
+                            nom = item.title || '';
+                            producteur = item.brand || '';
+                            millesime = extraireMillesime(nom);
+                        }
+                    } catch(e) {}
                 }
+
+                // Base 3 : Open EAN
+                if (!nom) {
+                    try {
+                        const res3 = await fetch(`https://opengtindb.org/?ean=${barcode}&cmd=detail&lang=fr`);
+                        const text3 = await res3.text();
+                        const parser = new DOMParser();
+                        const xml = parser.parseFromString(text3, 'text/xml');
+                        const name = xml.querySelector('name')?.textContent;
+                        if (name) {
+                            nom = name;
+                            millesime = extraireMillesime(nom);
+                        }
+                    } catch(e) {}
+                }
+
+                if (!nom) {
+                    // Vin non trouvé mais on affiche quand même avec le code-barres
+                    // pour que l'utilisateur puisse au moins voir que le scan a fonctionné
+                    alert("⚠️ Ce vin n'est pas encore dans nos bases de données.\nLe nom a été pré-rempli avec ce que nous avons trouvé.\nVous pouvez le compléter manuellement.");
+                    document.getElementById('nomVin').focus();
+                    return;
+                }
+
+                scanData = { nom, millesime, producteur, region };
+                document.getElementById('scanNom').innerText = nom || '—';
+                document.getElementById('scanMillesime').innerText = millesime || 'Non détecté';
+                document.getElementById('scanProducteur').innerText = producteur || '—';
+                document.getElementById('scanRegion').innerText = region || '—';
+                document.getElementById('scanResult').classList.add('active');
+
             } catch(err) {
-                alert("⚠️ " + err.message + "\nVous pouvez saisir le nom manuellement.");
+                alert("⚠️ Erreur lors de la recherche. Saisissez le nom manuellement.");
             } finally {
                 document.getElementById('scanLoader').classList.remove('active');
             }
         }
 
         function extraireMillesime(texte) {
+            if (!texte) return null;
             const match = texte.match(/\b(19|20)\d{2}\b/);
             return match ? match[0] : null;
         }
 
         function utiliserScan() {
             if (!scanData) return;
-            const nomComplet = scanData.millesime
-                ? `${scanData.nom} ${scanData.millesime}`
-                : scanData.nom;
+            const nomComplet = scanData.millesime ? `${scanData.nom} ${scanData.millesime}` : scanData.nom;
             document.getElementById('nomVin').value = nomComplet;
             let note = '';
             if (scanData.producteur) note += `${scanData.producteur}\n`;
