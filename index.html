@@ -24,19 +24,7 @@
         .active { display: flex !important; }
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* NOM CAVE ADAPTATIF */
-        #userName {
-            font-family: 'Bodoni Moda', serif;
-            color: var(--gold);
-            font-size: clamp(1.1rem, 5vw, 1.6rem);
-            margin: 15px 50px 20px 50px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            line-height: 1.2;
-            word-break: break-word;
-        }
-
+        #userName { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: clamp(1.1rem, 5vw, 1.6rem); margin: 15px 55px 20px 15px; text-transform: uppercase; letter-spacing: 2px; line-height: 1.2; word-break: break-word; text-align: center; }
         .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 20px; border: 1px solid rgba(197,160,89,0.3); background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(197,160,89,0.05) 100%); border-radius: 15px; font-size: 1rem; line-height: 1.6; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .intro-text b { display: block; margin-bottom: 8px; background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem; letter-spacing: 1px; }
         .intro-text span { color: #ccc; font-weight: 400; }
@@ -46,11 +34,8 @@
         .btn-bottle-wrap { width: 130px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .btn-bottle-wrap img { height: 95px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); object-fit: contain; }
 
-        /* HAMBURGER */
         .hamburger { position: fixed; top: 15px; right: 15px; z-index: 9000; background: rgba(197,160,89,0.1); border: 1.5px solid rgba(197,160,89,0.4); border-radius: 10px; width: 44px; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; }
         .hamburger span { display: block; width: 22px; height: 2px; background: var(--gold); border-radius: 2px; }
-
-        /* MENU LATÉRAL */
         .side-menu { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #0a0a0a; border-left: 1.5px solid rgba(197,160,89,0.3); z-index: 8000; flex-direction: column; padding: 70px 20px 30px; box-sizing: border-box; overflow-y: auto; }
         .side-menu.open { display: flex; }
         .side-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 7000; }
@@ -111,15 +96,10 @@
 </head>
 <body>
 
-    <!-- HAMBURGER -->
     <div class="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
     </div>
-
-    <!-- OVERLAY -->
     <div class="side-overlay" id="sideOverlay" onclick="fermerMenu()"></div>
-
-    <!-- MENU LATÉRAL -->
     <div class="side-menu" id="sideMenu">
         <div class="menu-section-title">Langue / Language</div>
         <button class="lang-btn" onclick="changerLangue('fr')" id="lang_fr"><span class="lang-flag">🇫🇷</span> Français</button>
@@ -134,7 +114,6 @@
         <button class="menu-action-btn" onclick="auth.signOut().then(()=>location.reload())">🚪 <span id="menu_logout_label">Déconnexion</span></button>
     </div>
 
-    <!-- MODAL QR -->
     <div id="qrModal" class="modal" onclick="this.style.display='none'">
         <div class="modal-content" onclick="event.stopPropagation()">
             <h2 style="color:var(--gold); font-family:'Bodoni Moda';" id="txt_share_cave">PARTAGER MA CAVE</h2>
@@ -144,14 +123,12 @@
         </div>
     </div>
 
-    <!-- MODAL IMAGE -->
     <div id="modalImg" class="modal-img" onclick="this.style.display='none'">
         <img id="modalImgSrc" src="" alt="">
         <h3 id="modalImgNom"></h3>
         <div class="stars-big" id="modalImgStars"></div>
     </div>
 
-    <!-- MODAL NOTE -->
     <div id="modalNote" class="modal-note" onclick="this.style.display='none'">
         <div class="modal-note-content" onclick="event.stopPropagation()">
             <h3 id="modalNoteNom"></h3>
@@ -160,7 +137,6 @@
         </div>
     </div>
 
-    <!-- MODAL SCANNER -->
     <div id="modalScanner" class="modal-scanner">
         <div class="scanner-title" id="txt_scan_title">SCANNER LE CODE-BARRES</div>
         <div class="scanner-hint" id="txt_scan_hint">Pointez la caméra vers le code-barres</div>
@@ -168,7 +144,6 @@
         <button class="btn-stop-scan" onclick="arreterScan()" id="txt_cancel_scan">✕ ANNULER</button>
     </div>
 
-    <!-- PAGE AUTH -->
     <div id="PAGE_AUTH" class="p active">
         <img src="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg" class="logo">
         <h1 id="txt_title">LE CARNET DE LA GRAPPE</h1>
@@ -176,19 +151,17 @@
             <b id="txt_tagline">Votre cave, toujours dans votre poche</b>
             <span id="txt_tagline_sub">Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.</span>
         </div>
-        <button id="googleLogin" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; padding:0 20px;">CONNEXION GOOGLE</button>
+        <button id="btnGoogle" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; padding:0 20px;">CONNEXION GOOGLE</button>
     </div>
 
-    <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
-        <div id="userName" style="font-family:'Bodoni Moda'; margin-bottom:20px;"></div>
+        <div id="userName"></div>
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="btn-label" id="txt_reds">VINS ROUGES</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/8b15ea10.png" alt="Rouge"></div></button>
         <button class="btn-gold" onclick="openRayon('BLANCS')"><span class="btn-label" id="txt_whites">VINS BLANCS</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/fb282310.jpg" alt="Blanc"></div></button>
         <button class="btn-gold" onclick="openRayon('ROSES')"><span class="btn-label" id="txt_roses">VINS ROSÉS</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/01068710.jpg" alt="Rosé"></div></button>
         <button class="btn-gold" onclick="openRayon('CHAMPAGNES')"><span class="btn-label" id="txt_champagnes">CHAMPAGNES</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/53e2fb10.jpg" alt="Champagne"></div></button>
     </div>
 
-    <!-- PAGE LISTE -->
     <div id="PAGE_LISTE" class="p">
         <h1 id="rayonTitle"></h1>
         <div id="readonly-badge-container"></div>
@@ -197,7 +170,6 @@
         <button onclick="showPage('PAGE_HOME')" style="color:var(--gold); background:none; border:none; margin-top:30px; font-weight:700; cursor:pointer;" id="txt_back">← RETOUR ACCUEIL</button>
     </div>
 
-    <!-- PAGE ADD -->
     <div id="PAGE_ADD" class="p">
         <h1 id="addTitle">Ajouter</h1>
         <button class="btn-scanner" onclick="demarrerScan()" id="txt_scan_btn">📷 SCANNER LE CODE-BARRES</button>
@@ -243,7 +215,7 @@
 
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
         let isReadOnly = false, vinsCharges = {}, scanData = null, html5QrCode = null;
-        let prenomUtilisateur = ""; // stocké séparément pour mise à jour à chaque changement de langue
+        let prenomUtilisateur = "";
 
         const LANGUES = {
             fr: { title:"LE CARNET DE LA GRAPPE", tagline:"Votre cave, toujours dans votre poche", tagline_sub:"Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.", login:"CONNEXION GOOGLE", cave_of:"Cave de", shared_cave:"Cave partagée", reds:"VINS ROUGES", whites:"VINS BLANCS", roses:"VINS ROSÉS", champagnes:"CHAMPAGNES", share_cave:"PARTAGER MA CAVE", scan_qr:"Scannez pour accéder à votre cave", close:"FERMER", add:"Ajouter", edit:"Modifier", scan_barcode:"📷 SCANNER LE CODE-BARRES", searching:"Recherche du vin...", wine_found:"✅ Vin trouvé", name:"Nom", vintage:"Millésime", producer:"Producteur", region:"Région", use_info:"✨ UTILISER CES INFORMATIONS", wine_name:"Nom du vin", quantity:"Quantité", camera:"📷 APPAREIL", gallery:"🖼️ GALERIE", tasting_notes:"Notes de dégustation...", save:"ENREGISTRER", cancel:"Annuler", back:"← RETOUR ACCUEIL", no_wine:"Aucun vin. Ajoutez-en un !", no_wine_ro:"Aucun vin.", delete_confirm:"Supprimer cette bouteille ?", no_note:"Aucune note.", readonly_badge:"👁 Mode consultation", camera_error:"Impossible d'accéder à la caméra.", wine_not_found:"Vin non trouvé.\nSaisissez le nom manuellement.", search_error:"Erreur de recherche.", name_required:"Veuillez entrer un nom.", cancel_scan:"✕ ANNULER", scan_title:"SCANNER LE CODE-BARRES", scan_hint:"Pointez la caméra vers le code-barres de la bouteille", not_detected:"Non détecté", qr_code:"Mon QR Code", logout:"Déconnexion" },
@@ -268,7 +240,7 @@
             T = LANGUES[code];
             localStorage.setItem('langue', code);
             appliquerTraductions();
-            mettreAJourNomCave(); // ← correction : met à jour le nom immédiatement
+            mettreAJourNomCave();
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active-lang'));
             document.getElementById('lang_' + code).classList.add('active-lang');
             fermerMenu();
@@ -278,7 +250,7 @@
             document.getElementById('txt_title').innerText = T.title;
             document.getElementById('txt_tagline').innerText = T.tagline;
             document.getElementById('txt_tagline_sub').innerText = T.tagline_sub;
-            document.getElementById('googleLogin').innerText = T.login;
+            document.getElementById('btnGoogle').innerText = T.login;
             document.getElementById('txt_reds').innerText = T.reds;
             document.getElementById('txt_whites').innerText = T.whites;
             document.getElementById('txt_roses').innerText = T.roses;
@@ -305,6 +277,7 @@
             document.getElementById('noteVin').placeholder = T.tasting_notes;
             document.getElementById('menu_qr_label').innerText = T.qr_code;
             document.getElementById('menu_logout_label').innerText = T.logout;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active-lang'));
             document.getElementById('lang_' + langActuelle).classList.add('active-lang');
         }
 
@@ -319,6 +292,7 @@
             document.getElementById('sideOverlay').classList.remove('open');
         }
 
+        // ---- FIREBASE AUTH ----
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
 
@@ -329,16 +303,21 @@
             document.getElementById('userName').innerText = T.shared_cave;
             showPage('PAGE_HOME');
         } else {
-            document.getElementById('googleLogin').onclick = () => {
-                auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
-            };
+            // Connexion Google — addEventListener pour éviter tout conflit
+            document.getElementById('btnGoogle').addEventListener('click', function() {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).catch(e => alert(e.message));
+            });
+
             auth.onAuthStateChanged(u => {
                 if (u) {
                     userUID = u.uid;
-                    prenomUtilisateur = u.displayName.split(' ')[0]; // ← stocké
+                    prenomUtilisateur = u.displayName ? u.displayName.split(' ')[0] : '';
                     mettreAJourNomCave();
                     showPage('PAGE_HOME');
-                } else { showPage('PAGE_AUTH'); }
+                } else {
+                    showPage('PAGE_AUTH');
+                }
             });
         }
 
