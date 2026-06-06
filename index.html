@@ -20,10 +20,23 @@
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
         :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
         body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
-        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px 20px; min-height: 100vh; box-sizing: border-box; }
+        .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* NOM CAVE ADAPTATIF */
+        #userName {
+            font-family: 'Bodoni Moda', serif;
+            color: var(--gold);
+            font-size: clamp(1.1rem, 5vw, 1.6rem);
+            margin: 15px 50px 20px 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
         .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 20px; border: 1px solid rgba(197,160,89,0.3); background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(197,160,89,0.05) 100%); border-radius: 15px; font-size: 1rem; line-height: 1.6; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         .intro-text b { display: block; margin-bottom: 8px; background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem; letter-spacing: 1px; }
         .intro-text span { color: #ccc; font-weight: 400; }
@@ -34,36 +47,18 @@
         .btn-bottle-wrap img { height: 95px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); object-fit: contain; }
 
         /* HAMBURGER */
-        .hamburger {
-            position: fixed; top: 15px; right: 15px; z-index: 9000;
-            background: rgba(197,160,89,0.1); border: 1.5px solid rgba(197,160,89,0.4);
-            border-radius: 10px; width: 44px; height: 44px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 5px; cursor: pointer;
-        }
+        .hamburger { position: fixed; top: 15px; right: 15px; z-index: 9000; background: rgba(197,160,89,0.1); border: 1.5px solid rgba(197,160,89,0.4); border-radius: 10px; width: 44px; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; }
         .hamburger span { display: block; width: 22px; height: 2px; background: var(--gold); border-radius: 2px; }
 
         /* MENU LATÉRAL */
-        .side-menu {
-            display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%;
-            background: #0a0a0a; border-left: 1.5px solid rgba(197,160,89,0.3);
-            z-index: 8000; flex-direction: column; padding: 70px 20px 30px;
-            box-sizing: border-box;
-        }
+        .side-menu { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #0a0a0a; border-left: 1.5px solid rgba(197,160,89,0.3); z-index: 8000; flex-direction: column; padding: 70px 20px 30px; box-sizing: border-box; overflow-y: auto; }
         .side-menu.open { display: flex; }
         .side-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 7000; }
         .side-overlay.open { display: block; }
-
         .menu-section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #555; margin-bottom: 12px; margin-top: 20px; }
-        .lang-btn {
-            display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px;
-            background: none; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;
-            color: #aaa; font-family: 'Montserrat', sans-serif; font-size: 0.9rem;
-            cursor: pointer; margin-bottom: 8px; text-align: left; transition: 0.2s;
-        }
+        .lang-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px; background: none; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; color: #aaa; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; cursor: pointer; margin-bottom: 8px; text-align: left; transition: 0.2s; }
         .lang-btn:hover, .lang-btn.active-lang { background: rgba(197,160,89,0.1); border-color: rgba(197,160,89,0.4); color: var(--gold); }
         .lang-flag { font-size: 1.3rem; }
-
         .menu-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 20px 0; }
         .menu-action-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px; background: none; border: none; color: #666; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; cursor: pointer; text-align: left; }
 
@@ -126,38 +121,17 @@
 
     <!-- MENU LATÉRAL -->
     <div class="side-menu" id="sideMenu">
-        <div class="menu-section-title" id="menu_lang_title">Langue / Language</div>
-
-        <button class="lang-btn active-lang" onclick="changerLangue('fr')" id="lang_fr">
-            <span class="lang-flag">🇫🇷</span> Français
-        </button>
-        <button class="lang-btn" onclick="changerLangue('en')" id="lang_en">
-            <span class="lang-flag">🇬🇧</span> English
-        </button>
-        <button class="lang-btn" onclick="changerLangue('de')" id="lang_de">
-            <span class="lang-flag">🇩🇪</span> Deutsch
-        </button>
-        <button class="lang-btn" onclick="changerLangue('es')" id="lang_es">
-            <span class="lang-flag">🇪🇸</span> Español
-        </button>
-        <button class="lang-btn" onclick="changerLangue('it')" id="lang_it">
-            <span class="lang-flag">🇮🇹</span> Italiano
-        </button>
-        <button class="lang-btn" onclick="changerLangue('zh')" id="lang_zh">
-            <span class="lang-flag">🇨🇳</span> 中文
-        </button>
-        <button class="lang-btn" onclick="changerLangue('ja')" id="lang_ja">
-            <span class="lang-flag">🇯🇵</span> 日本語
-        </button>
-
+        <div class="menu-section-title">Langue / Language</div>
+        <button class="lang-btn" onclick="changerLangue('fr')" id="lang_fr"><span class="lang-flag">🇫🇷</span> Français</button>
+        <button class="lang-btn" onclick="changerLangue('en')" id="lang_en"><span class="lang-flag">🇬🇧</span> English</button>
+        <button class="lang-btn" onclick="changerLangue('de')" id="lang_de"><span class="lang-flag">🇩🇪</span> Deutsch</button>
+        <button class="lang-btn" onclick="changerLangue('es')" id="lang_es"><span class="lang-flag">🇪🇸</span> Español</button>
+        <button class="lang-btn" onclick="changerLangue('it')" id="lang_it"><span class="lang-flag">🇮🇹</span> Italiano</button>
+        <button class="lang-btn" onclick="changerLangue('zh')" id="lang_zh"><span class="lang-flag">🇨🇳</span> 中文</button>
+        <button class="lang-btn" onclick="changerLangue('ja')" id="lang_ja"><span class="lang-flag">🇯🇵</span> 日本語</button>
         <div class="menu-divider"></div>
-
-        <button class="menu-action-btn" onclick="document.getElementById('qrModal').style.display='flex'; fermerMenu()">
-            🔗 <span id="menu_qr_label">Mon QR Code</span>
-        </button>
-        <button class="menu-action-btn" onclick="auth.signOut().then(()=>location.reload())">
-            🚪 <span id="menu_logout_label">Déconnexion</span>
-        </button>
+        <button class="menu-action-btn" onclick="document.getElementById('qrModal').style.display='flex'; fermerMenu()">🔗 <span id="menu_qr_label">Mon QR Code</span></button>
+        <button class="menu-action-btn" onclick="auth.signOut().then(()=>location.reload())">🚪 <span id="menu_logout_label">Déconnexion</span></button>
     </div>
 
     <!-- MODAL QR -->
@@ -207,7 +181,7 @@
 
     <!-- PAGE HOME -->
     <div id="PAGE_HOME" class="p">
-        <h1 id="userName" style="font-family:'Bodoni Moda'; margin-bottom:20px;">Ma Cave</h1>
+        <div id="userName" style="font-family:'Bodoni Moda'; margin-bottom:20px;"></div>
         <button class="btn-gold" onclick="openRayon('ROUGES')"><span class="btn-label" id="txt_reds">VINS ROUGES</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/8b15ea10.png" alt="Rouge"></div></button>
         <button class="btn-gold" onclick="openRayon('BLANCS')"><span class="btn-label" id="txt_whites">VINS BLANCS</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/fb282310.jpg" alt="Blanc"></div></button>
         <button class="btn-gold" onclick="openRayon('ROSES')"><span class="btn-label" id="txt_roses">VINS ROSÉS</span><div class="btn-bottle-wrap"><img src="https://i49.servimg.com/u/f49/11/31/89/70/01068710.jpg" alt="Rosé"></div></button>
@@ -269,294 +243,8 @@
 
         let userUID = null, rayonActuel = "", noteEtoiles = 0, currentImg = "", editID = null;
         let isReadOnly = false, vinsCharges = {}, scanData = null, html5QrCode = null;
+        let prenomUtilisateur = ""; // stocké séparément pour mise à jour à chaque changement de langue
 
-        // ---- TRADUCTIONS ----
         const LANGUES = {
             fr: { title:"LE CARNET DE LA GRAPPE", tagline:"Votre cave, toujours dans votre poche", tagline_sub:"Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.", login:"CONNEXION GOOGLE", cave_of:"Cave de", shared_cave:"Cave partagée", reds:"VINS ROUGES", whites:"VINS BLANCS", roses:"VINS ROSÉS", champagnes:"CHAMPAGNES", share_cave:"PARTAGER MA CAVE", scan_qr:"Scannez pour accéder à votre cave", close:"FERMER", add:"Ajouter", edit:"Modifier", scan_barcode:"📷 SCANNER LE CODE-BARRES", searching:"Recherche du vin...", wine_found:"✅ Vin trouvé", name:"Nom", vintage:"Millésime", producer:"Producteur", region:"Région", use_info:"✨ UTILISER CES INFORMATIONS", wine_name:"Nom du vin", quantity:"Quantité", camera:"📷 APPAREIL", gallery:"🖼️ GALERIE", tasting_notes:"Notes de dégustation...", save:"ENREGISTRER", cancel:"Annuler", back:"← RETOUR ACCUEIL", no_wine:"Aucun vin. Ajoutez-en un !", no_wine_ro:"Aucun vin.", delete_confirm:"Supprimer cette bouteille ?", no_note:"Aucune note.", readonly_badge:"👁 Mode consultation", camera_error:"Impossible d'accéder à la caméra.", wine_not_found:"Vin non trouvé.\nSaisissez le nom manuellement.", search_error:"Erreur de recherche.", name_required:"Veuillez entrer un nom.", cancel_scan:"✕ ANNULER", scan_title:"SCANNER LE CODE-BARRES", scan_hint:"Pointez la caméra vers le code-barres de la bouteille", not_detected:"Non détecté", qr_code:"Mon QR Code", logout:"Déconnexion" },
-            en: { title:"THE WINE CELLAR BOOK", tagline:"Your cellar, always in your pocket", tagline_sub:"Inventory your wines, track your stock and tasting notes at a glance.", login:"GOOGLE LOGIN", cave_of:"Cellar of", shared_cave:"Shared cellar", reds:"RED WINES", whites:"WHITE WINES", roses:"ROSÉ WINES", champagnes:"CHAMPAGNES", share_cave:"SHARE MY CELLAR", scan_qr:"Scan to access my cellar", close:"CLOSE", add:"Add", edit:"Edit", scan_barcode:"📷 SCAN BARCODE", searching:"Searching wine...", wine_found:"✅ Wine found", name:"Name", vintage:"Vintage", producer:"Producer", region:"Region", use_info:"✨ USE THIS INFO", wine_name:"Wine name", quantity:"Quantity", camera:"📷 CAMERA", gallery:"🖼️ GALLERY", tasting_notes:"Tasting notes...", save:"SAVE", cancel:"Cancel", back:"← BACK HOME", no_wine:"No wine. Add one!", no_wine_ro:"No wine.", delete_confirm:"Delete this bottle?", no_note:"No note.", readonly_badge:"👁 View only", camera_error:"Cannot access camera.", wine_not_found:"Wine not found.\nPlease enter name manually.", search_error:"Search error.", name_required:"Please enter a name.", cancel_scan:"✕ CANCEL", scan_title:"SCAN BARCODE", scan_hint:"Point camera at bottle barcode", not_detected:"Not detected", qr_code:"My QR Code", logout:"Logout" },
-            de: { title:"DAS WEINKELLER BUCH", tagline:"Ihr Keller, immer in Ihrer Tasche", tagline_sub:"Inventarisieren Sie Ihre Weine und Verkostungsnotizen.", login:"GOOGLE ANMELDUNG", cave_of:"Keller von", shared_cave:"Geteilter Keller", reds:"ROTWEINE", whites:"WEISSWEINE", roses:"ROSÉWEINE", champagnes:"CHAMPAGNER", share_cave:"KELLER TEILEN", scan_qr:"Scannen Sie für Kellerzugang", close:"SCHLIESSEN", add:"Hinzufügen", edit:"Bearbeiten", scan_barcode:"📷 BARCODE SCANNEN", searching:"Wein suchen...", wine_found:"✅ Wein gefunden", name:"Name", vintage:"Jahrgang", producer:"Erzeuger", region:"Region", use_info:"✨ VERWENDEN", wine_name:"Weinname", quantity:"Menge", camera:"📷 KAMERA", gallery:"🖼️ GALERIE", tasting_notes:"Verkostungsnotizen...", save:"SPEICHERN", cancel:"Abbrechen", back:"← ZURÜCK", no_wine:"Kein Wein. Hinzufügen!", no_wine_ro:"Kein Wein.", delete_confirm:"Flasche löschen?", no_note:"Keine Notiz.", readonly_badge:"👁 Nur ansehen", camera_error:"Kein Kamerazugriff.", wine_not_found:"Wein nicht gefunden.", search_error:"Suchfehler.", name_required:"Namen eingeben.", cancel_scan:"✕ ABBRECHEN", scan_title:"BARCODE SCANNEN", scan_hint:"Kamera auf Barcode richten", not_detected:"Nicht erkannt", qr_code:"Mein QR Code", logout:"Abmelden" },
-            es: { title:"EL LIBRO DE LA BODEGA", tagline:"Tu bodega, siempre en tu bolsillo", tagline_sub:"Inventaría tus vinos, stock y notas de cata.", login:"INICIAR CON GOOGLE", cave_of:"Bodega de", shared_cave:"Bodega compartida", reds:"VINOS TINTOS", whites:"VINOS BLANCOS", roses:"VINOS ROSADOS", champagnes:"CHAMPANES", share_cave:"COMPARTIR MI BODEGA", scan_qr:"Escanea para acceder", close:"CERRAR", add:"Añadir", edit:"Editar", scan_barcode:"📷 ESCANEAR CÓDIGO", searching:"Buscando vino...", wine_found:"✅ Vino encontrado", name:"Nombre", vintage:"Añada", producer:"Productor", region:"Región", use_info:"✨ USAR INFORMACIÓN", wine_name:"Nombre del vino", quantity:"Cantidad", camera:"📷 CÁMARA", gallery:"🖼️ GALERÍA", tasting_notes:"Notas de cata...", save:"GUARDAR", cancel:"Cancelar", back:"← VOLVER", no_wine:"Sin vino. ¡Añade uno!", no_wine_ro:"Sin vino.", delete_confirm:"¿Eliminar botella?", no_note:"Sin nota.", readonly_badge:"👁 Solo lectura", camera_error:"Sin acceso a cámara.", wine_not_found:"Vino no encontrado.", search_error:"Error de búsqueda.", name_required:"Ingrese un nombre.", cancel_scan:"✕ CANCELAR", scan_title:"ESCANEAR CÓDIGO", scan_hint:"Apunte al código de barras", not_detected:"No detectado", qr_code:"Mi Código QR", logout:"Cerrar sesión" },
-            it: { title:"IL LIBRO DELLA CANTINA", tagline:"La tua cantina, sempre in tasca", tagline_sub:"Inventaria vini, stock e note di degustazione.", login:"ACCESSO GOOGLE", cave_of:"Cantina di", shared_cave:"Cantina condivisa", reds:"VINI ROSSI", whites:"VINI BIANCHI", roses:"VINI ROSATI", champagnes:"CHAMPAGNE", share_cave:"CONDIVIDI CANTINA", scan_qr:"Scansiona per accedere", close:"CHIUDI", add:"Aggiungi", edit:"Modifica", scan_barcode:"📷 SCANSIONA CODICE", searching:"Ricerca vino...", wine_found:"✅ Vino trovato", name:"Nome", vintage:"Annata", producer:"Produttore", region:"Regione", use_info:"✨ USA QUESTE INFO", wine_name:"Nome del vino", quantity:"Quantità", camera:"📷 FOTOCAMERA", gallery:"🖼️ GALLERIA", tasting_notes:"Note di degustazione...", save:"SALVA", cancel:"Annulla", back:"← TORNA", no_wine:"Nessun vino. Aggiungine uno!", no_wine_ro:"Nessun vino.", delete_confirm:"Eliminare bottiglia?", no_note:"Nessuna nota.", readonly_badge:"👁 Solo visualizzazione", camera_error:"Nessun accesso fotocamera.", wine_not_found:"Vino non trovato.", search_error:"Errore ricerca.", name_required:"Inserire un nome.", cancel_scan:"✕ ANNULLA", scan_title:"SCANSIONA CODICE", scan_hint:"Punta la fotocamera al codice", not_detected:"Non rilevato", qr_code:"Il Mio QR Code", logout:"Disconnetti" },
-            zh: { title:"酒窖笔记本", tagline:"您的酒窖，随时随地", tagline_sub:"轻松管理您的藏酒、库存和品酒笔记。", login:"谷歌登录", cave_of:"酒窖", shared_cave:"共享酒窖", reds:"红葡萄酒", whites:"白葡萄酒", roses:"桃红葡萄酒", champagnes:"香槟", share_cave:"分享我的酒窖", scan_qr:"扫描以访问酒窖", close:"关闭", add:"添加", edit:"编辑", scan_barcode:"📷 扫描条形码", searching:"搜索葡萄酒...", wine_found:"✅ 找到葡萄酒", name:"名称", vintage:"年份", producer:"生产商", region:"产区", use_info:"✨ 使用此信息", wine_name:"葡萄酒名称", quantity:"数量", camera:"📷 相机", gallery:"🖼️ 图库", tasting_notes:"品酒笔记...", save:"保存", cancel:"取消", back:"← 返回", no_wine:"没有葡萄酒，请添加！", no_wine_ro:"没有葡萄酒。", delete_confirm:"删除这瓶酒？", no_note:"没有笔记。", readonly_badge:"👁 仅查看", camera_error:"无法访问相机。", wine_not_found:"未找到葡萄酒。", search_error:"搜索错误。", name_required:"请输入名称。", cancel_scan:"✕ 取消", scan_title:"扫描条形码", scan_hint:"将相机对准条形码", not_detected:"未检测到", qr_code:"我的二维码", logout:"退出登录" },
-            ja: { title:"ワインセラー手帳", tagline:"あなたのセラー、いつでも手の中に", tagline_sub:"ワインの在庫とテイスティングノートを簡単管理。", login:"Googleでログイン", cave_of:"セラー", shared_cave:"共有セラー", reds:"赤ワイン", whites:"白ワイン", roses:"ロゼワイン", champagnes:"シャンパン", share_cave:"セラーを共有", scan_qr:"スキャンしてアクセス", close:"閉じる", add:"追加", edit:"編集", scan_barcode:"📷 バーコードをスキャン", searching:"ワインを検索中...", wine_found:"✅ ワインが見つかりました", name:"名前", vintage:"ヴィンテージ", producer:"生産者", region:"地域", use_info:"✨ この情報を使用", wine_name:"ワイン名", quantity:"数量", camera:"📷 カメラ", gallery:"🖼️ ギャラリー", tasting_notes:"テイスティングノート...", save:"保存", cancel:"キャンセル", back:"← ホームに戻る", no_wine:"ワインなし。追加してください！", no_wine_ro:"ワインなし。", delete_confirm:"このボトルを削除しますか？", no_note:"ノートなし。", readonly_badge:"👁 閲覧のみ", camera_error:"カメラにアクセスできません。", wine_not_found:"ワインが見つかりません。", search_error:"検索エラー。", name_required:"名前を入力してください。", cancel_scan:"✕ キャンセル", scan_title:"バーコードをスキャン", scan_hint:"カメラをバーコードに向けてください", not_detected:"未検出", qr_code:"マイQRコード", logout:"ログアウト" }
-        };
-
-        let langActuelle = localStorage.getItem('langue') || 'fr';
-        let T = LANGUES[langActuelle];
-
-        function changerLangue(code) {
-            langActuelle = code;
-            T = LANGUES[code];
-            localStorage.setItem('langue', code);
-            appliquerTraductions();
-            // Mettre à jour bouton actif
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active-lang'));
-            document.getElementById('lang_' + code).classList.add('active-lang');
-            fermerMenu();
-        }
-
-        function appliquerTraductions() {
-            document.getElementById('txt_title').innerText = T.title;
-            document.getElementById('txt_tagline').innerText = T.tagline;
-            document.getElementById('txt_tagline_sub').innerText = T.tagline_sub;
-            document.getElementById('googleLogin').innerText = T.login;
-            document.getElementById('txt_reds').innerText = T.reds;
-            document.getElementById('txt_whites').innerText = T.whites;
-            document.getElementById('txt_roses').innerText = T.roses;
-            document.getElementById('txt_champagnes').innerText = T.champagnes;
-            document.getElementById('txt_share_cave').innerText = T.share_cave;
-            document.getElementById('txt_scan_qr').innerText = T.scan_qr;
-            document.getElementById('txt_close_qr').innerText = T.close;
-            document.getElementById('txt_close_note').innerText = T.close;
-            document.getElementById('txt_scan_title').innerText = T.scan_title;
-            document.getElementById('txt_scan_hint').innerText = T.scan_hint;
-            document.getElementById('txt_cancel_scan').innerText = T.cancel_scan;
-            document.getElementById('txt_scan_btn').innerText = T.scan_barcode;
-            document.getElementById('txt_searching').innerText = T.searching;
-            document.getElementById('txt_wine_found').innerText = T.wine_found;
-            document.getElementById('txt_use_info').innerText = T.use_info;
-            document.getElementById('txt_camera').innerText = T.camera;
-            document.getElementById('txt_gallery').innerText = T.gallery;
-            document.getElementById('txt_save').innerText = T.save;
-            document.getElementById('txt_cancel').innerText = T.cancel;
-            document.getElementById('txt_back').innerText = T.back;
-            document.getElementById('addTitle').innerText = T.add;
-            document.getElementById('nomVin').placeholder = T.wine_name;
-            document.getElementById('qteVin').placeholder = T.quantity;
-            document.getElementById('noteVin').placeholder = T.tasting_notes;
-            document.getElementById('menu_qr_label').innerText = T.qr_code;
-            document.getElementById('menu_logout_label').innerText = T.logout;
-            document.getElementById('lang_' + langActuelle).classList.add('active-lang');
-        }
-
-        // Appliquer au démarrage
-        appliquerTraductions();
-
-        // ---- MENU ----
-        function toggleMenu() {
-            document.getElementById('sideMenu').classList.toggle('open');
-            document.getElementById('sideOverlay').classList.toggle('open');
-        }
-        function fermerMenu() {
-            document.getElementById('sideMenu').classList.remove('open');
-            document.getElementById('sideOverlay').classList.remove('open');
-        }
-
-        // ---- FIREBASE ----
-        const urlParams = new URLSearchParams(window.location.search);
-        const viewUID = urlParams.get('view');
-
-        if (viewUID) {
-            isReadOnly = true;
-            userUID = viewUID;
-            document.getElementById('btn-add-vin').style.display = 'none';
-            document.getElementById('userName').innerText = T.shared_cave;
-            showPage('PAGE_HOME');
-        } else {
-            document.getElementById('googleLogin').onclick = () => {
-                auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message));
-            };
-            auth.onAuthStateChanged(u => {
-                if (u) {
-                    userUID = u.uid;
-                    document.getElementById('userName').innerText = T.cave_of + " " + u.displayName.split(' ')[0];
-                    showPage('PAGE_HOME');
-                } else { showPage('PAGE_AUTH'); }
-            });
-        }
-
-        function showPage(id) {
-            document.querySelectorAll('.p').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
-
-        function openRayon(n) {
-            rayonActuel = n;
-            document.getElementById('rayonTitle').innerText = n;
-            document.getElementById('readonly-badge-container').innerHTML = isReadOnly ? `<div class="readonly-badge">${T.readonly_badge}</div>` : '';
-            if (!isReadOnly) document.getElementById('btn-add-vin').style.display = 'block';
-            chargerVins();
-            showPage('PAGE_LISTE');
-        }
-
-        function setStars(n) {
-            noteEtoiles = n;
-            document.querySelectorAll('#starRating span').forEach((s, i) => s.classList.toggle('selected', i < n));
-        }
-
-        function handleFile(input) {
-            if (!input.files || !input.files[0]) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                currentImg = e.target.result;
-                document.getElementById('preview').innerHTML = `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">`;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-
-        function demarrerScan() {
-            document.getElementById('modalScanner').classList.add('active');
-            html5QrCode = new Html5Qrcode("reader");
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 150 } },
-                (decodedText) => { arreterScan(); rechercherVin(decodedText); },
-                () => {}
-            ).catch(() => { arreterScan(); alert(T.camera_error); });
-        }
-
-        function arreterScan() {
-            document.getElementById('modalScanner').classList.remove('active');
-            if (html5QrCode) { html5QrCode.stop().catch(() => {}); html5QrCode = null; }
-        }
-
-        async function rechercherVin(barcode) {
-            document.getElementById('scanLoader').classList.add('active');
-            document.getElementById('scanResult').classList.remove('active');
-            let nom = '', millesime = '', producteur = '', region = '';
-            try {
-                try {
-                    const res1 = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
-                    const data1 = await res1.json();
-                    if (data1.status === 1 && data1.product) {
-                        const p = data1.product;
-                        nom = p.product_name_fr || p.product_name || '';
-                        producteur = p.brands || '';
-                        region = p.origins_tags?.[0]?.replace('en:', '') || p.manufacturing_places || '';
-                        millesime = extraireMillesime(nom + ' ' + (p.labels || ''));
-                    }
-                } catch(e) {}
-
-                if (!nom) {
-                    try {
-                        const res2 = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${barcode}`);
-                        const data2 = await res2.json();
-                        if (data2.items && data2.items.length > 0) {
-                            nom = data2.items[0].title || '';
-                            producteur = data2.items[0].brand || '';
-                            millesime = extraireMillesime(nom);
-                        }
-                    } catch(e) {}
-                }
-
-                if (!nom) { alert(T.wine_not_found); return; }
-
-                scanData = { nom, millesime, producteur, region };
-                document.getElementById('txt_scan_name_field').innerHTML = `${T.name} : <b>${nom || '—'}</b>`;
-                document.getElementById('txt_scan_vintage_field').innerHTML = `${T.vintage} : <b>${millesime || T.not_detected}</b>`;
-                document.getElementById('txt_scan_producer_field').innerHTML = `${T.producer} : <b>${producteur || '—'}</b>`;
-                document.getElementById('txt_scan_region_field').innerHTML = `${T.region} : <b>${region || '—'}</b>`;
-                document.getElementById('scanResult').classList.add('active');
-            } catch(err) {
-                alert(T.search_error);
-            } finally {
-                document.getElementById('scanLoader').classList.remove('active');
-            }
-        }
-
-        function extraireMillesime(texte) {
-            if (!texte) return null;
-            const match = texte.match(/\b(19|20)\d{2}\b/);
-            return match ? match[0] : null;
-        }
-
-        function utiliserScan() {
-            if (!scanData) return;
-            document.getElementById('nomVin').value = scanData.millesime ? `${scanData.nom} ${scanData.millesime}` : scanData.nom;
-            let note = '';
-            if (scanData.producteur) note += `${scanData.producteur}\n`;
-            if (scanData.region) note += `${scanData.region}`;
-            document.getElementById('noteVin').value = note.trim();
-            document.getElementById('scanResult').classList.remove('active');
-            scanData = null;
-        }
-
-        function chargerVins() {
-            db.ref('users/' + userUID + '/cave').orderByChild('categorie').equalTo(rayonActuel).on('value', s => {
-                const c = document.getElementById('container-vins');
-                c.innerHTML = ""; let count = 0; vinsCharges = {};
-                s.forEach(child => {
-                    const v = child.val(), id = child.key;
-                    count++; vinsCharges[id] = v;
-                    const etoiles = v.noteEtoiles || 0;
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    if (v.qte === 0) card.style.opacity = "0.5";
-                    card.innerHTML = `
-                        <img src="${v.image || 'https://via.placeholder.com/70x100'}" class="img-vin" onclick="ouvrirImage('${id}')">
-                        <div class="vin-info">
-                            <b>${v.nom}</b>
-                            <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
-                        </div>
-                        <div class="vin-qte">x${v.qte}</div>
-                        <button class="btn-carnet" onclick="ouvrirNote('${id}')">📖</button>
-                        ${!isReadOnly ? `
-                            <button class="btn-edit-vin" onclick="preparerModif('${id}')">✏️</button>
-                            <button class="btn-suppr" onclick="supprimer('${id}')">✕</button>
-                        ` : ''}
-                    `;
-                    c.appendChild(card);
-                });
-                if (count === 0) c.innerHTML = `<p style="color:#555; margin-top:40px;">${isReadOnly ? T.no_wine_ro : T.no_wine}</p>`;
-            });
-        }
-
-        function goToAdd() {
-            editID = null; scanData = null;
-            document.getElementById('addTitle').innerText = T.add;
-            document.getElementById('nomVin').value = "";
-            document.getElementById('qteVin').value = 1;
-            document.getElementById('noteVin').value = "";
-            document.getElementById('preview').innerHTML = "";
-            document.getElementById('scanResult').classList.remove('active');
-            document.getElementById('scanLoader').classList.remove('active');
-            currentImg = ""; setStars(0);
-            showPage('PAGE_ADD');
-        }
-
-        function preparerModif(id) {
-            const v = vinsCharges[id]; if(!v) return;
-            editID = id; scanData = null;
-            document.getElementById('addTitle').innerText = T.edit;
-            document.getElementById('nomVin').value = v.nom;
-            document.getElementById('qteVin').value = v.qte;
-            document.getElementById('noteVin').value = v.note || "";
-            currentImg = v.image || "";
-            document.getElementById('preview').innerHTML = currentImg ? `<img src="${currentImg}" style="width:100px; margin-top:15px; border-radius:8px;">` : "";
-            document.getElementById('scanResult').classList.remove('active');
-            setStars(v.noteEtoiles || 0);
-            showPage('PAGE_ADD');
-        }
-
-        function sauvegarderVin() {
-            const nom = document.getElementById('nomVin').value.trim();
-            const inputQte = document.getElementById('qteVin').value;
-            if (!nom) return alert(T.name_required);
-            const qteVal = (inputQte !== "" && !isNaN(inputQte)) ? parseInt(inputQte) : 1;
-            const data = { nom, qte: qteVal, note: document.getElementById('noteVin').value, noteEtoiles, image: currentImg, categorie: rayonActuel };
-            const ref = editID ? db.ref('users/' + userUID + '/cave/' + editID) : db.ref('users/' + userUID + '/cave').push();
-            ref.set(data).then(() => showPage('PAGE_LISTE'));
-        }
-
-        function supprimer(id) { if (confirm(T.delete_confirm)) db.ref('users/' + userUID + '/cave/' + id).remove(); }
-
-        function ouvrirImage(id) {
-            const v = vinsCharges[id]; if(!v) return;
-            const etoiles = v.noteEtoiles || 0;
-            document.getElementById('modalImgSrc').src = v.image || 'https://via.placeholder.com/300x450';
-            document.getElementById('modalImgNom').innerText = v.nom;
-            document.getElementById('modalImgStars').innerText = '★'.repeat(etoiles) + '☆'.repeat(5 - etoiles);
-            document.getElementById('modalImg').style.display = 'flex';
-        }
-
-        function ouvrirNote(id) {
-            const v = vinsCharges[id]; if(!v) return;
-            document.getElementById('modalNoteNom').innerText = v.nom;
-            const el = document.getElementById('modalNoteTexte');
-            if (v.note && v.note.trim()) { el.innerText = v.note; el.classList.remove('empty'); }
-            else { el.innerText = T.no_note; el.classList.add('empty'); }
-            document.getElementById('modalNote').style.display = 'flex';
-        }
-    </script>
-</body>
-</html>
+            en: { title:"THE WINE CELLAR BOOK", tagline:"Your cellar, always in your pocket", tagline_sub:"Inventory your wines, track your stock and tasting notes at a glance.", login:"GOOGLE LOGIN", cave_of:"Cellar of", shared_cave:"Shared cellar", reds:"
