@@ -61,11 +61,15 @@
         .note-texte { color: #ddd; font-size: 1rem; line-height: 1.7; font-style: italic; border-left: 2px solid var(--gold); padding-left: 15px; min-height: 60px; white-space: pre-wrap; }
         .note-texte.empty { color: #555; font-style: normal; border-left-color: #333; }
         .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #333; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+        
+        /* --- CORRECTION OVERFLOW ICI --- */
         .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; transition: opacity 0.3s; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
-        .grid-info { flex: 1; min-width: 0; }
-        .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+        .vin-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; width: 100%; }
         .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
+        /* ------------------------------ */
+
         .btn-carnet, .btn-edit-vin { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
         .btn-suppr { background: none; border: none; color: #ff4444; font-size: 1.5rem; margin-left: 4px; cursor: pointer; flex-shrink: 0; }
         .readonly-badge { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
@@ -370,12 +374,10 @@
             document.getElementById('scanResult').classList.remove('active');
             let nom = '', millesime = '', producteur = '', region = '';
             
-            // Configuration des Clés API (à remplacer par tes jetons)
             const BARCODES_SPIDER_KEY = "VOTRE_CLE_API_BARCODES_SPIDER";
             const DIGIT_EYES_KEY = "VOTRE_CLE_API_DIGIT_EYES";
 
             try {
-                // 1. Essai : Open Food Facts
                 try {
                     const res1 = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
                     const data1 = await res1.json();
@@ -388,7 +390,6 @@
                     }
                 } catch(e) {}
 
-                // 2. Essai : UPCitemdb (si pas trouvé avant)
                 if (!nom) {
                     try {
                         const res2 = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${barcode}`);
@@ -401,7 +402,6 @@
                     } catch(e) {}
                 }
 
-                // 3. Essai : Barcodes Spider API
                 if (!nom && BARCODES_SPIDER_KEY !== "VOTRE_CLE_API_BARCODES_SPIDER") {
                     try {
                         const res3 = await fetch(`https://api.barcodespider.com/v1/lookup?token=${BARCODES_SPIDER_KEY}&upc=${barcode}`);
@@ -415,7 +415,6 @@
                     } catch(e) {}
                 }
 
-                // 4. Essai : Digit-Eyes API
                 if (!nom && DIGIT_EYES_KEY !== "VOTRE_CLE_API_DIGIT_EYES") {
                     try {
                         const res4 = await fetch(`https://www.digit-eyes.com/gtin/v2.0/?upc_code=${barcode}&app_key=${DIGIT_EYES_KEY}`);
@@ -428,10 +427,8 @@
                     } catch(e) {}
                 }
 
-                // Si aucune base de données n'a d'informations sur ce code-barres
                 if (!nom) { alert(T.wine_not_found); return; }
 
-                // Stockage et remplissage automatique immédiat
                 scanData = { nom, millesime, producteur, region };
                 utiliserScan();
 
