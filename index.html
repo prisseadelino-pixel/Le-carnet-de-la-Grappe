@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LE CARNET DE LA GRAPPE</title>
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#ffffff">
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="La Grappe">
     <link rel="apple-touch-icon" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
     <link rel="icon" type="image/jpg" href="https://i.servimg.com/u/f49/11/31/89/70/picsar10.jpg">
@@ -18,80 +18,79 @@
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@700&family=Montserrat:wght@400;700&display=swap');
-        :root { --gold: #c5a059; --bg: #000; --brd: rgba(255,255,255,0.15); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
+        :root { --gold: #c5a059; --bg: #ffffff; --brd: rgba(0,0,0,0.15); }
+        body { margin: 0; background: var(--bg); color: #222; font-family: 'Montserrat', sans-serif; text-align: center; overflow-x: hidden; }
         .p { display: none; flex-direction: column; align-items: center; padding: 20px 10px; min-height: 100vh; box-sizing: border-box; }
         .active { display: flex !important; }
         .logo { width: 120px; height: auto; margin-bottom: 15px; border: 1.5px solid var(--gold); padding: 8px; border-radius: 8px; }
         h1 { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.8rem; margin: 15px 0; text-transform: uppercase; letter-spacing: 2px; }
         #userName { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: clamp(1.1rem, 5vw, 1.6rem); margin: 15px 55px 20px 15px; text-transform: uppercase; letter-spacing: 2px; line-height: 1.2; word-break: break-word; text-align: center; }
-        .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 20px; border: 1px solid rgba(197,160,89,0.3); background: linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(197,160,89,0.05) 100%); border-radius: 15px; font-size: 1rem; line-height: 1.6; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .intro-text b { display: block; margin-bottom: 8px; background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem; letter-spacing: 1px; }
-        .intro-text span { color: #ccc; font-weight: 400; }
-        .btn-gold { background: rgba(197,160,89,0.05); border: 1.5px solid var(--gold); color: var(--gold); padding: 0; width: 95%; max-width: 600px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; min-height: 110px; transition: 0.2s; overflow: hidden; }
+        .intro-text { width: 90%; max-width: 450px; margin: 15px 0 25px 0; padding: 20px; border: 1px solid rgba(197,160,89,0.3); background: linear-gradient(145deg, rgba(0,0,0,0.01) 0%, rgba(197,160,89,0.05) 100%); border-radius: 15px; font-size: 1rem; line-height: 1.6; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .intro-text b { display: block; margin-bottom: 8px; background: linear-gradient(to right, #222, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.1rem; letter-spacing: 1px; }
+        .intro-text span { color: #555; font-weight: 400; }
+        .btn-gold { background: rgba(197,160,89,0.03); border: 1.5px solid var(--gold); color: var(--gold); padding: 0; width: 95%; max-width: 600px; margin: 10px 0; text-transform: uppercase; cursor: pointer; font-weight: 700; font-size: 1.1rem; border-radius: 18px; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; min-height: 110px; transition: 0.2s; overflow: hidden; }
         .btn-gold:active { background: rgba(197,160,89,0.12); transform: scale(0.98); }
         .btn-label { flex: 1; text-align: left; padding-left: 25px; font-size: 1.05rem; letter-spacing: 2px; }
         .btn-bottle-wrap { width: 130px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .btn-bottle-wrap img { height: 95px; width: auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6)); object-fit: contain; }
+        .btn-bottle-wrap img { height: 95px; width: auto; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); object-fit: contain; }
 
         .hamburger { position: fixed; top: 15px; right: 15px; z-index: 9000; background: rgba(197,160,89,0.1); border: 1.5px solid rgba(197,160,89,0.4); border-radius: 10px; width: 44px; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; }
         .hamburger span { display: block; width: 22px; height: 2px; background: var(--gold); border-radius: 2px; }
-        .side-menu { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #0a0a0a; border-left: 1.5px solid rgba(197,160,89,0.3); z-index: 8000; flex-direction: column; padding: 70px 20px 30px; box-sizing: border-box; overflow-y: auto; }
+        .side-menu { display: none; position: fixed; top: 0; right: 0; width: 280px; height: 100%; background: #fcfcfc; border-left: 1.5px solid rgba(197,160,89,0.3); z-index: 8000; flex-direction: column; padding: 70px 20px 30px; box-sizing: border-box; overflow-y: auto; box-shadow: -5px 0 25px rgba(0,0,0,0.05); }
         .side-menu.open { display: flex; }
-        .side-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 7000; }
+        .side-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 7000; }
         .side-overlay.open { display: block; }
-        .menu-section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #555; margin-bottom: 12px; margin-top: 20px; }
-        .lang-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px; background: none; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; color: #aaa; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; cursor: pointer; margin-bottom: 8px; text-align: left; transition: 0.2s; }
+        .menu-section-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 3px; color: #999; margin-bottom: 12px; margin-top: 20px; }
+        .lang-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px; background: none; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; color: #666; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; cursor: pointer; margin-bottom: 8px; text-align: left; transition: 0.2s; }
         .lang-btn:hover, .lang-btn.active-lang { background: rgba(197,160,89,0.1); border-color: rgba(197,160,89,0.4); color: var(--gold); }
         .lang-flag { font-size: 1.3rem; }
-        .menu-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 20px 0; }
-        .menu-action-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px; background: none; border: none; color: #666; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; cursor: pointer; text-align: left; }
+        .menu-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 20px 0; }
+        .menu-action-btn { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 15px; background: none; border: none; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; cursor: pointer; text-align: left; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #111; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; }
-        .qr-wrapper { width: 260px; height: 260px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 30px; border-radius: 15px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .qr-wrapper { width: 260px; height: 260px; margin: 20px auto; background: white; padding: 10px; border-radius: 10px; display: flex; justify-content: center; align-items: center; border: 1px solid #eee; }
         .qr-wrapper img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
-        .modal-img { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 4000; justify-content: center; align-items: center; flex-direction: column; }
-        .modal-img img { max-width: 90%; max-height: 75vh; border-radius: 12px; border: 2px solid var(--gold); }
-        .modal-img h3 { color: var(--gold); font-family: 'Bodoni Moda', serif; margin: 20px 0 5px; font-size: 1.4rem; }
+        .modal-img { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 4000; justify-content: center; align-items: center; flex-direction: column; }
+        .modal-img img { max-width: 90%; max-height: 75vh; border-radius: 12px; border: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .modal-img h3 { color: #fff; font-family: 'Bodoni Moda', serif; margin: 20px 0 5px; font-size: 1.4rem; }
         .modal-img .stars-big { font-size: 1.6rem; color: var(--gold); margin-bottom: 10px; }
-        .modal-note { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 4000; justify-content: center; align-items: center; }
-        .modal-note-content { background: #0d0d0d; border: 1.5px solid var(--gold); border-radius: 15px; width: 88%; max-width: 420px; padding: 25px; text-align: left; }
+        .modal-note { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4000; justify-content: center; align-items: center; }
+        .modal-note-content { background: #ffffff; border: 1.5px solid var(--gold); border-radius: 15px; width: 88%; max-width: 420px; padding: 25px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         .modal-note-content h3 { font-family: 'Bodoni Moda', serif; color: var(--gold); margin: 0 0 15px; font-size: 1.1rem; }
-        .note-texte { color: #ddd; font-size: 1rem; line-height: 1.7; font-style: italic; border-left: 2px solid var(--gold); padding-left: 15px; min-height: 60px; white-space: pre-wrap; }
-        .note-texte.empty { color: #555; font-style: normal; border-left-color: #333; }
-        .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #333; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+        .note-texte { color: #444; font-size: 1rem; line-height: 1.7; font-style: italic; border-left: 2px solid var(--gold); padding-left: 15px; min-height: 60px; white-space: pre-wrap; }
+        .note-texte.empty { color: #aaa; font-style: normal; border-left-color: #ddd; }
+        .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #ddd; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         
-        /* --- CORRECTION OVERFLOW ICI --- */
-        .card { background: #0d0d0d; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; transition: opacity 0.3s; }
+        .card { background: #fafafa; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; transition: opacity 0.3s; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
         .vin-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        .vin-info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; width: 100%; }
-        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #fff; margin-left: 8px; flex-shrink: 0; }
-        /* ------------------------------ */
+        .vin-info b { color: #222; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; width: 100%; }
+        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #222; margin-left: 8px; flex-shrink: 0; }
 
         .btn-carnet, .btn-edit-vin { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
         .btn-suppr { background: none; border: none; color: #ff4444; font-size: 1.5rem; margin-left: 4px; cursor: pointer; flex-shrink: 0; }
-        .readonly-badge { background: rgba(197,160,89,0.12); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #000; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 100; }
-        input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #111; color: #fff; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
-        .stars { font-size: 35px; color: #333; margin: 15px 0; cursor: pointer; }
+        .readonly-badge { background: rgba(197,160,89,0.08); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #fff; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
+        input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #fdfdfd; color: #222; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
+        input::placeholder, textarea::placeholder { color: #aaa; }
+        .stars { font-size: 35px; color: #e0e0e0; margin: 15px 0; cursor: pointer; }
         .stars .selected { color: var(--gold); }
         .photo-actions-container { display: flex; gap: 10px; width: 95%; max-width: 600px; margin: 8px 0; }
         .btn-half { flex: 1; margin: 0 !important; min-height: 60px !important; font-size: 0.95rem !important; }
-        .btn-scanner { width: 95%; max-width: 600px; margin: 8px 0; padding: 18px; background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.08)); border: 1.5px solid var(--gold); border-radius: 12px; color: var(--gold); font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .modal-scanner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; }
+        .btn-scanner { width: 95%; max-width: 600px; margin: 8px 0; padding: 18px; background: linear-gradient(135deg, rgba(197,160,89,0.1), rgba(197,160,89,0.03)); border: 1.5px solid var(--gold); border-radius: 12px; color: var(--gold); font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .modal-scanner { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.97); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; }
         .modal-scanner.active { display: flex; }
         .scanner-title { font-family: 'Bodoni Moda', serif; color: var(--gold); font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; }
-        .scanner-hint { color: #888; font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 1px; }
-        #reader { width: 300px; border-radius: 12px; overflow: hidden; border: 2px solid var(--gold); }
-        .btn-stop-scan { margin-top: 25px; padding: 14px 40px; border-radius: 10px; background: none; border: 1px solid #444; color: #888; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; }
-        .scan-result { display: none; width: 95%; max-width: 600px; background: #0d0d0d; border: 1.5px solid rgba(197,160,89,0.4); border-radius: 12px; padding: 18px; margin: 8px 0; text-align: left; }
+        .scanner-hint { color: #999; font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 1px; }
+        #reader { width: 300px; border-radius: 12px; overflow: hidden; border: 2px solid var(--gold); background: #000; }
+        .btn-stop-scan { margin-top: 25px; padding: 14px 40px; border-radius: 10px; background: none; border: 1px solid #ddd; color: #999; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; cursor: pointer; }
+        .scan-result { display: none; width: 95%; max-width: 600px; background: #fafafa; border: 1.5px solid rgba(197,160,89,0.4); border-radius: 12px; padding: 18px; margin: 8px 0; text-align: left; }
         .scan-result.active { display: block; }
         .scan-result-title { color: var(--gold); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
-        .scan-field { margin-bottom: 8px; font-size: 0.85rem; color: #ccc; }
-        .scan-field b { color: #fff; }
-        .btn-use-scan { width: 100%; margin-top: 14px; padding: 13px; border-radius: 10px; background: var(--gold); border: none; color: #000; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .scan-field { margin-bottom: 8px; font-size: 0.85rem; color: #555; }
+        .scan-field b { color: #222; }
+        .btn-use-scan { width: 100%; margin-top: 14px; padding: 13px; border-radius: 10px; background: var(--gold); border: none; color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .scan-loader { display: none; align-items: center; justify-content: center; gap: 12px; margin: 10px 0; }
         .scan-loader.active { display: flex; }
         .spinner { width: 28px; height: 28px; border: 3px solid rgba(197,160,89,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
@@ -155,7 +154,7 @@
             <b id="txt_tagline">Votre cave, toujours dans votre poche</b>
             <span id="txt_tagline_sub">Inventorier vos crus, suivez vos stocks et vos notes de dégustation en un clin d'œil.</span>
         </div>
-        <button id="btnGoogle" class="btn-gold" style="background:white; color:black; border:none; justify-content:center; min-height:60px; padding:0 20px;">CONNEXION GOOGLE</button>
+        <button id="btnGoogle" class="btn-gold" style="background:#222; color:#fff; border:none; justify-content:center; min-height:60px; padding:0 20px;">CONNEXION GOOGLE</button>
     </div>
 
     <div id="PAGE_HOME" class="p">
@@ -202,7 +201,7 @@
             <span onclick="setStars(1)">★</span><span onclick="setStars(2)">★</span><span onclick="setStars(3)">★</span><span onclick="setStars(4)">★</span><span onclick="setStars(5)">★</span>
         </div>
         <textarea id="noteVin" rows="4" placeholder="Notes de dégustation..."></textarea>
-        <button class="btn-gold" style="background:var(--gold); color:#000; justify-content:center; padding:0 20px;" onclick="sauvegarderVin()" id="txt_save">ENREGISTRER</button>
+        <button class="btn-gold" style="background:var(--gold); color:#fff; justify-content:center; padding:0 20px;" onclick="genererEtSauvegarderVin()" id="txt_save">ENREGISTRER</button>
         <button onclick="showPage('PAGE_LISTE')" style="color:gray; background:none; border:none; margin-top:10px;" id="txt_cancel">Annuler</button>
     </div>
 
@@ -227,7 +226,7 @@
             de: { title:"DAS WEINKELLER BUCH", tagline:"Ihr Keller, immer in Ihrer Tasche", tagline_sub:"Inventarisieren Sie Ihre Weine und Verkostungsnotizen.", login:"GOOGLE ANMELDUNG", cave_of:"Keller von", shared_cave:"Geteilter Keller", reds:"ROTWEINE", whites:"WEISSWEINE", roses:"ROSÉWEINE", champagnes:"CHAMPAGNER", share_cave:"KELLER TEILEN", scan_qr:"Scannen für Kellerzugang", close:"SCHLIESSEN", add:"Hinzufügen", edit:"Bearbeiten", scan_barcode:"📷 BARCODE SCANNEN", searching:"Wein suchen...", wine_found:"✅ Wein gefunden", name:"Name", vintage:"Jahrgang", producer:"Erzeuger", region:"Region", use_info:"✨ VERWENDEN", wine_name:"Weinname", quantity:"Menge", camera:"📷 KAMERA", gallery:"🖼️ GALERIE", tasting_notes:"Verkostungsnotizen...", save:"SPEICHERN", cancel:"Abbrechen", back:"← ZURÜCK", no_wine:"Kein Wein. Hinzufügen!", no_wine_ro:"Kein Wein.", delete_confirm:"Flasche löschen?", no_note:"Keine Notiz.", readonly_badge:"👁 Nur ansehen", camera_error:"Kein Kamerazugriff.", wine_not_found:"Wein nicht gefunden.", search_error:"Suchfehler.", name_required:"Namen eingeben.", cancel_scan:"✕ ABBRECHEN", scan_title:"BARCODE SCANNEN", scan_hint:"Kamera auf Barcode richten", not_detected:"Nicht erkannt", qr_code:"Mein QR Code", logout:"Abmelden" },
             es: { title:"EL LIBRO DE LA BODEGA", tagline:"Tu bodega, siempre en tu bolsillo", tagline_sub:"Inventaría tus vinos, stock y notas de cata.", login:"INICIAR CON GOOGLE", cave_of:"Bodega de", shared_cave:"Bodega compartida", reds:"VINOS TINTOS", whites:"VINOS BLANCOS", roses:"VINOS ROSADOS", champagnes:"CHAMPANES", share_cave:"COMPARTIR MI BODEGA", scan_qr:"Escanea para acceder", close:"CERRAR", add:"Añadir", edit:"Editar", scan_barcode:"📷 ESCANEAR CÓDIGO", searching:"Buscando vino...", wine_found:"✅ Vino encontrado", name:"Nombre", vintage:"Añada", producer:"Productor", region:"Región", use_info:"✨ USAR INFORMACIÓN", wine_name:"Nombre del vino", quantity:"Cantidad", camera:"📷 CÁMARA", gallery:"🖼️ GALERÍA", tasting_notes:"Notas de cata...", save:"GUARDAR", cancel:"Cancelar", back:"← VOLVER", no_wine:"Sin vino. ¡Añade uno!", no_wine_ro:"Sin vino.", delete_confirm:"¿Eliminar botella?", no_note:"Sin nota.", readonly_badge:"👁 Solo lectura", camera_error:"Sin acceso a cámara.", wine_not_found:"Vino no encontrado.", search_error:"Error de búsqueda.", name_required:"Ingrese un nombre.", cancel_scan:"✕ CANCELAR", scan_title:"ESCANEAR CÓDIGO", scan_hint:"Apunte al código de barras", not_detected:"No detectado", qr_code:"Mi Código QR", logout:"Cerrar sesión" },
             it: { title:"IL LIBRO DELLA CANTINA", tagline:"La tua cantina, sempre in tasca", tagline_sub:"Inventaria vini, stock e note di degustazione.", login:"ACCESSO GOOGLE", cave_of:"Cantina di", shared_cave:"Cantina condivisa", reds:"VINI ROSSI", whites:"VINI BIANCHI", roses:"VINI ROSATI", champagnes:"CHAMPAGNE", share_cave:"CONDIVIDI CANTINA", scan_qr:"Scansiona per accedere", close:"CHIUDI", add:"Aggiungi", edit:"Modifica", scan_barcode:"📷 SCANSIONA CODICE", searching:"Ricerca vino...", wine_found:"✅ Vino trovato", name:"Nome", vintage:"Annata", producer:"Produttore", region:"Regione", use_info:"✨ USA QUESTE INFO", wine_name:"Nome del vino", quantity:"Quantità", camera:"📷 FOTOCAMERA", gallery:"🖼️ GALLERIA", tasting_notes:"Note di degustazione...", save:"SALVA", cancel:"Annulla", back:"← TORNA", no_wine:"Nessun vino. Aggiungine uno!", no_wine_ro:"Nessun vino.", delete_confirm:"Eliminare bottiglia?", no_note:"Nessuna nota.", readonly_badge:"👁 Solo visualizzazione", camera_error:"Nessun accesso fotocamera.", wine_not_found:"Vino non trovato.", search_error:"Errore ricerca.", name_required:"Inserire un nome.", cancel_scan:"✕ ANNULLA", scan_title:"SCANSIONA CODICE", scan_hint:"Punta la fotocamera al codice", not_detected:"Non rilevato", qr_code:"Il Mio QR Code", logout:"Disconnetti" },
-            zh: { title:"酒窖笔记本", tagline:"您的酒窖，随时随地", tagline_sub:"轻松 management 您的藏酒、库存和品酒笔记。", login:"谷歌登录", cave_of:"酒窖", shared_cave:"共享酒窖", reds:"红葡萄酒", whites:"白葡萄酒", roses:"桃红葡萄酒", champagnes:"香槟", share_cave:"分享我的酒窖", scan_qr:"扫描以访问酒窖", close:"关闭", add:"添加", edit:"编辑", scan_barcode:"📷 扫描条形码", searching:"搜索葡萄酒...", wine_found:"✅ 找到葡萄酒", name:"名称", vintage:"年份", producer:"生产商", region:"产区", use_info:"✨ 使用此信息", wine_name:"葡萄酒名称", quantity:"数量", camera:"📷 相机", gallery:"🖼️ 图库", tasting_notes:"品酒笔记...", save:"保存", cancel:"取消", back:"← 返回", no_wine:"没有葡萄酒，请添加！", no_wine_ro:"没有葡萄酒。", delete_confirm:"删除这瓶酒？", no_note:"没有笔记。", readonly_badge:"👁 仅查看", camera_error:"无法访问相机。", wine_not_found:"未找到葡萄酒。", search_error:"搜索错误。", name_required:"请输入名称。", cancel_scan:"✕ 取消", scan_title:"扫描条形码", scan_hint:"将相机对准条形码", not_detected:"未检测到", qr_code:"我的二维码", logout:"退出登录" },
+            zh: { title:"酒窖笔记本", tagline:"您的酒窖，随时随地", tagline_sub:"轻松 management 您的藏酒、库存 and 品酒笔记。", login:"谷歌登录", cave_of:"酒窖", shared_cave:"共享酒窖", reds:"红葡萄酒", whites:"白葡萄酒", roses:"桃红葡萄酒", champagnes:"香槟", share_cave:"分享我的酒窖", scan_qr:"扫描以访问酒窖", close:"关闭", add:"添加", edit:"编辑", scan_barcode:"📷 扫描条形码", searching:"搜索葡萄酒...", wine_found:"✅ 找到葡萄酒", name:"名称", vintage:"年份", producer:"生产商", region:"产区", use_info:"✨ 使用此信息", wine_name:"葡萄酒名称", quantity:"数量", camera:"📷 相机", gallery:"🖼️ 图库", tasting_notes:"品酒笔记...", save:"保存", cancel:"取消", back:"← 返回", no_wine:"没有葡萄酒，请添加！", no_wine_ro:"没有葡萄酒。", delete_confirm:"删除这瓶酒？", no_note:"没有笔记。", readonly_badge:"👁 仅查看", camera_error:"无法访问相机。", wine_not_found:"未找到葡萄酒。", search_error:"搜索错误。", name_required:"请输入名称。", cancel_scan:"✕ 取消", scan_title:"扫描条形码", scan_hint:"将相机对准条形码", not_detected:"未检测到", qr_code:"我的二维码", logout:"退出登录" },
             ja: { title:"ワインセラー手帳", tagline:"あなたのセラー、いつでも手の中に", tagline_sub:"ワインの在庫とテイスティングノートを簡単管理。", login:"Googleでログイン", cave_of:"セラー", shared_cave:"共有セラー", reds:"赤ワイン", whites:"白ワイン", roses:"ロゼワイン", champagnes:"シャンパン", share_cave:"セラーを共有", scan_qr:"スキャンしてアクセス", close:"閉じる", add:"追加", edit:"編集", scan_barcode:"📷 バーコードをスキャン", searching:"ワインを検索中...", wine_found:"✅ ワインが見つかりました", name:"名前", vintage:"ヴィンテージ", producer:"生産者", region:"地域", use_info:"✨ この情報を使用", wine_name:"ワイン名", quantity:"数量", camera:"📷 カメラ", gallery:"🖼️ ギャラリー", tasting_notes:"テイスティングノート...", save:"保存", cancel:"キャンセル", back:"← ホームに戻る", no_wine:"ワインなし。追加してください！", no_wine_ro:"ワインなし。", delete_confirm:"このボトルを削除しますか？", no_note:"ノートなし。", readonly_badge:"👁 閲覧のみ", camera_error:"カメラにアクセスできません。", wine_not_found:"ワインが見つかりません。", search_error:"検索エラー。", name_required:"名前を入力してください。", cancel_scan:"✕ キャンセル", scan_title:"バーコードをスキャン", scan_hint:"カメラをバーコードに向けてください", not_detected:"未検出", qr_code:"マイQRコード", logout:"ログアウト" }
         };
 
@@ -513,7 +512,7 @@
             showPage('PAGE_ADD');
         }
 
-        function sauvegarderVin() {
+        function genererEtSauvegarderVin() {
             const nom = document.getElementById('nomVin').value.trim();
             const inputQte = document.getElementById('qteVin').value;
             if (!nom) return alert(T.name_required);
