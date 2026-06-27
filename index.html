@@ -74,7 +74,6 @@
         .btn-action-round:active { transform: scale(0.92); background: #f9f9f9; }
         .btn-action-round svg { width: 18px; height: 18px; transition: stroke 0.2s; }
         
-        /* Variations au survol/clic pour ajouter du dynamisme subtil */
         .btn-action-round.btn-note svg { stroke: var(--gold); }
         .btn-action-round.btn-edit svg { stroke: #555555; }
         .btn-action-round.btn-delete { border-color: rgba(217,83,79,0.15); }
@@ -552,7 +551,7 @@
             document.getElementById('modalImg').style.display = 'flex';
         }
 
-        function abrirNote(id) {
+        function ouvrirNote(id) {
             const v = vinsCharges[id]; if(!v) return;
             document.getElementById('modalNoteNom').innerText = v.nom;
             const el = document.getElementById('modalNoteTexte');
