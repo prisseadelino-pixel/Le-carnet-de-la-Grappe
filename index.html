@@ -1,3 +1,7 @@
+Du tout ! C'est ma faute, j'ai cru voir du Flutter à cause du style épuré de tes captures d'écran, mais puisque tout ton code précédent est en **HTML/CSS/JavaScript**, c'est encore plus simple. Pas besoin de package ni de configuration complexe.
+On va directement remplacer les emojis par du code **SVG** (des icônes vectorielles propres qui s'adaptent à toutes les résolutions) directement dans ton fichier HTML.
+Voici le code complet et mis à jour de ton application. J'ai redessiné le livre, le crayon et la croix pour en faire des boutons ultra-design, minimalistes, avec des lignes fines et des couleurs parfaitement assorties (or et bordeaux discret pour la suppression).
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -62,16 +66,27 @@
         .note-texte.empty { color: #aaa; font-style: normal; border-left-color: #ddd; }
         .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #ddd; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         
-        .card { background: #fafafa; border: 1px solid var(--brd); padding: 15px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 12px; align-items: center; box-sizing: border-box; transition: opacity 0.3s; }
-        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
-        .vin-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        .vin-info b { color: #222; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; width: 100%; }
-        .vin-qte { font-size: 1.5rem; font-weight: 700; color: #222; margin-left: 8px; flex-shrink: 0; }
+        /* CARTES DE VINS & ACTION ICONS */
+        .card { background: #ffffff; border: 1px solid rgba(197,160,89,0.2); padding: 12px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 16px; align-items: center; box-sizing: border-box; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: opacity 0.3s; }
+        .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(197,160,89,0.3); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
+        .vin-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+        .vin-info b { color: #222; font-size: 1.05rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; width: 100%; }
+        .vin-qte { font-size: 1.3rem; font-weight: 700; color: #666; margin-left: 10px; margin-right: 5px; flex-shrink: 0; }
 
-        .btn-carnet, .btn-edit-vin { background: none; border: 1px solid rgba(197,160,89,0.4); color: var(--gold); border-radius: 8px; padding: 6px 11px; font-size: 1.1rem; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
-        .btn-suppr { background: none; border: none; color: #ff4444; font-size: 1.5rem; margin-left: 4px; cursor: pointer; flex-shrink: 0; }
+        /* BOUTONS D'ACTION SVG RE-DESIGNÉS */
+        .btn-action-round { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 6px; flex-shrink: 0; padding: 0; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+        .btn-action-round:active { transform: scale(0.92); background: #f9f9f9; }
+        .btn-action-round svg { width: 18px; height: 18px; transition: stroke 0.2s; }
+        
+        /* Variations au survol/clic pour ajouter du dynamisme subtil */
+        .btn-action-round.btn-note svg { stroke: var(--gold); }
+        .btn-action-round.btn-edit svg { stroke: #555555; }
+        .btn-action-round.btn-delete { border-color: rgba(217,83,79,0.15); }
+        .btn-action-round.btn-delete svg { stroke: #d9534f; }
+        .btn-action-round.btn-delete:active { background: rgba(217,83,79,0.05); }
+
         .readonly-badge { background: rgba(197,160,89,0.08); border: 1px solid rgba(197,160,89,0.4); color: var(--gold); font-size: 0.75rem; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #fff; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; }
+        .btn-add { position: fixed; bottom: 30px; right: 20px; background: var(--gold); width: 65px; height: 65px; border-radius: 50%; border: none; font-size: 35px; color: #fff; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(197,160,89,0.4); z-index: 100; display: flex; align-items: center; justify-content: center; }
         input, textarea { width: 95%; padding: 15px; margin: 8px 0; background: #fdfdfd; color: #222; border: 1.5px solid var(--brd); border-radius: 10px; font-family: 'Montserrat'; box-sizing: border-box; }
         input::placeholder, textarea::placeholder { color: #aaa; }
         .stars { font-size: 35px; color: #e0e0e0; margin: 15px 0; cursor: pointer; }
@@ -226,7 +241,7 @@
             de: { title:"DAS WEINKELLER BUCH", tagline:"Ihr Keller, immer in Ihrer Tasche", tagline_sub:"Inventarisieren Sie Ihre Weine und Verkostungsnotizen.", login:"GOOGLE ANMELDUNG", cave_of:"Keller von", shared_cave:"Geteilter Keller", reds:"ROTWEINE", whites:"WEISSWEINE", roses:"ROSÉWEINE", champagnes:"CHAMPAGNER", share_cave:"KELLER TEILEN", scan_qr:"Scannen für Kellerzugang", close:"SCHLIESSEN", add:"Hinzufügen", edit:"Bearbeiten", scan_barcode:"📷 BARCODE SCANNEN", searching:"Wein suchen...", wine_found:"✅ Wein gefunden", name:"Name", vintage:"Jahrgang", producer:"Erzeuger", region:"Region", use_info:"✨ VERWENDEN", wine_name:"Weinname", quantity:"Menge", camera:"📷 KAMERA", gallery:"🖼️ GALERIE", tasting_notes:"Verkostungsnotizen...", save:"SPEICHERN", cancel:"Abbrechen", back:"← ZURÜCK", no_wine:"Kein Wein. Hinzufügen!", no_wine_ro:"Kein Wein.", delete_confirm:"Flasche loeschen?", no_note:"Keine Notiz.", readonly_badge:"👁 Nur ansehen", camera_error:"Kein Kamerazugriff.", wine_not_found:"Wein nicht gefunden.", search_error:"Suchfehler.", name_required:"Namen eingeben.", cancel_scan:"✕ ABBRECHEN", scan_title:"BARCODE SCANNEN", scan_hint:"Kamera auf Barcode richten", not_detected:"Nicht erkannt", qr_code:"Mein QR Code", logout:"Abmelden" },
             es: { title:"EL LIBRO DE LA BODEGA", tagline:"Tu bodega, siempre en tu bolsillo", tagline_sub:"Inventaría tus vinos, stock y notas de cata.", login:"INICIAR CON GOOGLE", cave_of:"Bodega de", shared_cave:"Bodega compartida", reds:"VINOS TINTOS", whites:"VINOS BLANCOS", roses:"VINOS ROSADOS", champagnes:"CHAMPANES", share_cave:"COMPARTIR MI BODEGA", scan_qr:"Escanea para acceder", close:"CERRAR", add:"Añadir", edit:"Editar", scan_barcode:"📷 ESCANEAR CÓDIGO", searching:"Buscando vino...", wine_found:"✅ Vino encontrado", name:"Nombre", vintage:"Añada", producer:"Productor", region:"Región", use_info:"✨ USAR INFORMACIÓN", wine_name:"Nombre del vino", quantity:"Cantidad", camera:"📷 CÁMARA", gallery:"🖼️ GALERÍA", tasting_notes:"Notas de cata...", save:"GUARDAR", cancel:"Cancelar", back:"← VOLVER", no_wine:"Sin vino. ¡Añade uno!", no_wine_ro:"Sin vino.", delete_confirm:"¿Eliminar botella?", no_note:"Sin nota.", readonly_badge:"👁 Solo lectura", camera_error:"Sin acceso a cámara.", wine_not_found:"Vino no encontrado.", search_error:"Error de búsqueda.", name_required:"Ingrese un nombre.", cancel_scan:"✕ CANCELAR", scan_title:"ESCANEAR CÓDIGO", scan_hint:"Apunte al código de barras", not_detected:"No detectado", qr_code:"Mi Código QR", logout:"Cerrar sesión" },
             it: { title:"IL LIBRO DELLA CANTINA", tagline:"La tua cantina, sempre in tasca", tagline_sub:"Inventaria vini, stock e note di degustazione.", login:"ACCESSO GOOGLE", cave_of:"Cantina di", shared_cave:"Cantina condivisa", reds:"VINI ROSSI", whites:"VINI BIANCHI", roses:"VINI ROSATI", champagnes:"CHAMPAGNE", share_cave:"CONDIVIDI CANTINA", scan_qr:"Scansiona per accedere", close:"CHIUDI", add:"Aggiungi", edit:"Modifica", scan_barcode:"📷 SCANSIONA CODICE", searching:"Ricerca vino...", wine_found:"✅ Vino trovato", name:"Nome", vintage:"Annata", producer:"Produttore", region:"Regione", use_info:"✨ USA QUESTE INFO", wine_name:"Nome del vino", quantity:"Quantità", camera:"📷 FOTOCAMERA", gallery:"🖼️ GALLERIA", tasting_notes:"Note di degustazione...", save:"SALVA", cancel:"Annulla", back:"← TORNA", no_wine:"Nessun vino. Aggiungine uno!", no_wine_ro:"Nessun vino.", delete_confirm:"Eliminare bottiglia?", no_note:"Nessuna nota.", readonly_badge:"👁 Solo visualizzazione", camera_error:"Nessun acceso fotocamera.", wine_not_found:"Vino non trovato.", search_error:"Errore ricerca.", name_required:"Inserire un nome.", cancel_scan:"✕ ANNULLA", scan_title:"SCANSIONA CODICE", scan_hint:"Punta la fotocamera al codice", not_detected:"Non rilevato", qr_code:"Il Mio QR Code", logout:"Disconnetti" },
-            zh: { title:"酒窖笔记本", tagline:"您的酒窖，随时随地", tagline_sub:"轻松 management 您的藏酒、库存 and 品酒笔记。", login:"谷歌登录", cave_of:"酒窖", shared_cave:"共享酒窖", reds:"红葡萄酒", whites:"白葡萄酒", roses:"桃红葡萄酒", champagnes:"香槟", share_cave:"分享我的酒窖", scan_qr:"扫描以访问酒窖", close:"关闭", add:"添加", edit:"编辑", scan_barcode:"📷 扫描条形码", searching:"搜索葡萄酒...", wine_found:"✅ 找到葡萄酒", name:"名称", vintage:"年份", producer:"生产商", region:"产区", use_info:"✨ 使用此信息", wine_name:"葡萄酒名称", quantity:"数量", camera:"📷 相机", gallery:"🖼️ 图库", tasting_notes:"品酒笔记...", save:"保存", cancel:"取消", back:"← 返回", no_wine:"没有葡萄酒，请添加！", no_wine_ro:"没有葡萄酒。", delete_confirm:"删除这瓶酒？", no_note:"没有笔记。", readonly_badge:"👁 仅查看", camera_error:"无法访问相机。", wine_not_found:"未找到葡萄酒。", search_error:"搜索错误。", name_required:"请输入名称。", cancel_scan:"✕ 取消", scan_title:"扫描条形码", scan_hint:"将相机对准条形码", not_detected:"未检测到", qr_code:"我的二维码", logout:"退出登录" },
+            zh: { title:"酒窖笔记本", tagline:"您的酒窖，随时随地", tagline_sub:"轻松 management 您的藏酒、库存 and品酒笔记。", login:"谷歌登录", cave_of:"酒窖", shared_cave:"共享酒窖", reds:"红葡萄酒", whites:"白葡萄酒", roses:"桃红葡萄酒", champagnes:"香槟", share_cave:"分享我的酒窖", scan_qr:"扫描以访问酒窖", close:"关闭", add:"添加", edit:"编辑", scan_barcode:"📷 扫描条形码", searching:"搜索葡萄酒...", wine_found:"✅ 找到葡萄酒", name:"名称", vintage:"年份", producer:"生产商", region:"产区", use_info:"✨ 使用此信息", wine_name:"葡萄酒名称", quantity:"数量", camera:"📷 相机", gallery:"🖼️ 图库", tasting_notes:"品酒笔记...", save:"保存", cancel:"取消", back:"← 返回", no_wine:"没有葡萄酒，请添加！", no_wine_ro:"没有葡萄酒。", delete_confirm:"删除这瓶酒？", no_note:"没有笔记。", readonly_badge:"👁 仅查看", camera_error:"无法访问相机。", wine_not_found:"未找到葡萄酒。", search_error:"搜索错误。", name_required:"请输入名称。", cancel_scan:"✕ 取消", scan_title:"扫描条形码", scan_hint:"将相机对准条形码", not_detected:"未检测到", qr_code:"我的二维码", logout:"退出登录" },
             ja: { title:"ワインセラー手帳", tagline:"あなたのセラー、いつでも手の中に", tagline_sub:"ワインの在庫とテイスティングノートを簡単管理。", login:"Googleでログイン", cave_of:"セラー", shared_cave:"共有セラー", reds:"赤ワイン", whites:"白ワイン", roses:"ロゼワイン", champagnes:"シャンパン", share_cave:"セラーを共有", scan_qr:"スキャンしてアクセス", close:"閉じる", add:"追加", edit:"編集", scan_barcode:"📷 バーコードをスキャン", searching:"ワインを検索中...", wine_found:"✅ ワインが見つかりました", name:"名前", vintage:"ヴィンテージ", producer:"生産者", region:"地域", use_info:"✨ この情報を使用", wine_name:"ワイン名", quantity:"数量", camera:"📷 カメラ", gallery:"🖼️ ギャラリー", tasting_notes:"テイスティングノート...", save:"保存", cancel:"キャンセル", back:"← ホームに戻る", no_wine:"ワインなし。追加してください！", no_wine_ro:"ワインなし。", delete_confirm:"このボトルを削除しますか？", no_note:"ノートなし。", readonly_badge:"👁 閲覧のみ", camera_error:"カメラにアクセスできません。", wine_not_found:"ワインが見つかりません。", search_error:"検索エラー。", name_required:"名前を入力してください。", cancel_scan:"✕ キャンセル", scan_title:"バーコードをスキャン", scan_hint:"カメラをバーコードに向けてください", not_detected:"未検出", qr_code:"マイQRコード", logout:"ログアウト" }
         };
 
@@ -473,10 +488,18 @@
                             <span style="color:var(--gold); font-size:0.85rem;">${'★'.repeat(etoiles)}${'☆'.repeat(5-etoiles)}</span>
                         </div>
                         <div class="vin-qte">x${v.qte}</div>
-                        <button class="btn-carnet" onclick="ouvrirNote('${id}')">📖</button>
+                        
+                        <button class="btn-action-round btn-note" onclick="ouvrirNote('${id}')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        </button>
+                        
                         ${!isReadOnly ? `
-                            <button class="btn-edit-vin" onclick="preparerModif('${id}')">✏️</button>
-                            <button class="btn-suppr" onclick="supprimer('${id}')">✕</button>
+                            <button class="btn-action-round btn-edit" onclick="preparerModif('${id}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                            </button>
+                            <button class="btn-action-round btn-delete" onclick="supprimer('${id}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                            </button>
                         ` : ''}
                     `;
                     c.appendChild(card);
@@ -533,7 +556,7 @@
             document.getElementById('modalImg').style.display = 'flex';
         }
 
-        function ouvrirNote(id) {
+        function abrirNote(id) {
             const v = vinsCharges[id]; if(!v) return;
             document.getElementById('modalNoteNom').innerText = v.nom;
             const el = document.getElementById('modalNoteTexte');
@@ -544,3 +567,5 @@
     </script>
 </body>
 </html>
+
+```
