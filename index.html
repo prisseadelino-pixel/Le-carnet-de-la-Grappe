@@ -62,14 +62,12 @@
         .note-texte.empty { color: #aaa; font-style: normal; border-left-color: #ddd; }
         .btn-fermer-note { margin-top: 20px; width: 100%; padding: 13px; border-radius: 10px; background: none; border: 1px solid #ddd; color: #888; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; cursor: pointer; }
         
-        /* CARTES DE VINS & ACTION ICONS */
         .card { background: #ffffff; border: 1px solid rgba(197,160,89,0.2); padding: 12px; display: flex; width: 98%; max-width: 600px; text-align: left; margin-bottom: 12px; border-radius: 16px; align-items: center; box-sizing: border-box; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: opacity 0.3s; }
         .img-vin { width: 70px; height: 100px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(197,160,89,0.3); margin-right: 15px; flex-shrink: 0; cursor: pointer; }
         .vin-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
         .vin-info b { color: #222; font-size: 1.05rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; width: 100%; }
         .vin-qte { font-size: 1.3rem; font-weight: 700; color: #666; margin-left: 10px; margin-right: 5px; flex-shrink: 0; }
 
-        /* BOUTONS D'ACTION SVG RE-DESIGNÉS */
         .btn-action-round { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 10px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 6px; flex-shrink: 0; padding: 0; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
         .btn-action-round:active { transform: scale(0.92); background: #f9f9f9; }
         .btn-action-round svg { width: 18px; height: 18px; transition: stroke 0.2s; }
@@ -305,7 +303,7 @@
             document.getElementById('sideOverlay').classList.remove('open');
         }
 
-        // ---- FIREBASE AUTH (CORRIGÉ PERSISTANCE & REDIRECT) ----
+        // ---- FIREBASE AUTH (CORRIGÉ REDIRECT + PERSISTANCE) ----
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
 
@@ -319,9 +317,9 @@
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
                 document.getElementById('btnGoogle').addEventListener('click', function() {
                     const provider = new firebase.auth.GoogleAuthProvider();
-                    auth.signInWithRedirect(provider).catch(e => alert(e.message));
+                    auth.signInWithRedirect(provider).catch(e => alert("Erreur redirect: " + e.message));
                 });
-            });
+            }).catch(e => console.error("Persistence error:", e));
 
             auth.getRedirectResult().then((result) => {
                 if (result.user) {
