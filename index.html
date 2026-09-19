@@ -303,7 +303,7 @@
             document.getElementById('sideOverlay').classList.remove('open');
         }
 
-        // ---- FIREBASE AUTH (CORRIGÉ REDIRECT + PERSISTANCE) ----
+        // ---- FIREBASE AUTH (RETOUR POPUP STABLE + ALERTE DEBUG) ----
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
 
@@ -314,22 +314,11 @@
             document.getElementById('userName').innerText = T.shared_cave;
             showPage('PAGE_HOME');
         } else {
-            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-                document.getElementById('btnGoogle').addEventListener('click', function() {
-                    const provider = new firebase.auth.GoogleAuthProvider();
-                    auth.signInWithRedirect(provider).catch(e => alert("Erreur redirect: " + e.message));
+            document.getElementById('btnGoogle').addEventListener('click', function() {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).catch(e => {
+                    alert("Erreur auth: " + e.code + " - " + e.message);
                 });
-            }).catch(e => console.error("Persistence error:", e));
-
-            auth.getRedirectResult().then((result) => {
-                if (result.user) {
-                    userUID = result.user.uid;
-                    prenomUtilisateur = result.user.displayName ? result.user.displayName.split(' ')[0] : '';
-                    mettreAJourNomCave();
-                    showPage('PAGE_HOME');
-                }
-            }).catch((e) => {
-                console.error("Auth redirect error:", e);
             });
 
             auth.onAuthStateChanged(u => {
