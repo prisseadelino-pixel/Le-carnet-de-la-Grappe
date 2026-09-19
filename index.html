@@ -303,7 +303,7 @@
             document.getElementById('sideOverlay').classList.remove('open');
         }
 
-        // ---- FIREBASE AUTH (RETOUR POPUP STABLE + ALERTE DEBUG) ----
+        // ---- FIREBASE AUTH (NETTOYÉ PROPRE) ----
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
 
@@ -314,11 +314,20 @@
             document.getElementById('userName').innerText = T.shared_cave;
             showPage('PAGE_HOME');
         } else {
-            document.getElementById('btnGoogle').addEventListener('click', function() {
+            document.getElementById('btnGoogle').addEventListener('click', async function() {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).catch(e => {
-                    alert("Erreur auth: " + e.code + " - " + e.message);
-                });
+                try {
+                    await auth.getRedirectResult().catch(() => {});
+                    const result = await auth.signInWithPopup(provider);
+                    if (result.user) {
+                        userUID = result.user.uid;
+                        prenomUtilisateur = result.user.displayName ? result.user.displayName.split(' ')[0] : '';
+                        mettreAJourNomCave();
+                        showPage('PAGE_HOME');
+                    }
+                } catch(e) {
+                    alert("Erreur connexion : " + e.message);
+                }
             });
 
             auth.onAuthStateChanged(u => {
