@@ -305,7 +305,7 @@
             document.getElementById('sideOverlay').classList.remove('open');
         }
 
-        // ---- FIREBASE AUTH (CORRIGÉ REDIRECT) ----
+        // ---- FIREBASE AUTH (CORRIGÉ PERSISTANCE & REDIRECT) ----
         const urlParams = new URLSearchParams(window.location.search);
         const viewUID = urlParams.get('view');
 
@@ -316,9 +316,11 @@
             document.getElementById('userName').innerText = T.shared_cave;
             showPage('PAGE_HOME');
         } else {
-            document.getElementById('btnGoogle').addEventListener('click', function() {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithRedirect(provider).catch(e => alert(e.message));
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+                document.getElementById('btnGoogle').addEventListener('click', function() {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    auth.signInWithRedirect(provider).catch(e => alert(e.message));
+                });
             });
 
             auth.getRedirectResult().then((result) => {
